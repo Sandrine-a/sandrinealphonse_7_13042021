@@ -14,24 +14,24 @@
      
      <form class="login__form">
 
-          <div class="signup__form-input">
+          <div class="login__form-input">
             <label for="email" class="color_blue">E-mail </label>
             <input v-model="email" class="input_field" type="mail" id="email" placeholder="Entrez votre mail pro">
           </div>
-          <div class="signup__form-input">
+          <div class="login__form-input">
             <label for="password" class="color_blue">Mot-de-Passe </label>
             <input v-model="password" class="input_field" type="password" id="password" placeholder="Entrez votre mot-de-passe">
           </div>
 
-          <div class="login__form-input" v-if=" mode == 'signup'">
-            <label for="lastName" class="color_blue"> Nom </label>
-            <input v-model="lastName" class="input_field" type="text" id="lastName" placeholder="Entrez votre nom">
-          </div>
+            <div class="login__form-input" v-if=" mode == 'signup'">
+              <label for="lastName" class="color_blue"> Nom </label>
+              <input v-model="lastName" class="input_field" type="text" id="lastName" placeholder="Entrez votre nom">
+            </div>
 
-          <div class="login__form-input" v-if=" mode == 'signup'">
-            <label for="firstNAme" class="color_blue">Prénom </label>
-            <input v-model="firstName" class="input_field" type="text" id="firstNAme" placeholder="Entrez votre prénom">
-          </div>
+            <div class="login__form-input" v-if=" mode == 'signup'">
+              <label for="firstNAme" class="color_blue">Prénom </label>
+              <input v-model="firstName" class="input_field" type="text" id="firstNAme" placeholder="Entrez votre prénom">
+            </div>
           
         <section id="section__btn">
           <div class="btn__main">
@@ -41,8 +41,8 @@
 
           <div class="login__form-legend">
             <p> - OU - </p>
-            <legend v-if=" mode == 'login'">Pas encore de compte? <span class="login__form-legendBold">Connectez-vous: </span></legend>
-            <legend v-else>Déjà inscrit? <span class="login__form-legendBold">Connectez-vous: </span></legend>
+            <legend v-if=" mode == 'login'">Pas encore de compte? <span class="login__form-legendBold" @click="switchToSignup()">Inscrivez-vous: </span></legend>
+            <legend v-else>Déjà inscrit? <span class="login__form-legendBold" @click="switchToLogin()">Connectez-vous: </span></legend>
           </div>
 
           <div class="btn__main">
@@ -92,49 +92,44 @@ export default {
  @import "@/assets/_variables.scss";
 
  .home{
-   background-image: url("../assets/groupomania_couverture_paris.jpg");
-   background-attachment: fixed;
+/*    background-attachment: fixed;
    background-repeat: no-repeat;
-   background-position: left;
+   background-position: left; */
    display: flex;
-   position: absolute;  
  } 
 
  .frame {
-/*   width: 40%; */
+  width: 40%;
+  background-image: url("../assets/groupomania_couverture_paris.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center top;
   position: relative;
-  top: 0;
-  left: 0;
-   &__image {
-     width: 100%;
-     object-fit: fill;
-     
-   }
+  overflow: hidden;
    &__logo {
      position: absolute;
      max-width: 30%; 
-     height: 100px;
+     height: 70px;
      background-color: $secondary-color; 
      border-radius: 25px; 
-     position: relative;
-     bottom: 100px;
-     left: 30%;
+     left: 40%;
+     bottom: 20%;
      &--icon {
-       padding: 20px;
+       padding: 25px 10px;
        width: 80%;
-
      }
    }
  }
 
  .form {
-   width:60%;
-   position: relative;
-   right: 25px;
-   top:0;
+   width:70%;
    border-top-left-radius: 25%;
    border-bottom-left-radius: 25%;
    background-color: white;
+   display: flex;
+   flex-direction: column;
+   justify-content: center;
+   align-items: center;
  }
 
 .color_blue {
@@ -153,7 +148,16 @@ export default {
       display: flex;
       flex-direction: column;
       justify-content: center;
-      align-items: center;
+    }
+    &-legend {
+    text-align: center;
+    padding: 10px 0;
+   }
+    &-legendBold {
+    font-weight: bold;
+    color: $tertiary-color;
+    cursor: pointer;
+    text-decoration: underline;
     }
   }
 }
@@ -169,6 +173,10 @@ export default {
 
 #section__btn {
   margin-top: 50px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 .btn__main{
   height: 50px;
@@ -179,7 +187,7 @@ export default {
     height: 100%;
     width: 300px;
     border: none;
-    
+    cursor: pointer;
   }
   &-login {
     color: white;
@@ -188,6 +196,7 @@ export default {
     height: 100%;
     width: 300px;
     border: none;
+    cursor: pointer;
   }
 }
 </style>
