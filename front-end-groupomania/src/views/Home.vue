@@ -11,7 +11,7 @@
 
      <h1 class="login__title color_blue " v-if=" mode == 'login'" > Connexion </h1>
      <h1 class="login__title color_blue " v-else> Créez votre compte </h1>
-     
+
      <form class="login__form">
 
           <div class="login__form-input">
@@ -24,31 +24,38 @@
           </div>
 
             <div class="login__form-input" v-if=" mode == 'signup'">
-              <label for="lastName" class="color_blue"> Nom </label>
-              <input v-model="lastName" class="input_field" type="text" id="lastName" placeholder="Entrez votre nom">
+              <label for="lastname" class="color_blue"> Nom </label>
+              <input v-model="lastname" class="input_field" type="text" id="lastname" placeholder="Entrez votre nom">
             </div>
 
             <div class="login__form-input" v-if=" mode == 'signup'">
-              <label for="firstNAme" class="color_blue">Prénom </label>
-              <input v-model="firstName" class="input_field" type="text" id="firstNAme" placeholder="Entrez votre prénom">
+              <label for="firstname" class="color_blue">Prénom </label>
+              <input v-model="firstname" class="input_field" type="text" id="firstname" placeholder="Entrez votre prénom">
             </div>
           
         <section id="section__btn">
+
           <div class="btn__main">
-            <button class="btn__main-login" type="submit" v-if=" mode == 'login'">Connexion</button>
-            <button @click="createAccount()" class="btn__main-login" v-else>Créer un compte</button>
+            <button @click="login()" class="btn__main-confirm" type="button" v-if=" mode == 'login'">Connexion</button>
+            <button @click="signup()" class="btn__main-confirm" type="button" v-else>Créer un compte</button>
           </div>
 
           <div class="login__form-legend">
             <p> - OU - </p>
-            <legend v-if=" mode == 'login'">Pas encore de compte? <span class="login__form-legendBold" @click="switchToSignup()">Inscrivez-vous: </span></legend>
-            <legend v-else>Déjà inscrit? <span class="login__form-legendBold" @click="switchToLogin()">Connectez-vous: </span></legend>
+            <legend v-if=" mode == 'login'">
+              Pas encore de compte? 
+              <span class="login__form-legendBold" @click="switchToSignup()">Inscrivez-vous: </span>
+            </legend>
+            <legend v-else>
+              Déjà inscrit? 
+              <span class="login__form-legendBold" @click="switchToLogin()">Connectez-vous: </span>
+            </legend>
+          </div>
+          <div class="btn__main">
+            <button class="btn__main-switch" type="button" @click="switchToSignup()" v-if=" mode == 'login'">Créer un compte</button>
+            <button class="btn__main-switch" type="button" @click="switchToLogin()" v-else>Connexion</button>
           </div>
 
-          <div class="btn__main">
-            <button class="btn__main-signup" type="submit" @click="switchToSignup()" v-if=" mode == 'login'">Créer un compte</button>
-            <button class="btn__main-signup" type="submit" @click="switchToLogin()" v-else>Connexion</button>
-          </div>
         </section>
       
      </form>
@@ -63,24 +70,41 @@
 
 export default {
   name: 'Home',
-    data: function() {
+  data: function() {
     return {
       mode: 'login',
       email: '',
       password: '',
-      firstName: '',
-      lastName: '',
+      firstname: '',
+      lastname: '',
     }
   },
   methods : {
-    switchToSignup: function() {
+    switchToSignup() {
       this.mode = 'signup';
     },
-    switchToLogin: function() {
+    switchToLogin() {
       this.mode = 'login';
     },
-    createAccount: function( ) {
-      console.log(this.email,this.password,this.firstName,this.lastName);
+    signup() {
+      console.log(this.email,this.password,this.firstname,this.lastname);
+      this.$store.dispatch('signup', {
+        email: this.email,
+        password: this.password,
+        firstname: this.firstname,
+        lastname: this.lastname
+      })
+      .then(response => console.log(response))
+      .catch(error => console.log(error));
+    },
+    login() {
+      console.log(this.email,this.password);
+      this.$store.dispatch('login', {
+        email: this.email,
+        password: this.password
+      })
+      .then(response => console.log(response))
+      .catch(error => console.log(error));
     }
   }
 }
@@ -92,9 +116,6 @@ export default {
  @import "@/assets/_variables.scss";
 
  .home{
-/*    background-attachment: fixed;
-   background-repeat: no-repeat;
-   background-position: left; */
    display: flex;
  } 
 
@@ -148,6 +169,7 @@ export default {
       display: flex;
       flex-direction: column;
       justify-content: center;
+      align-items: flex-start;
     }
     &-legend {
     text-align: center;
@@ -178,9 +200,10 @@ export default {
   justify-content: center;
   align-items: center;
 }
+
 .btn__main{
   height: 50px;
-  &-signup {
+  &-confirm {
     color: white;
     background: $tertiary-color;
     border-radius: 25px;
@@ -189,7 +212,7 @@ export default {
     border: none;
     cursor: pointer;
   }
-  &-login {
+  &-switch {
     color: white;
     background: $tertiary-color;
     border-radius: 25px;
@@ -199,4 +222,5 @@ export default {
     cursor: pointer;
   }
 }
+
 </style>

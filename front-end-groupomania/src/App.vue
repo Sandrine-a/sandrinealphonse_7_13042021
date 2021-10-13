@@ -1,6 +1,9 @@
 <template>
-
+  <div id="app">
+    <router-link to="/posts">posts</router-link>
     <router-view/>
+    
+  </div>
 
 </template>
 
