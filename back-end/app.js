@@ -10,7 +10,7 @@ const bodyParser = require('body-parser');
 const path = require('path');
 
 const userRoutes = require('./routes/user');
-/* const postRoutes = require('./routes/post'); */
+const postRoutes = require('./routes/posts');
 
 const app = express();
 
@@ -36,16 +36,10 @@ db.authenticate()
 .then(()=> console.log('Connection  to database has been established successfully.'))
 .catch(err =>  console.error('Unable to connect to the database:', error));
 
-//Tests routes AAAAA SUPPPPRIMER
-app.get('/', (req, res, next) => {
-  res.setHeader('Ccontent-Type', 'text/html');
-  res.status(200).send('<h1>hello express</h1>');
-});
-
 //Enregistrement des routes User
 app.use('/api/users', userRoutes);
-/* //Enregistrement du router
-app.use('/api/posts', postRoutes); */
+//Enregistrement du router
+app.use('/api/posts', postRoutes);
 
 //Exports
 module.exports = app;
