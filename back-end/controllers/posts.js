@@ -18,20 +18,20 @@ exports.createPost = async (req,res,next) => {
   //Vérification de la complétion des inputs
   if(!title || !content) {
   return res.status(400).json({error: ' Tous les champs sont oblogatoires !'});
-   } 
+   }; 
 
   // Récupération de l'IdUser
-  const user = await models.User.findOne({
+  const userMatch = await models.User.findOne({
     where: { id: idUser }
   })
-  .then(user => {
-    console.log(user.id);
-    if(user) {
-      console.log(user);
+  .then(async userMatch => {
+    console.log(userMatch.id);
+    if(userMatch) {
+      console.log(userMatch);
       //Si Id User exist
       try {
         //Creéation du post
-        models.Post.create({
+        const user = await models.Post.create({
         idUser: user.id,
         title: title,
         content: content,
@@ -62,3 +62,15 @@ exports.createPost = async (req,res,next) => {
      .catch(error => res.status(400).json({ error })); */
 
 };
+
+/* exports.modifyPost = async (req,res,next) => {
+};
+
+exports.getAllPosts = async (req,res,next) => {
+};
+
+exports.getOnePost = async (req,res,next) => {
+};
+
+exports.deletePost = async (req,res,next) => {
+}; */

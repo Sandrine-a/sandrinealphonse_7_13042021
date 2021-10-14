@@ -12,16 +12,13 @@ exports.signup = async (req,res,next) => {
   console.log("controleur SIGNUP");
 
   //Recuperation des param
-  const lastName = req.body.lastname;
-  const firstName = req.body.firstname;
-  const email = req.body.email;
-  const password = req.body.password;
+
+  const { lastname, firstname, email, password } = req.body;
 
   //Vérification de la complétion des inputs
-  if(!lastName || !firstName || !email || !password) {
+  if(!lastname || !firstname || !email || !password) {
     return res.status(400).json({error: 'tous les champs sont oblogatoires !'});
   } 
-
   //TO DO VALIDATION INPUTS
 
   //Vérification de l'utilisateur déja en BDD
@@ -36,8 +33,8 @@ exports.signup = async (req,res,next) => {
     try { 
       const hash = await bcrypt.hash(password, 12);
       const user = await models.User.create({
-        firstName: firstName,
-        lastName: lastName,
+        firstName: firstname,
+        lastName: lastname,
         email: email,
         password: hash,
         isAdmin: 0
@@ -88,4 +85,14 @@ exports.login = async (req,res,next) => {
   .catch(error => res.status(500).json({ error }));
 
 };
+
+//MIDDLEWARE TO DO
+/* exports.getProfile = async (req,res,next) => {
+};
+
+exports.modifyProfile = async (req,res,next) => {
+};
+
+exports.deleteProfile = async (req,res,next) => {
+}; */
 

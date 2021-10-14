@@ -1,12 +1,18 @@
-//Import controleur user:
+//Imports
 const express = require('express');
 
 const router = express.Router();
 
 const postCtrl = require('../controllers/posts');
 
-//Route pour ajouter une sauce:
+//Routes
 router.post('/', postCtrl.createPost);
 
-//Export des routes users:
+//Routes TODO
+/* router.get('/:id', postCtrl.getOnePost);
+router.put('/:id', postCtrl.modifyPost);
+router.get('/', postCtrl.AllPosts);
+router.delete('/:id', postCtrl.createPost); */
+
+//Export
 module.exports = router;

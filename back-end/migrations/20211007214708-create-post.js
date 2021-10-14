@@ -8,7 +8,7 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      idUser: {
+      userId: {
         allowNull: false,
         type: Sequelize.INTEGER,
         references : {
@@ -29,10 +29,12 @@ module.exports = {
         type: Sequelize.STRING
       },
       likes: {
+        defaultValue: 0,
         allowNull: false,
         type: Sequelize.INTEGER
       },
       comments: {
+        defaultValue: 0,
         allowNull: false,
         type: Sequelize.INTEGER
       },

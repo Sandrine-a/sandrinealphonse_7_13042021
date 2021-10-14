@@ -1,7 +1,11 @@
 import { createStore } from 'vuex';
 
-//url de l'api cameras:
-const urlApi = "http://localhost:3000/api";
+const axios = require('axios');
+
+//Instance axios
+const instance = axios.create({
+  baseURL: '"http://localhost:3000/api"'
+});
 
 export default createStore({
   state: {
@@ -15,14 +19,7 @@ export default createStore({
       return new Promise((resolve,reject) => {
         commit;
         
-        fetch( `${urlApi}/users/signup`, {
-          method: "POST",
-          body:  JSON.stringify(userInfos),
-          headers: {
-            'Accept': 'application/json',
-            'Content-Type' : 'application/json'
-          }
-        })
+        instance.post('/users/signup', userInfos)
         .then((response) => {
           console.log(response);
           resolve(response);
@@ -39,14 +36,7 @@ export default createStore({
       return new Promise((resolve,reject) => {
         commit;
         
-        fetch( `${urlApi}/users/login`, {
-          method: "POST",
-          body:  JSON.stringify(userInfos),
-          headers: {
-            'Accept': 'application/json',
-            'Content-Type' : 'application/json'
-          }
-        })
+        axios.post('instance/users/login', userInfos)
         .then((response) => {
           console.log(response);
           resolve(response);
