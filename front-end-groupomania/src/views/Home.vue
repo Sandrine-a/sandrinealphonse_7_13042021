@@ -36,8 +36,10 @@
         <section id="section__btn">
 
           <div class="btn__main">
-            <button @click="login()" class="btn__main-confirm" type="button" v-if=" mode == 'login'">Connexion</button>
-            <button @click="signup()" class="btn__main-confirm" type="button" v-else>Créer un compte</button>
+            <div v-if=" mode == 'login' && status == 'error_login' "> Mot-de-passe/adresse mail invalide </div>
+            <button @click="login()" class="btn__main-confirm" type="button" v-if=" mode == 'login' "><span v-if=" status == 'loading' ">Connexion en cours...</span><span v-else>Connexion</span></button>
+            <button @click="signup()" class="btn__main-confirm" type="button" v-else><span v-if=" status == 'loading' ">Création en cours...</span>
+            <span v-else>Créer un compte</span></button>
           </div>
 
           <div class="login__form-legend">
@@ -67,6 +69,7 @@
 
 <script>
 // @ is an alias to /src
+import {mapState} from 'vuex';
 
 export default {
   name: 'Home',
@@ -78,6 +81,9 @@ export default {
       firstname: '',
       lastname: '',
     }
+  },
+  computed: {
+    ...mapState(['status'])
   },
   methods : {
     switchToSignup() {
@@ -94,7 +100,7 @@ export default {
         firstname: this.firstname,
         lastname: this.lastname
       })
-      .then(response => console.log(response))
+      .then(() => this.login())
       .catch(error => console.log(error));
     },
     login() {
@@ -103,7 +109,9 @@ export default {
         email: this.email,
         password: this.password
       })
-      .then(response => console.log(response))
+      .then(() => {
+        this.$router.push('Posts')
+      })
       .catch(error => console.log(error));
     }
   }

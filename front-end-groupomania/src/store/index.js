@@ -1,48 +1,54 @@
 import { createStore } from 'vuex';
 
 const axios = require('axios');
-
 //Instance axios
 const instance = axios.create({
-  baseURL: '"http://localhost:3000/api"'
+  baseURL: 'http://localhost:3000/api'
 });
 
 export default createStore({
   state: {
+    status: '',
+    user: {
+      userId: -1,
+      token:''
+    }
   },
   mutations: {
+    SET_STATUS(state, status) {
+      state.status = status;
+    },
+    LOG_USER(state, user) {
+      state.user = user;
+    }
   },
   actions: {
     signup({ commit }, userInfos) {
-      console.log(userInfos);
-
+      commit('SET_STATUS', 'loading');
       return new Promise((resolve,reject) => {
-        commit;
-        
+        commit('SET_STATUS', '');
         instance.post('/users/signup', userInfos)
         .then((response) => {
-          console.log(response);
+          commit('SET_STATUS', 'signup');
           resolve(response);
         })
         .catch((error) => {
-          console.log(error);
+          commit('SET_STATUS', 'error_signup');
           reject(error);
         })
       })      
     },
     login({ commit } , userInfos) {
-      console.log(userInfos);
-
-      return new Promise((resolve,reject) => {
-        commit;
-        
-        axios.post('instance/users/login', userInfos)
+      commit('SET_STATUS', 'loading');
+      return new Promise((resolve,reject) => {   
+        instance.post('/users/login', userInfos)
         .then((response) => {
-          console.log(response);
+          commit('SET_STATUS', '');
+          commit('SET_STATUS', 'response.data');
           resolve(response);
         })
         .catch((error) => {
-          console.log(error);
+          commit('SET_STATUS', 'error_login');
           reject(error);
         })
       })

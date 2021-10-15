@@ -1,6 +1,5 @@
 <template>
   <div id="app">
-    <router-link to="/posts">posts</router-link>
     <router-view/>
     
   </div>
@@ -18,7 +17,6 @@
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   }
-
 
 
 
