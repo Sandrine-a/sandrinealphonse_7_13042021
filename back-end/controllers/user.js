@@ -7,21 +7,15 @@ const bcrypt = require('bcrypt');
 
 const jwt = require('jsonwebtoken');
 
+
 //Middlewares
 exports.signup = async (req,res,next) => {
   console.log("controleur SIGNUP");
 
   //Recuperation des param
-
   const { lastname, firstname, email, password } = req.body;
 
-  //Vérification de la complétion des inputs
-  if(!lastname || !firstname || !email || !password) {
-    return res.status(400).json({error: 'tous les champs sont oblogatoires !'});
-  } 
-  //TO DO VALIDATION INPUTS
-
-  //Vérification de l'utilisateur déja en BDD
+  //Verification de l'utilisateur déja en BDD
   const userExist = await models.User.findOne({
     attributes: ['email'],
     where: {email: email}
@@ -36,8 +30,7 @@ exports.signup = async (req,res,next) => {
         firstName: firstname,
         lastName: lastname,
         email: email,
-        password: hash,
-        isAdmin: 0
+        password: hash
       });
       return res.status(201).json({ 'userId': user.id});
     }  catch (error) {
@@ -47,15 +40,10 @@ exports.signup = async (req,res,next) => {
 };
 
 exports.login = async (req,res,next) => { 
-  console.log("** ** *** controleur LOGIN")
-   //Recuperation des param
-   const email = req.body.email;
-   const password = req.body.password;
- 
-   //Vérification de la complétion des inputs
-  if(!email || !password) {
-     return res.status(400).json({error: 'tous les champs sont oblogatoires !'});
-  } 
+
+  //Recuperation des param
+  const email = req.body.email;
+  const password = req.body.password;
 
   const user = await models.User.findOne({
     where: {email: email}
@@ -83,7 +71,6 @@ exports.login = async (req,res,next) => {
 
   })
   .catch(error => res.status(500).json({ error }));
-
 };
 
 //MIDDLEWARE TO DO

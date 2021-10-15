@@ -5,10 +5,12 @@ const router = express.Router();
 
 const userCtrl = require('../controllers/user');
 
-//Routing
-router.post('/signup', userCtrl.signup);
+const validator = require('../utils/validator');
 
-router.post('/login', userCtrl.login);
+//Routing
+router.post('/signup', validator.signupValidator(), validator.validateResult, userCtrl.signup);
+
+router.post('/login', validator.loginValidator(), validator.validateResult, userCtrl.login);
 
 //Routing TODO
 /* router.get('/:id', userCtrl.getProfile);
