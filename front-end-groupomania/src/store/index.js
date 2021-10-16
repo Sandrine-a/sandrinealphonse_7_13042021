@@ -64,7 +64,7 @@ export default createStore({
       })
     },
     getUserProfile ({ commit }) {
-      instance.get('/posts/')
+      instance.get('/users/:id')
       .then((response) => {
         console.log(response.data);
         commit('USER_PROFILE', response.data);

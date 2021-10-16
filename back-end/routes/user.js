@@ -16,9 +16,11 @@ router.post('/login', validator.loginValidator(), validator.validateResult, user
 
 router.get('/:id', auth, userCtrl.getUserProfile);
 
+router.put('/:id', auth, userCtrl.updateUserProfile);
+
 //Routing TODO
 /* 
-router.put('/:id', userCtrl.modifyProfile);
+
 router.post('/:id', userCtrl.deletProfile); */
 
 //Export des routes users:

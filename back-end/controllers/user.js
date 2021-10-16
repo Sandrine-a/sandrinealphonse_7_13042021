@@ -74,7 +74,7 @@ exports.login = async (req,res,next) => {
 };
 
 exports.getUserProfile = async (req,res,next) => {
-  console.log(req.params.id);
+  //PARAMS
   const userId = req.params.id; 
 
   const user = await models.User.findOne({
@@ -85,15 +85,41 @@ exports.getUserProfile = async (req,res,next) => {
     console.log(user);
     if(user) {
       res.status(200).json(user);
+    } else {
+      return res.status(404).json({ error: 'user not found' })
     }
   })
-  .catch((error) => res.status(404).json({ error: error }));
+  .catch((error) => res.status(500).json({ error: error }));
+};
+
+exports.updateUserProfile = async (req,res,next) => {
+  console.log(req.params);
+  console.log(req.body);
+  //PARAMS
+  const userId = req.params.id; 
+  const firstname = req.body.firstname;
+  const lastname = req.body.lastname;
+
+  const user = await models.User.findOne({
+    attributes: ['id', 'firstName', 'lastName' ],
+    where: { id: userId}
+  })
+  .then(user => {
+    if(user) {
+      user.update({
+        firstName: ( firstname ? firstname : user.firstName )
+      })
+      .then(res.status(201).json({ message: ' Profile modifié !'}))
+    } else {
+      return res.status(404).json({ 'error': 'user not found' })
+    }
+  })
+  .catch((error) => res.status(500).json({ error: error }));
 };
 
 //MIDDLEWARE TO DO
 /* 
-exports.modifyProfile = async (req,res,next) => {
-};
+
 
 exports.deleteProfile = async (req,res,next) => {
 }; */
