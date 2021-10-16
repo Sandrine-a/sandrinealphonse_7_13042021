@@ -73,10 +73,25 @@ exports.login = async (req,res,next) => {
   .catch(error => res.status(500).json({ error }));
 };
 
-//MIDDLEWARE TO DO
-/* exports.getProfile = async (req,res,next) => {
+exports.getUserProfile = async (req,res,next) => {
+  console.log(req.params.id);
+  const userId = req.params.id; 
+
+  const user = await models.User.findOne({
+    attributes: ['id', 'firstName', 'lastName', 'email'],
+    where: { id: userId}
+  })
+  .then(user => {
+    console.log(user);
+    if(user) {
+      res.status(200).json(user);
+    }
+  })
+  .catch((error) => res.status(404).json({ error: error }));
 };
 
+//MIDDLEWARE TO DO
+/* 
 exports.modifyProfile = async (req,res,next) => {
 };
 
