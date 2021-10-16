@@ -3,9 +3,9 @@
   <div class="home">
 
     <div class="frame">
-      <div class="frame__logo">
-       <img alt="Groupomania logo" src="../assets/icon-groupomania-white.svg" class="frame__logo--icon">
-       </div>
+       <img alt="Groupomania logo" src="../assets/icon-groupomania-white.svg" class="frame__icon">
+       <img alt="vector frame" src="../assets/vector-frame.svg" class="frame__vector" >
+
     </div>
     <div class="form">    
 
@@ -135,25 +135,27 @@ export default {
   background-position: center top;
   position: relative;
   overflow: hidden;
-   &__logo {
-     position: absolute;
-     max-width: 30%; 
-     height: 70px;
-     background-color: $secondary-color; 
-     border-radius: 25px; 
-     left: 40%;
-     bottom: 20%;
-     &--icon {
-       padding: 25px 10px;
-       width: 80%;
-     }
-   }
+    &__icon {
+      width: 55%;
+      position: absolute;
+      bottom: 90px;
+      left: 120px;
+      z-index: 2;
+    }
+    &__vector {
+      width: 77%;
+      height: 160px;
+      position: absolute;
+      bottom: 30px;
+      left: 75px;
+      z-index: 1;
+    }
  }
 
  .form {
    width:70%;
-   border-top-left-radius: 25%;
-   border-bottom-left-radius: 25%;
+   border-top-left-radius: 25px;
+   border-bottom-left-radius: 25px;
    background-color: white;
    display: flex;
    flex-direction: column;
@@ -172,7 +174,8 @@ export default {
   &__form {
     display: flex;
     flex-direction: column;
-      justify-content: center;
+    justify-content: center;
+    align-items: center;
     &-input {
       display: flex;
       flex-direction: column;
@@ -195,7 +198,7 @@ export default {
 .input_field {
   width: 300px;
   height: 50px;
-  border-radius: 25px;
+  border-radius: 20px;
   background-color: $primary-color;
   color: white;
   border: none;
@@ -214,20 +217,22 @@ export default {
   &-confirm {
     color: white;
     background: $tertiary-color;
-    border-radius: 25px;
+    border-radius: 20px;
     height: 100%;
     width: 300px;
     border: none;
     cursor: pointer;
+    font-size: 4vh;
   }
   &-switch {
     color: white;
     background: $tertiary-color;
-    border-radius: 25px;
+    border-radius: 20px;
     height: 100%;
     width: 300px;
     border: none;
     cursor: pointer;
+    font-size: 4vh;
   }
 }
 
