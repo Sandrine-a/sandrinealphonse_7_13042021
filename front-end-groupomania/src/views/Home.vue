@@ -14,51 +14,51 @@
 
      <form class="login__form">
 
-          <div class="login__form-input">
-            <label for="email" class="color_blue">E-mail </label>
-            <input v-model="email" class="input_field" type="mail" id="email" placeholder="Entrez votre mail pro">
-          </div>
-          <div class="login__form-input">
-            <label for="password" class="color_blue">Mot-de-Passe </label>
-            <input v-model="password" class="input_field" type="password" id="password" placeholder="Entrez votre mot-de-passe">
-          </div>
+      <div class="login__form-input">
+        <label for="email" class="color_blue">E-mail </label>
+        <input v-model="email" class="input_field" type="mail" id="email" placeholder="Entrez votre mail pro" required>
+      </div>
+      <div class="login__form-input">
+        <label for="password" class="color_blue">Mot-de-Passe </label>
+        <input v-model="password" class="input_field" type="password" id="password" placeholder="Entrez votre mot-de-passe" required>
+      </div>
 
-            <div class="login__form-input" v-if=" mode == 'signup'">
-              <label for="lastname" class="color_blue"> Nom </label>
-              <input v-model="lastname" class="input_field" type="text" id="lastname" placeholder="Entrez votre nom">
-            </div>
+      <div class="login__form-input" v-if=" mode == 'signup'">
+        <label for="lastname" class="color_blue"> Nom </label>
+        <input v-model="lastname" class="input_field" type="text" id="lastname" placeholder="Entrez votre nom" required>
+      </div>
 
-            <div class="login__form-input" v-if=" mode == 'signup'">
-              <label for="firstname" class="color_blue">Prénom </label>
-              <input v-model="firstname" class="input_field" type="text" id="firstname" placeholder="Entrez votre prénom">
-            </div>
+      <div class="login__form-input" v-if=" mode == 'signup'">
+        <label for="firstname" class="color_blue">Prénom </label>
+        <input v-model="firstname" class="input_field" type="text" id="firstname" placeholder="Entrez votre prénom" required>
+      </div>
           
-        <section id="section__btn">
+      <section id="section__btn">
 
-          <div class="btn__main">
-            <div v-if=" mode == 'login' && status == 'error_login' "> Mot-de-passe/adresse mail invalide </div>
-            <button @click="login()" class="btn__main-confirm" type="button" v-if=" mode == 'login' "><span v-if=" status == 'loading' ">Connexion en cours...</span><span v-else>Connexion</span></button>
-            <button @click="signup()" class="btn__main-confirm" type="button" v-else><span v-if=" status == 'loading' ">Création en cours...</span>
-            <span v-else>Créer un compte</span></button>
-          </div>
+        <div class="btn__main">
+          <div v-if=" mode == 'login' && status == 'error_login' "> Mot-de-passe/adresse mail invalide </div>
+          <button @click="login()" class="btn__main-confirm" type="button" v-if=" mode == 'login' "><span v-if=" status == 'loading' ">Connexion en cours...</span><span v-else>Connexion</span></button>
+          <button @click="signup()" class="btn__main-confirm" type="button" v-else><span v-if=" status == 'loading' ">Création en cours...</span>
+          <span v-else>Créer un compte</span></button>
+        </div>
 
-          <div class="login__form-legend">
-            <p> - OU - </p>
-            <legend v-if=" mode == 'login'">
-              Pas encore de compte? 
-              <span class="login__form-legendBold" @click="switchToSignup()">Inscrivez-vous: </span>
-            </legend>
-            <legend v-else>
-              Déjà inscrit? 
-              <span class="login__form-legendBold" @click="switchToLogin()">Connectez-vous: </span>
-            </legend>
-          </div>
-          <div class="btn__main">
-            <button class="btn__main-switch" type="button" @click="switchToSignup()" v-if=" mode == 'login'">Créer un compte</button>
-            <button class="btn__main-switch" type="button" @click="switchToLogin()" v-else>Connexion</button>
-          </div>
+        <div class="login__form-legend">
+          <p> - OU - </p>
+          <legend v-if=" mode == 'login'">
+            Pas encore de compte? 
+            <span class="login__form-legendBold" @click="switchToSignup()">Inscrivez-vous: </span>
+          </legend>
+          <legend v-else>
+            Déjà inscrit? 
+            <span class="login__form-legendBold" @click="switchToLogin()">Connectez-vous: </span>
+          </legend>
+        </div>
+        <div class="btn__main">
+          <button class="btn__main-switch" type="button" @click="switchToSignup()" v-if=" mode == 'login'">Créer un compte</button>
+          <button class="btn__main-switch" type="button" @click="switchToLogin()" v-else>Connexion</button>
+        </div>
 
-        </section>
+      </section>
       
      </form>
 
@@ -73,7 +73,7 @@ import {mapState} from 'vuex';
 
 export default {
   name: 'Home',
-  data: function() {
+  data() {
     return {
       mode: 'login',
       email: '',
@@ -93,7 +93,6 @@ export default {
       this.mode = 'login';
     },
     signup() {
-      console.log(this.email,this.password,this.firstname,this.lastname);
       this.$store.dispatch('signup', {
         email: this.email,
         password: this.password,
@@ -110,7 +109,9 @@ export default {
         password: this.password
       })
       .then(() => {
-        this.$router.push('Users')
+        console.log(this.$store.state.user.userId);
+        let id = this.$store.state.user.userId;
+        this.$router.push({ name: 'Users', params: { id: id } })
       })
       .catch(error => console.log(error));
     }
@@ -222,7 +223,8 @@ export default {
     width: 300px;
     border: none;
     cursor: pointer;
-    font-size: 4vh;
+    font-weight: bold;
+    font-size: 6vh;
   }
   &-switch {
     color: white;
@@ -232,7 +234,8 @@ export default {
     width: 300px;
     border: none;
     cursor: pointer;
-    font-size: 4vh;
+    font-weight: bold;
+    font-size: 6vh;
   }
 }
 

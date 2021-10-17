@@ -28,9 +28,10 @@ export default createStore({
     status: '',
     user: user,
     userInfos: {
-      email: '',
+      userId:'',
       firstname: '',
-      lastname: ''
+      lastname: '',
+      email: ''
     }
   },
   mutations: {
@@ -43,6 +44,7 @@ export default createStore({
       state.user = user;
     },
     USER_PROFILE(state, userInfos) {
+      console.log(userInfos);
       state.userInfos = userInfos;
     }
   },
@@ -62,7 +64,7 @@ export default createStore({
         })
       })      
     },
-    login({ commit } , userInfos) {
+    login({ commit }, userInfos) {
       commit('SET_STATUS', 'loading');
       return new Promise((resolve,reject) => {   
         axiosInstance.post('/users/login', userInfos)
@@ -78,8 +80,18 @@ export default createStore({
         })
       })
     },
-    getUserProfile ({ commit }) {
-      axiosInstance.get('/users/9')
+    getUserProfile({ commit }) {
+
+/*       let params = (new URL(document.location)).searchParams;
+      let id =  parseInt(params.get('id'));
+      axiosInstance.get({name: 'Users', params: { id: id } }) */
+
+      //recherche de l'id dans
+/*       let params = (new URL(document.location)).searchParams;
+      let id = params.get("id"); */
+      console.log(this.state.user.userId);
+      let id = this.state.user.userId;
+      axiosInstance.get(`/users/${id}`)
       .then((response) => {
         console.log(response.data);
         commit('USER_PROFILE', response.data);

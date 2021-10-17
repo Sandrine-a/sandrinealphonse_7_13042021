@@ -8,14 +8,14 @@ const routes = [
     component: Home
   },
   {
-    path: '/users',
+    path: '/users/:id',
     name: 'Users',
-    component: () => import(/* webpackChunkName: "about" */ '../views/Users.vue')
+    component: () => import(/* webpackChunkName: "users" */ '../views/Users.vue')
   },
   {
     path: '/posts',
     name: 'Posts',
-    component: () => import(/* webpackChunkName: "about" */ '../views/Posts.vue')
+    component: () => import(/* webpackChunkName: "posts" */ '../views/Posts.vue')
   },
   {
     path: '/about',
@@ -28,7 +28,7 @@ const routes = [
 ]
 
 const router = createRouter({
-  history: createWebHistory(process.env.BASE_URL),
+  history: createWebHistory(),
   routes
 })
 

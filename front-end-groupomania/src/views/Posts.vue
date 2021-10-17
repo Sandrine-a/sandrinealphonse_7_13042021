@@ -38,7 +38,7 @@
 
 
   .main {
-    background-color: $primary-color;
+    background-color: $bg-color;
   }
 
 
