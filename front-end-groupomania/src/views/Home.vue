@@ -110,7 +110,7 @@ export default {
         password: this.password
       })
       .then(() => {
-        this.$router.push('Posts')
+        this.$router.push('Users')
       })
       .catch(error => console.log(error));
     }

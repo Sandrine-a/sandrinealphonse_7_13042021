@@ -1,23 +1,36 @@
 import { createStore } from 'vuex';
 
 const axios = require('axios');
-//Instance axios
-const instance = axios.create({
+const axiosInstance = axios.create({
   baseURL: 'http://localhost:3000/api'
 });
+//initialisation du user en localstorage
+let user = localStorage.getItem('user');
+if(!user) {
+  user = {
+    userId: -1,
+    token:''
+  }; 
+} else {
+  try {
+    user = JSON.parse(user);
+    axiosInstance.defaults.headers.common['Authorization'] = user.token; 
+  } catch {
+    user = {
+      userId: -1,
+      token:''
+    };    
+  }
+}
 
 export default createStore({
   state: {
     status: '',
-    user: {
-      userId: -1,
-      token:''
-    },
+    user: user,
     userInfos: {
       email: '',
       firstname: '',
-      lastname: '',
-      photo: ''
+      lastname: ''
     }
   },
   mutations: {
@@ -25,7 +38,8 @@ export default createStore({
       state.status = status;
     },
     LOG_USER(state, user) {
-      axios.defaults.headers.common['Authorization'] = user;
+      axiosInstance.defaults.headers.common['Authorization'] = user.token; 
+      localStorage.setItem('user', JSON.stringify(user));   
       state.user = user;
     },
     USER_PROFILE(state, userInfos) {
@@ -37,7 +51,7 @@ export default createStore({
       commit('SET_STATUS', 'loading');
       return new Promise((resolve,reject) => {
         commit('SET_STATUS', '');
-        instance.post('/users/signup', userInfos)
+        axiosInstance.post('/users/signup', userInfos)
         .then((response) => {
           commit('SET_STATUS', 'signup');
           resolve(response);
@@ -51,10 +65,11 @@ export default createStore({
     login({ commit } , userInfos) {
       commit('SET_STATUS', 'loading');
       return new Promise((resolve,reject) => {   
-        instance.post('/users/login', userInfos)
+        axiosInstance.post('/users/login', userInfos)
         .then((response) => {
+          console.log(response.data);
           commit('SET_STATUS', '');
-          commit('LOG_USER', 'response.data');
+          commit('LOG_USER', response.data);
           resolve(response);
         })
         .catch((error) => {
@@ -64,7 +79,7 @@ export default createStore({
       })
     },
     getUserProfile ({ commit }) {
-      instance.get('/users/:id')
+      axiosInstance.get('/users/9')
       .then((response) => {
         console.log(response.data);
         commit('USER_PROFILE', response.data);
