@@ -39,7 +39,7 @@ export default createStore({
       state.status = status;
     },
     LOG_USER(state, user) {
-      axiosInstance.defaults.headers.common['Authorization'] = user.token; 
+      axiosInstance.defaults.headers.common['Authorization'] = 'Bearer' + ' ' + user.token; 
       localStorage.setItem('user', JSON.stringify(user));   
       state.user = user;
     },
