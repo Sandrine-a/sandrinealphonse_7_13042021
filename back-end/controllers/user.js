@@ -7,6 +7,8 @@ const bcrypt = require('bcrypt');
 
 const jwt = require('jsonwebtoken');
 
+const fs = require('fs');
+
 
 //Middlewares
 exports.signup = async (req,res,next) => {
@@ -49,7 +51,6 @@ exports.login = async (req,res,next) => {
     where: {email: email}
   })
   .then(user => {
-    console.log(user.password);
     if(!user) {
       return res.status(401).json({ error: 'Utilisateur inconnu !' });
     }
@@ -82,7 +83,6 @@ exports.getUserProfile = async (req,res,next) => {
     where: { id: userId}
   })
   .then(user => {
-    console.log(user);
     if(user) {
       res.status(200).json(user);
     } else {
@@ -107,7 +107,8 @@ exports.updateUserProfile = async (req,res,next) => {
   .then(user => {
     if(user) {
       user.update({
-        firstName: ( firstname ? firstname : user.firstName )
+        firstName: ( firstname ? firstname : user.firstName ),
+        lastName: ( lastname ? lastname : user.lastName )
       })
       .then(res.status(201).json({ message: ' Profile modifié !'}))
     } else {

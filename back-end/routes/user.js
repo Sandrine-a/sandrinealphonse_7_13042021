@@ -4,10 +4,9 @@ const express = require('express');
 const router = express.Router();
 
 const userCtrl = require('../controllers/user');
-
 const validator = require('../utils/validator');
-
 const auth = require('../utils/auth');
+const multer = require('../utils/multer-config');
 
 //Routing
 router.post('/signup', validator.signupValidator(), validator.validateResult, userCtrl.signup);
@@ -16,7 +15,7 @@ router.post('/login', validator.loginValidator(), validator.validateResult, user
 
 router.get('/:id', auth, userCtrl.getUserProfile);
 
-router.put('/:id', auth, userCtrl.updateUserProfile);
+router.put('/:id', auth, multer, userCtrl.updateUserProfile);
 
 //Routing TODO
 /* 
