@@ -93,30 +93,81 @@ exports.getUserProfile = async (req,res,next) => {
 };
 
 exports.updateUserProfile = async (req,res,next) => {
-  console.log(req.params);
-  console.log(req.body);
+
   //PARAMS
   const userId = req.params.id; 
-  const firstname = req.body.firstname;
-  const lastname = req.body.lastname;
 
-  const user = await models.User.findOne({
-    attributes: ['id', 'firstName', 'lastName' ],
+  //Recherche d'un fichier dans la req pour isoler l'User
+  const updatedUser = req.file ? {
+    ...req.body,
+    photo: `${req.protocol}://${req.get('host')}/images/users/${req.file.filename}`
+  } : {
+    ...req.body
+  }
+  console.log(updatedUser);
+
+  models.User.findOne({
+    attributes: ['id', 'firstName', 'lastName', 'pPicture' ],
     where: { id: userId}
   })
   .then(user => {
-    if(user) {
+    if( updatedUser.photo && user.pPicture == null) {
       user.update({
-        firstName: ( firstname ? firstname : user.firstName ),
-        lastName: ( lastname ? lastname : user.lastName )
+        firstName: updatedUser.firstname, 
+        lastName: updatedUser.lastname,
+        pPicture: updatedUser.photo 
+      }, {
+        where: {
+          id: req.body.userId
+        }
       })
       .then(res.status(201).json({ message: ' Profile modifié !'}))
+    } else if ( !updatedUser.photo && user.pPicture ) {
+      user.update({
+        firstName: updatedUser.firstname, 
+        lastName: updatedUser.lastname
+      }, {
+        where: {
+          id: req.body.userId
+        }
+      })
+      .then(res.status(201).json({ message: ' Profile modifié sans photo!'}))
     } else {
-      return res.status(404).json({ 'error': 'user not found' })
+        //Suppression de l'ancienne image de la BDD
+        const oldFilename = user.pPicture.split('/images/users/')[1];
+        try {
+          fs.unlinkSync(`images/users/${oldFilename}`)
+        } catch(error) {
+          throw new Error("Erreur avec l'image envoyée")
+        }
+        user.update({
+          firstName: updatedUser.firstname, 
+          lastName: updatedUser.lastname,
+          pPicture: updatedUser.photo
+        }, {
+          where: {
+            id: req.body.userId
+          }
+        })
+        .then(res.status(201).json({ message: ' Profile modifié avec photo!'}))
+
     }
+/*     if(req.file) {
+      //Suppression de l'ancienne image de la BDD
+      const oldFilename = user.pPicture.split('/images/users/')[1];
+      try {
+        fs.unlinkSync(`images/users/${oldFilename}`)
+      } catch(error) {
+        throw new Error("Erreur avec l'image envoyée")
+      }
+    } */
+
+
   })
+
   .catch((error) => res.status(500).json({ error: error }));
 };
+
 
 //MIDDLEWARE TO DO
 /* 
