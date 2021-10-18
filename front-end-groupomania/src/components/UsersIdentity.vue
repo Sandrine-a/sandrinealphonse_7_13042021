@@ -35,6 +35,7 @@
     computed: {
       ...mapState({
         user: 'userInfos',
+        userParams: 'user'
       })
     },
     methods: {
@@ -91,13 +92,13 @@
   &-modify {
     color: white;
     background: $tertiary-color;
-    border-radius: 20px;
+    border-radius: 10px;
     height: 100%;
     width: 300px;
     border: none;
     cursor: pointer;
     font-weight: bold;
-    font-size: 6vh;
+    font-size: 4vh;
     }
   }
 </style>

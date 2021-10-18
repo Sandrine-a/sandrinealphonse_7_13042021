@@ -9,6 +9,7 @@ const bodyParser = require('body-parser');
 
 const path = require('path');
 
+
 const userRoutes = require('./routes/user');
 const postRoutes = require('./routes/posts');
 

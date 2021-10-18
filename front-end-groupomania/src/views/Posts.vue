@@ -2,8 +2,10 @@
 
   <div class="main">
     <Header/>
-    <div>
-      <h1>Posts</h1>
+
+    <h1>Posts</h1>
+    <div class="card__column">
+      <PostsColumn />
     </div>
     
   </div>
@@ -13,19 +15,22 @@
 <script>
 
   import Header from '../components/Header.vue';
+  import PostsColumn from '../components/PostsColumn.vue'
+  
 
   export default {
     name: 'Posts',
     components: {
-      Header
+      Header,
+      PostsColumn
     },
     mounted() {
-      console.log(this.$store.state.user);
+
       if (this.$store.state.user.userId == -1 ) {
         this.$router.push('/');
         return;
       }
-      this.$store.dispatch('getUserProfile')
+      this.$store.dispatch('getUserParams');
     }
   }
 
@@ -35,11 +40,14 @@
 
  @import "@/assets/_variables.scss";
 
-
-
   .main {
     background-color: $bg-color;
   }
+  .card__column {
+    margin-left: 40px;
+    width: 70%;
+  }
+  
 
 
 </style>

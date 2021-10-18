@@ -7,19 +7,34 @@
       <nav class="header__nav">
         <ul class="header__nav--list">
           <li class="nav__list"><router-link to="/posts" class="nav__link"><fa icon="home" class="nav__icon"/></router-link></li>
-          <li class="nav__list"><a href="#" class="nav__link"><fa icon="user" class="nav__icon"/></a></li>
+          <li class="nav__list"><router-link :to="`/users/${userId}`" class="nav__link"><fa icon="user" class="nav__icon"/></router-link></li>
         </ul>
       </nav>
       <router-view />
+      
     </div>
   </header>
   
 </template>
 
 <script>
+
+import { mapState } from 'vuex'
+
 export default {
-  name: 'Header'
+  name: 'Header',
+  computed: {
+    ...mapState({
+      user: 'userInfos',
+    })
+  },
+  methods: {
+/*     getUserParams() {
+      this.$store.dispatch('getUserParams');
+    } */
+  }
 }
+
 </script>
 
 <style lang="scss" scoped>

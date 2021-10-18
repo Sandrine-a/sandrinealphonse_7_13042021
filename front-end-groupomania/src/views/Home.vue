@@ -79,7 +79,7 @@ export default {
       email: '',
       password: '',
       firstname: '',
-      lastname: '',
+      lastname: ''
     }
   },
   computed: {
@@ -109,9 +109,7 @@ export default {
         password: this.password
       })
       .then(() => {
-        console.log(this.$store.state.user.userId);
-        let id = this.$store.state.user.userId;
-        this.$router.push({ name: 'Users', params: { id: id } })
+        this.$router.push('Posts')
       })
       .catch(error => console.log(error));
     }
@@ -218,24 +216,24 @@ export default {
   &-confirm {
     color: white;
     background: $tertiary-color;
-    border-radius: 20px;
+    border-radius: 10px;
     height: 100%;
     width: 300px;
     border: none;
     cursor: pointer;
     font-weight: bold;
-    font-size: 6vh;
+    font-size: 4vh;
   }
   &-switch {
     color: white;
     background: $tertiary-color;
-    border-radius: 20px;
+    border-radius: 10px;
     height: 100%;
     width: 300px;
     border: none;
     cursor: pointer;
     font-weight: bold;
-    font-size: 6vh;
+    font-size: 4vh;
   }
 }
 
