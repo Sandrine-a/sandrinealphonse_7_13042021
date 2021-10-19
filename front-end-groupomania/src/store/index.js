@@ -96,7 +96,6 @@ export default createStore({
       let id = this.state.user.userId;
       axiosInstance.get(`/users/${id}`)
       .then((response) => {
-        console.log(response.data);
         commit('USER_PROFILE', response.data);
       })
       .catch(() => {

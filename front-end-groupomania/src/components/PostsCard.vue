@@ -3,7 +3,7 @@
   <div class="posts__card">
     <div class="posts__container">
       <article class="posts__content">
-        <h2 class="posts__content-title"> Titre du post </h2>
+        <h3 class="posts__content-title"> Titre du post </h3>
         <div class="posts__content-article">
           <p class="posts__content">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse nec velit ac quam vehicula ultricies et eu nulla. Cras lacinia aliquet vulputate. Etiam molestie a magna at dapibus. Nullam suscipit ipsum sit amet sem ultricies, eu pretium nunc dapibus. Sed lacinia nibh in ligula ultrices tincidunt. Nulla ullamcorper iaculis nunc, id efficitur justo accumsan vitae. Nullam commodo facilisis erat, in imperdiet nisi gravida et.
@@ -48,7 +48,7 @@ export default {
 
   .posts {
     &__card {
-      margin-bottom: 70px;
+      margin-bottom: 50px;
       background-color: white;
       border-radius: 25px;
       border: 2px solid $secondary-color;
@@ -85,13 +85,15 @@ export default {
     }
   }
   .btn__main{
-  height: 50px;
+  height: 40px;
+  width: auto;
+  min-width: 200px;
   &-modify {
     color: white;
     background: $tertiary-color;
     border-radius: 10px;
     height: 100%;
-    width: 300px;
+    width: 100%;;
     border: none;
     cursor: pointer;
     font-weight: bold;

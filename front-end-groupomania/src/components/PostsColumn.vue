@@ -1,7 +1,6 @@
 <template>
 
   <div class="posts__column">
-    <h3> tests </h3>
 
     <PostsCard v-for="(post, index) in 5" :key="index"/>
 
@@ -10,7 +9,8 @@
 </template>
 
 <script >
-  import PostsCard from '../components/PostsCard.vue'
+  import PostsCard from '../components/PostsCard.vue';
+
 
   export default {
     name: 'PostsColumn',
@@ -28,6 +28,8 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    align-items: flex-start;
    }
+
 
 </style>

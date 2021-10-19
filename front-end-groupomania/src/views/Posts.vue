@@ -4,6 +4,18 @@
     <Header/>
 
     <h1>Posts</h1>
+
+    <div class="addPost__container">
+      <section class="addPost__top">
+        <h2 class="addPost__title">Ajouter un post</h2>
+        <img src="../assets/groupomania-icon.svg" alt="Logo miniature" class="addPost__logo"/>
+      </section>
+
+        <AddPostSelect @click="switchToWrite" @keyup.enter="switchToWrite"  v-if=" mode == 'read'"/>
+        <AddPostForm @write-cancel="switchToRead" v-else/>
+
+    </div> 
+
     <div class="card__column">
       <PostsColumn />
     </div>
@@ -16,14 +28,17 @@
 
   import Header from '../components/Header.vue';
   import PostsColumn from '../components/PostsColumn.vue';
-
+  import AddPostSelect from '../components/AddPostSelect.vue';
+  import AddPostForm from '../components/AddPostForm.vue';
   
 
   export default {
     name: 'Posts',
     components: {
       Header,
-      PostsColumn
+      PostsColumn,
+      AddPostSelect,
+      AddPostForm 
     },
     data() {
       return {
@@ -31,6 +46,7 @@
         posts: [
           
         ],
+        mode: 'read'
       }
     },
     mounted() {
@@ -41,30 +57,13 @@
       this.$store.dispatch('getUserParams');
       this.$store.dispatch('getAllPosts');
     },
-/*     computed: {
-      ...mapState({
-        user: 'userInfos',
-        userParams: 'user'
-      })
-    }, */
-/*     setup() {
-      class Post {
-        constructor(title, content, attachment, comments, likes,) {
-          this.title = title,
-          this.content = content,
-          this.comments = comments,
-          this.likes = likes
-        }
-      }
-      let test = new Post('Premier post');
-      console.log(test);
-    }, */
     methods: {
-/*       getAllPosts()  {
-        this.posts = ['test', "blabla", null, 0, 0]
-        axios.get('http://localhost:3000/api/posts')
-        .then(res => console.log(res));
-      } */
+      switchToWrite() {
+        this.mode = 'writePost'
+      },
+      switchToRead() {
+        this.mode ='read'
+      }
     }
   }
 
@@ -77,6 +76,28 @@
   .main {
     background-color: $bg-color;
   }
+  .addPost{
+  &__top {
+    display: flex;
+    justify-content: space-between;
+  }
+  &__container {
+    margin-left: 40px;
+    margin-bottom: 30px;
+    text-align: start;
+    background-color: white;
+    border-radius: 25px;
+    border: 2px solid $secondary-color;
+    padding: 0 20px 20px;
+    width: 60%;
+  }
+  &__title {
+    color: $tertiary-color;
+  }
+  &__logo {
+    width: 50px;
+  }
+}
   .card__column {
     margin-left: 40px;
     width: 70%;
