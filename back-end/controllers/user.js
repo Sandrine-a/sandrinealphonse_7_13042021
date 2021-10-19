@@ -68,10 +68,10 @@ exports.login = async (req,res,next) => {
         )
       })
     }) 
-    .catch(error => res.status(500).json({ error }));
+    .catch((error) => res.status(500).json({ error }));
 
   })
-  .catch(error => res.status(500).json({ error }));
+  .catch((error) => res.status(500).json({ error }));
 };
 
 exports.getUserProfile = async (req,res,next) => {

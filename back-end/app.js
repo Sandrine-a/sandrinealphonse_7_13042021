@@ -37,6 +37,8 @@ db.authenticate()
 .then(()=> console.log('Connection  to database has been established successfully.'))
 .catch(err =>  console.error('Unable to connect to the database:', error));
 
+app.use('/images', express.static(path.join(__dirname, 'images')));
+
 //Enregistrement des routes User
 app.use('/api/users', userRoutes);
 //Enregistrement du router
