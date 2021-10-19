@@ -32,6 +32,7 @@
         this.$router.push('/');
         return;
       }
+      this.$store.dispatch('getUserParams');
       this.$store.dispatch('getUserProfile');
     },  
     computed: {

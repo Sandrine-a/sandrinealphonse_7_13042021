@@ -14,7 +14,7 @@ if(!user) {
 } else {
   try {
     user = JSON.parse(user);
-    axiosInstance.defaults.headers.common['Authorization'] = user.token; 
+    axiosInstance.defaults.headers.common['Authorization'] = 'Bearer' + ' ' + user.token; 
   } catch {
     user = {
       userId: -1,
@@ -53,6 +53,7 @@ export default createStore({
     },
     CHECK_USER(state, user)  {
       state.user = user;
+      console.log('check user mutation:');
       console.log(user);
     }
   },
@@ -87,13 +88,11 @@ export default createStore({
         })
       })
     },
-    getUserParams({commit}) {
+    getUserParams({ commit }) {
       const user = JSON.parse(localStorage.getItem('user'));
       commit('CHECK_USER', user)
-      console.log(user);
     },
     getUserProfile({ commit }) {
-      console.log(this.state.user.userId);
       let id = this.state.user.userId;
       axiosInstance.get(`/users/${id}`)
       .then((response) => {
@@ -102,7 +101,28 @@ export default createStore({
       })
       .catch(() => {
       })
-    }
+    },
+    getAllPosts({ commit }) {
+      console.log('posts');
+      axiosInstance.get('/posts')
+      .then((response) => {
+        console.log(response)
+        commit()
+      })
+      .catch(() => {
+      })
+    },
+    
+/*     getAllPosts({commit}) {
+      console.log(this.state.user.userId);
+      let id = this.state.user.userId;
+      axiosInstance.get(`/users/${id}`)
+      .then((response) => {
+        console.log(response.data);
+        commit('USER_PROFILE', response.data);
+      })
+      .catch(() => {
+      }) */
   },
   modules: {
   }

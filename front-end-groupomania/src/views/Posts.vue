@@ -15,7 +15,8 @@
 <script>
 
   import Header from '../components/Header.vue';
-  import PostsColumn from '../components/PostsColumn.vue'
+  import PostsColumn from '../components/PostsColumn.vue';
+
   
 
   export default {
@@ -24,13 +25,46 @@
       Header,
       PostsColumn
     },
+    data() {
+      return {
+        user: '',
+        posts: [
+          
+        ],
+      }
+    },
     mounted() {
-
       if (this.$store.state.user.userId == -1 ) {
         this.$router.push('/');
         return;
       }
       this.$store.dispatch('getUserParams');
+      this.$store.dispatch('getAllPosts');
+    },
+/*     computed: {
+      ...mapState({
+        user: 'userInfos',
+        userParams: 'user'
+      })
+    }, */
+/*     setup() {
+      class Post {
+        constructor(title, content, attachment, comments, likes,) {
+          this.title = title,
+          this.content = content,
+          this.comments = comments,
+          this.likes = likes
+        }
+      }
+      let test = new Post('Premier post');
+      console.log(test);
+    }, */
+    methods: {
+/*       getAllPosts()  {
+        this.posts = ['test', "blabla", null, 0, 0]
+        axios.get('http://localhost:3000/api/posts')
+        .then(res => console.log(res));
+      } */
     }
   }
 
