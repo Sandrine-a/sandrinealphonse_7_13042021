@@ -2,13 +2,15 @@
 
   <div class="posts__column">
 
-    <PostsCard v-for="(post, index) in 5" :key="index"/>
+    <PostsCard v-for="(item, index) in allPosts" :datas="item" :key="index" />
 
   </div>
   
 </template>
 
 <script >
+  import {mapState} from 'vuex';
+
   import PostsCard from '../components/PostsCard.vue';
 
 
@@ -16,8 +18,10 @@
     name: 'PostsColumn',
     components: {
       PostsCard
+    },
+    computed: {
+      ...mapState(['allPosts','user'])
     }
-
 }
 </script>
 

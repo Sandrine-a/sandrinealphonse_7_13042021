@@ -25,6 +25,8 @@
 </template>
 
 <script>
+// @ is an alias to /src
+  import {mapState} from 'vuex';
 
   import Header from '../components/Header.vue';
   import PostsColumn from '../components/PostsColumn.vue';
@@ -42,20 +44,22 @@
     },
     data() {
       return {
-        user: '',
-        posts: [
-          
-        ],
+        posts: [],
         mode: 'read'
       }
+    }, 
+    computed: {
+      ...mapState(['user', 'allPosts'])
+    },
+    created() {
+      this.$store.dispatch('getUserParams');
+      this.$store.dispatch('getAllPosts');
     },
     mounted() {
       if (this.$store.state.user.userId == -1 ) {
         this.$router.push('/');
         return;
       }
-      this.$store.dispatch('getUserParams');
-      this.$store.dispatch('getAllPosts');
     },
     methods: {
       switchToWrite() {
@@ -64,7 +68,15 @@
       switchToRead() {
         this.mode ='read'
       }
-    }
+    }/* ,
+    props  {
+      title: '',
+      content:'',
+      attachment:'',
+      likes:'',
+      comments:'',
+      userId:''
+    } */
   }
 
 </script>

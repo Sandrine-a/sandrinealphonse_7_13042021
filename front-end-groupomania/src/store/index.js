@@ -32,6 +32,15 @@ export default createStore({
       firstname: '',
       lastname: '',
       email: ''
+    },
+    allPosts: [],
+    post: {
+      title: '',
+      content:'',
+      attachment:'',
+      likes:'',
+      comments:'',
+      userId:''
     }
   },
   getters: {
@@ -55,6 +64,10 @@ export default createStore({
       state.user = user;
       console.log('check user mutation:');
       console.log(user);
+    },
+    GET_ALL_POSTS(state, allPosts) {
+      state.allPosts = allPosts;
+      console.log(allPosts);
     }
   },
   actions: {
@@ -102,16 +115,14 @@ export default createStore({
       })
     },
     getAllPosts({ commit }) {
-      console.log('posts');
       axiosInstance.get('/posts')
       .then((response) => {
-        console.log(response)
-        commit()
+        commit('GET_ALL_POSTS', response.data)
       })
       .catch(() => {
       })
     },
-    
+
 /*     getAllPosts({commit}) {
       console.log(this.state.user.userId);
       let id = this.state.user.userId;
