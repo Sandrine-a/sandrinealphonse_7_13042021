@@ -10,7 +10,7 @@
           </p>
         </div>
       </article>
-      <div class="posts__buttons">
+      <div class="posts__buttons" v-if=" this.datas.UserId == this.user.userId " >
         <div class="btn__main">
           <button class="btn__main-modify" type="button"> Modifier </button>
         </div>
@@ -36,12 +36,16 @@
 </template>
 
 <script>
- 
+// @ is an alias to /src
+  import {mapState} from 'vuex'; 
 
 export default {
   name: "PostsCard",
   props: {
     datas: Object
+  },
+  computed: {
+    ...mapState(['user', 'allPosts'])
   }
 }
 </script>
@@ -56,6 +60,7 @@ export default {
       background-color: white;
       border-radius: 25px;
       border: 2px solid $secondary-color;
+      width: 100%;
     }
     &__content {
       text-align: start;
