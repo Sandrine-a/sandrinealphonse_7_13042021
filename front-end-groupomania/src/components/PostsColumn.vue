@@ -24,9 +24,12 @@
     },
     methods: {
       deletePost(post) {
-        this.$store.dispatch('deletePost', post )
-        .then(() => this.$store.dispatch('getAllPosts'))
-        .catch(error => console.log(error));
+        let result = confirm("Confirmez-vous la suppression?");
+        if(result) {
+          this.$store.dispatch('deletePost', post )
+          .then(() => this.$store.dispatch('getAllPosts'))
+          .catch(error => console.log(error));
+        }
       }     
     }
   }
