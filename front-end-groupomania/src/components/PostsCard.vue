@@ -15,7 +15,7 @@
           <button class="btn__main-modify" type="button"> Modifier </button>
         </div>
         <div class="btn__main">
-          <button class="btn__main-modify" type="button"> Supprimer </button>
+          <button class="btn__main-delete" type="button" @click="deletePost" > Supprimer </button>
         </div>
       </div>
       <section class="posts__reactions">
@@ -41,12 +41,23 @@
 
 export default {
   name: "PostsCard",
+  data() {
+    return {
+      post: {}
+    }
+  },
   props: {
     datas: Object
   },
   computed: {
-    ...mapState(['user', 'allPosts'])
+    ...mapState(['user'])
+  },
+  methods: {
+    deletePost() {
+      this.$emit('delete-post',  this.datas )
+    }
   }
+
 }
 </script>
 
@@ -97,7 +108,7 @@ export default {
   height: 40px;
   width: auto;
   min-width: 200px;
-  &-modify {
+  &-modify, &-delete {
     color: white;
     background: $tertiary-color;
     border-radius: 10px;

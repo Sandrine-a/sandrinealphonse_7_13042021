@@ -41,8 +41,8 @@ export default createStore({
       comments:'',
       id:'',
       userId:'',
-      createdAt:''
-/*       attachment:'' */
+      createdAt:'',
+      attachment:''
     }
   },
   getters: {
@@ -64,12 +64,17 @@ export default createStore({
     },
     CHECK_USER(state, user)  {
       state.user = user;
+      console.log(user);
     },
     GET_ALL_POSTS(state, allPosts) {
       state.allPosts = allPosts;
       console.log(allPosts);
     },
     CREATE_POST(state, post) {
+      state.post = post;
+      console.log(post);
+    },
+    POST_TO_DELETE(state, post) {
       state.post = post;
       console.log(post);
     }
@@ -142,18 +147,23 @@ export default createStore({
           reject(error);
         })
       })    
-    }
+    },
+    deletePost({ commit }, post) {
+      //Récupération du post envoyé et commit dans post:
+      commit('POST_TO_DELETE', post)
+      console.log(this.state.post.id);
+      //Puis, récupération de l'id du post dans le state
+      const id = this.state.post.id;
 
-/*     getAllPosts({commit}) {
-      console.log(this.state.user.userId);
-      let id = this.state.user.userId;
-      axiosInstance.get(`/users/${id}`)
-      .then((response) => {
-        console.log(response.data);
-        commit('USER_PROFILE', response.data);
+      return new Promise((resolve,reject) => {
+        axiosInstance.delete(`/posts/${id}`, {data: {userId: user.userId} })
+        .then((response) => {
+          console.log(response.data);
+          resolve(response);
+        })
+        .catch((error) => {reject(error)})
       })
-      .catch(() => {
-      }) */
+    }
   },
   modules: {
   }

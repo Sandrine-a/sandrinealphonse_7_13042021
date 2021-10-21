@@ -2,7 +2,7 @@
 
   <div class="posts__column">
 
-    <PostsCard v-for="(item, index) in allPosts" :datas="item" :key="index" />
+    <PostsCard v-for="(item, index) in allPosts" :datas="item" :key="index" @delete-post="deletePost" />
 
   </div>
   
@@ -21,8 +21,16 @@
     },
     computed: {
       ...mapState(['allPosts','user'])
+    },
+    methods: {
+      deletePost(post) {
+        this.$store.dispatch('deletePost', post )
+        .then(() => this.$store.dispatch('getAllPosts'))
+        .catch(error => console.log(error));
+      }     
     }
-}
+  }
+  
 </script>
 
 <style lang="scss" scoped>
