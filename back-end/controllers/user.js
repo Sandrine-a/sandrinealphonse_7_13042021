@@ -150,21 +150,8 @@ exports.updateUserProfile = async (req,res,next) => {
           }
         })
         .then(res.status(201).json({ message: ' Profile modifié avec photo!'}))
-
     }
-/*     if(req.file) {
-      //Suppression de l'ancienne image de la BDD
-      const oldFilename = user.pPicture.split('/images/users/')[1];
-      try {
-        fs.unlinkSync(`images/users/${oldFilename}`)
-      } catch(error) {
-        throw new Error("Erreur avec l'image envoyée")
-      }
-    } */
-
-
   })
-
   .catch((error) => res.status(500).json({ error: error }));
 };
 

@@ -9,7 +9,7 @@ const fs = require('fs');
 const { title } = require('process'); */
 
 exports.createPost = async (req,res,next) => { 
-  console.log("** ** CONTROLEUR CREATE SAUCE");
+  console.log("** ** CONTROLEUR CREATE POST");
   //Params
   const  { title, content, userId } = req.body;
 
@@ -40,18 +40,6 @@ exports.createPost = async (req,res,next) => {
   } else {
     return res.status(404).json({error: 'Utisateur deja inconnu !'});
   }
-
-
-   //Recuperation des param
-/*    const sauceObject = JSON.parse(req.body.sauce);
-   const sauce = new Sauce({
-     ...sauceObject,
-     imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
-   });
-   sauce.save()
-     .then(() => res.status(201).json({ message: ' Sauce enregistrée !'}))
-     .catch(error => res.status(400).json({ error })); */
-
 };
 
 exports.getAllPosts = async (req,res,next) => {
@@ -73,6 +61,25 @@ exports.getAllPosts = async (req,res,next) => {
   );
 };
 
+exports.deletePost = async (req,res,next) => {
+  console.log("** ** CONTROLEUR DELETE POST");
+  //PARAMS
+  const postId = req.params.id;
+  console.log(postId);
+  const userId = req.body.userId;
+  console.log(userId);
+
+  const post = await models.Post.findOne({
+    where: { id: postId, userId: userId}
+  })
+  .then( post => {
+    post.destroy()
+    .then(() => res.status(200).json({ message: ' Post supprimé '}))
+    .catch(error => res.status(500).json({ error: error }));
+  })
+  .catch(error => res.status(404).json({ error : 'Not found'}));
+};
+
 /* exports.modifyPost = async (req,res,next) => {
 };
 
@@ -82,5 +89,4 @@ exports.getAllPosts = async (req,res,next) => {
 exports.getOnePost = async (req,res,next) => {
 };
 
-exports.deletePost = async (req,res,next) => {
-}; */
+ */

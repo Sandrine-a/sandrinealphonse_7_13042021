@@ -12,11 +12,13 @@ router.post('/', auth, postCtrl.createPost);
 
 router.get('/', auth, postCtrl.getAllPosts);
 
+router.delete('/:id', auth, postCtrl.deletePost);
+
 //Routes TODO
 /* router.get('/:id', postCtrl.getOnePost);
 router.put('/:id', postCtrl.modifyPost);
 router.get('/', postCtrl.AllPosts);
-router.delete('/:id', postCtrl.createPost); */
+ */
 
 //Export
 module.exports = router;
