@@ -68,15 +68,7 @@
       switchToRead() {
         this.mode ='read'
       }
-    }/* ,
-    props  {
-      title: '',
-      content:'',
-      attachment:'',
-      likes:'',
-      comments:'',
-      userId:''
-    } */
+    }
   }
 
 </script>

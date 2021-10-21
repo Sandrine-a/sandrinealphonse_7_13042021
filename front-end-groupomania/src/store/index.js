@@ -37,10 +37,12 @@ export default createStore({
     post: {
       title: '',
       content:'',
-      attachment:'',
       likes:'',
       comments:'',
-      userId:''
+      id:'',
+      userId:'',
+      createdAt:''
+/*       attachment:'' */
     }
   },
   getters: {
@@ -62,12 +64,14 @@ export default createStore({
     },
     CHECK_USER(state, user)  {
       state.user = user;
-      console.log('check user mutation:');
-      console.log(user);
     },
     GET_ALL_POSTS(state, allPosts) {
       state.allPosts = allPosts;
       console.log(allPosts);
+    },
+    CREATE_POST(state, post) {
+      state.post = post;
+      console.log(post);
     }
   },
   actions: {
@@ -122,6 +126,23 @@ export default createStore({
       .catch(() => {
       })
     },
+    sendPost({ commit }, post) {
+      console.log(this.state.user);
+      commit('CREATE_POST', post );
+      return new Promise((resolve,reject) => {
+        axiosInstance.post('/posts', post)
+        .then((response) => {
+          console.log(response.data);
+          commit('CREATE_POST', response.data );
+          commit('SET_STATUS', 'sent')
+          resolve(response);
+        })
+        .catch((error) => {
+          commit('SET_STATUS', 'error_sendpost');
+          reject(error);
+        })
+      })    
+    }
 
 /*     getAllPosts({commit}) {
       console.log(this.state.user.userId);

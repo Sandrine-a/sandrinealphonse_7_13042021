@@ -18,7 +18,7 @@
 
       <div class="post__form-buttons">
         <div class="btn__post">
-          <button class="btn__post-send" type="button"> Envoyer </button>
+          <button @click="sendPost" class="btn__post-send" type="button"> Envoyer </button>
         </div>
         <div class="btn__post">
           <button class="btn__post-cancel" type="button" @click="cancelWrite" > Annuler </button>
@@ -30,26 +30,47 @@
 </template>
 
 <script>
-export default {
-  name: 'AddPostForm',
-  data() {
-    return {
-      title: '',
-      content:'',
-      attachment:''
-    }
-  },
-  methods: {
-    initUpload() {
-      const uploadBtn = document.getElementById("attachment");
-      uploadBtn.click()
+// @ is an alias to /src
+  import {mapState} from 'vuex';
+
+  export default {
+    name: 'AddPostForm',
+    data() {
+      return {
+        title: '',
+        content:'',
+        userId:''
+      }
+    },    
+    computed: {
+        ...mapState(['user','status'])
     },
-    cancelWrite () {
-      this.$emit('write-cancel', {mode: 'read'})
+    methods: {
+      initUpload() {
+        const uploadBtn = document.getElementById("attachment");
+        uploadBtn.click()
+      },
+      sendPost() {
+        this.$store.dispatch('sendPost', {
+          title: this.title,
+          content: this.content,
+          userId: this.user.userId
+        })
+        .then(() => this.$store.dispatch('getAllPosts'))
+        .then(() => this.cancelWrite())
+        .then(() => this.succesAlert())
+        .catch(error => console.log(error));
+      },
+      succesAlert() {
+        this.$emit('succes-status')
+      },
+      cancelWrite () {
+        this.$emit('write-cancel', { mode: 'read' })
+      }
     }
+
   }
 
-}
 </script>
 
 <style lang="scss" scoped>
