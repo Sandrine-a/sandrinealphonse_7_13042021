@@ -11,10 +11,10 @@ const { title } = require('process'); */
 exports.createPost = async (req,res,next) => { 
   console.log("** ** CONTROLEUR CREATE POST");
   //Params
-  const  { title, content, userId } = req.body;
+  const { title, content, userId } = req.body;
 
   //Vérification de la complétion des inputs
-  if(!title || !content || !userId ) {
+  if(!title && !content && !userId || !title && !req.file.filename && !userId) {
   return res.status(400).json({error: ' Tous les champs sont oblogatoires !'});
    }; 
    
@@ -22,23 +22,44 @@ exports.createPost = async (req,res,next) => {
     where: { id: userId}
   })
   if(userExist) {
-    console.log('USER EXIST YES');
     try {
-      //Creéation du post
-      const post = await models.Post.create({
-      title: title,
-      content: content,
-      likes: 0,
-      comments: 0,
-      UserId: userId
-      })
-      .then((post) => res.status(201).json({ post }))  
+      //Recherche d'un fichier dans la req pour l'isoler du post
+      const newPost = req.file ? {
+        ...req.body,
+        attachment: `${req.protocol}://${req.get('host')}/images/posts/${req.file.filename}`
+      } : {
+        ...req.body
+      }
+      console.log(newPost);
+
+      if(req.file) {
+        console.log('Post with pic');
+        //Creéation du post si file
+        await models.Post.create({
+          title: title,
+          attachment: newPost.attachment,
+          likes: 0,
+          comments: 0,
+          UserId: userId
+          })
+          .then((post) => res.status(201).json({ post }))  
+      } else {
+        console.log('Post content only:');
+        //Si post text 
+        await models.Post.create({
+          title: title,
+          content: content,
+          likes: 0,
+          comments: 0,
+          UserId: userId
+          })
+          .then((post) => res.status(201).json({ post }))     
+      }
     } catch (error) {
       res.status(400).json({ error })
     }
-
   } else {
-    return res.status(404).json({error: 'Utisateur deja inconnu !'});
+    return res.status(404).json({error: 'Utisateur inconnu !'});
   }
 };
 
@@ -65,17 +86,24 @@ exports.deletePost = async (req,res,next) => {
   console.log("** ** CONTROLEUR DELETE POST");
   //PARAMS
   const postId = req.params.id;
-  console.log(postId);
   const userId = req.body.userId;
-  console.log(userId);
 
   const post = await models.Post.findOne({
     where: { id: postId, userId: userId}
   })
   .then( post => {
-    post.destroy()
-    .then(() => res.status(200).json({ message: ' Post supprimé '}))
-    .catch(error => res.status(500).json({ error: error }));
+    if(!post.attachment) {
+      post.destroy()
+      .then(() => res.status(200).json({ message: ' Post supprimé '}))
+      .catch(error => res.status(500).json({ error: error }));
+    } else {
+      const filename = post.attachment.split('/images/posts/')[1];
+      fs.unlink(`images/${filename}`, () => {
+        post.destroy()
+        .then(() => res.status(200).json({ message: ' Post supprimé '}))
+        .catch(error => res.status(500).json({ error: error }));
+      })
+    }
   })
   .catch(error => res.status(404).json({ error : 'Not found'}));
 };
@@ -84,9 +112,11 @@ exports.modifyPost = async (req,res,next) => {
   console.log('*** ***MODIFY CONTROLEUR');
     //PARAMS
     const postId = req.params.id;
-    console.log(postId);
     const userId = req.body.userId;
-    console.log(userId);
+      //Vérification de la complétion des inputs
+    if(!postId && !req.content && !req.userId || !postId && !req.attachment && !req.userId) {
+      return res.status(400).json({error: ' Tous les champs sont oblogatoires !'});
+     }; 
 
     //Recherche d'un fichier dans la req pour l'isoler du post
     const updatedPost = await req.file ? {
@@ -105,8 +135,6 @@ exports.modifyPost = async (req,res,next) => {
       if(post.attachment) {
         //Suppression de l'ancienne image de la BDD
         const oldFilename = post.attachment.split('/images/posts/')[1];
-        console.log('oldFIlename:');
-        console.log(oldFilename);
         try {
           fs.unlinkSync(`images/posts/${oldFilename}`)
         } catch(error) {
@@ -122,7 +150,6 @@ exports.modifyPost = async (req,res,next) => {
         })
         .then(res.status(201).json({ message: 'Post image !'}))    
       } else {
-        console.log(updatedPost.title);
         post.update({
           title: updatedPost.title,
           content: updatedPost.content
@@ -136,13 +163,3 @@ exports.modifyPost = async (req,res,next) => {
     })   
     .catch(error => res.status(404).json({ error : 'Not found'}));
 };
-
-/* 
-
-exports.getAllPosts = async (req,res,next) => {
-};
-
-exports.getOnePost = async (req,res,next) => {
-};
-
- */
