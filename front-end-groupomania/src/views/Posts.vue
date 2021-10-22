@@ -53,14 +53,14 @@
     },
     created() {
       this.$store.dispatch('getUserParams');
-      this.$store.dispatch('getAllPosts');
     },
     mounted() {
-      if (this.userAccess.userId == -1 ) {
+      console.log(this.userAccess);
+      if (!this.userAccess) {
         this.$router.push('/');
         return;
       }
-      console.log(this.userAccess);
+      this.$store.dispatch('getAllPosts');
     },
     methods: {
       switchToWrite() {

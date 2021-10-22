@@ -38,10 +38,6 @@ export default createStore({
       state.status = status;
     },
     LOG_USER(state, userAccess) {
-/*       axiosInstance.defaults.headers.common['Authorization'] = 'Bearer' + ' ' + userAccess.token; 
-      
-      localStorage.setItem('accesstoken', JSON.stringify(userAccess)); */
-
       state.userAccess = userAccess;
     },
     USER_PROFILE(state, userInfos) {
@@ -84,10 +80,9 @@ export default createStore({
       return new Promise((resolve,reject) => {   
         axiosInstance.post('/users/login', userInfos)
         .then((response) => {
+          localStorage.setItem('accesstoken', JSON.stringify(response.data));
           commit('SET_STATUS', '');
           commit('LOG_USER', response.data);
-          
-          localStorage.setItem('accesstoken', JSON.stringify(response.data));
           resolve(response);
 
         })
@@ -96,14 +91,10 @@ export default createStore({
           reject(error);
         })
       })
-    },
+    },    
     getUserParams({ commit }) {
-      console.log(this.state.userAccess);
       const userAccess = JSON.parse(localStorage.getItem('accesstoken'));
       commit('CHECK_USER', userAccess)
-
-      console.log("etape get User params:");
-      console.log(userAccess);
     },
     getUserProfile({ commit }) {
       let id = this.state.userAccess.userId;
@@ -143,11 +134,12 @@ export default createStore({
       //Récupération du post envoyé et commit dans post:
       commit('POST_TO_DELETE', post)
       console.log(this.state.post.id);
+      console.log(this.state.userAccess.userId);
       //Puis, récupération de l'id du post dans le state
       const id = this.state.post.id;
 
       return new Promise((resolve,reject) => {
-        axiosInstance.delete(`/posts/${id}`, {data: {userId: this.userAccess.userId} })
+        axiosInstance.delete(`/posts/${id}`, {data: {userId: this.state.userAccess.userId} })
         .then((response) => {
           console.log(response.data);
           resolve(response);

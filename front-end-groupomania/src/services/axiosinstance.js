@@ -1,17 +1,23 @@
 const axios = require('axios');
 
+
+import router from '../router';
+
 const axiosInstance = axios.create({
-  baseURL: 'http://localhost:3000/api'
+  baseURL: 'http://localhost:3000/api',
+ 
 });
+
 
 axiosInstance.interceptors.request.use(function (config) {
   // Do something before request is sent
-  const accesstoken = JSON.parse(localStorage.getItem('accesstoken'));
-  if(accesstoken) {
-    axiosInstance.defaults.headers.common['Authorization'] = 'Bearer' + ' ' + accesstoken.token; 
+  const userAccess = JSON.parse(localStorage.getItem('accesstoken')); 
+  if(userAccess) {
+    console.log(userAccess);
+    config.headers["Authorization"] = 'Bearer' + ' ' + userAccess.token  
+  } else {
+    router.push('/');
   }
-  console.log('PAGE INTERCEPTOR:');
-  console.log(accesstoken);
 
   return config;
 
