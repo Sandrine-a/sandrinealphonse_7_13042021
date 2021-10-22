@@ -15,7 +15,7 @@ router.post('/login', validator.loginValidator(), validator.validateResult, user
 
 router.get('/:id', auth, userCtrl.getUserProfile);
 
-router.put('/:id', auth, multer, userCtrl.updateUserProfile);
+router.put('/:id', auth, multer.usersStorage, userCtrl.updateUserProfile);
 
 //Routing TODO
 /* 

@@ -8,11 +8,13 @@ const auth = require('../utils/auth');
 const multer = require('../utils/multer-config');
 
 //Routes
-router.post('/', auth, postCtrl.createPost);
+router.post('/', auth, multer.postsStorage, postCtrl.createPost);
 
 router.get('/', auth, postCtrl.getAllPosts);
 
-router.delete('/:id', auth, postCtrl.deletePost);
+router.put('/:id', auth, multer.postsStorage, postCtrl.modifyPost);
+
+router.delete('/:id', auth,  postCtrl.deletePost);
 
 //Routes TODO
 /* router.get('/:id', postCtrl.getOnePost);

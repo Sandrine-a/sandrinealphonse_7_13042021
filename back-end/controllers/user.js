@@ -97,7 +97,7 @@ exports.updateUserProfile = async (req,res,next) => {
   //PARAMS
   const userId = req.params.id; 
 
-  //Recherche d'un fichier dans la req pour isoler l'User
+  //Recherche d'un fichier dans la req puis isoler l'User
   const updatedUser = req.file ? {
     ...req.body,
     photo: `${req.protocol}://${req.get('host')}/images/users/${req.file.filename}`
