@@ -1,32 +1,15 @@
 import { createStore } from 'vuex';
 
-const axios = require('axios');
-const axiosInstance = axios.create({
-  baseURL: 'http://localhost:3000/api'
-});
-//initialisation du user en localstorage
-let user = localStorage.getItem('user');
-if(!user) {
-  user = {
-    userId: -1,
-    token:''
-  }; 
-} else {
-  try {
-    user = JSON.parse(user);
-    axiosInstance.defaults.headers.common['Authorization'] = 'Bearer' + ' ' + user.token; 
-  } catch {
-    user = {
-      userId: -1,
-      token:''
-    };    
-  }
-}
+import axiosInstance from '../services/axiosinstance';
+
 
 export default createStore({
   state: {
     status: '',
-    user: user,
+    userAccess: {
+      userId: -1,
+      token: ''
+    },
     userInfos: {
       userId:'',
       firstname: '',
@@ -54,17 +37,18 @@ export default createStore({
     SET_STATUS(state, status) {
       state.status = status;
     },
-    LOG_USER(state, user) {
-      axiosInstance.defaults.headers.common['Authorization'] = 'Bearer' + ' ' + user.token; 
-      localStorage.setItem('user', JSON.stringify(user));   
-      state.user = user;
+    LOG_USER(state, userAccess) {
+/*       axiosInstance.defaults.headers.common['Authorization'] = 'Bearer' + ' ' + userAccess.token; 
+      
+      localStorage.setItem('accesstoken', JSON.stringify(userAccess)); */
+
+      state.userAccess = userAccess;
     },
     USER_PROFILE(state, userInfos) {
       state.userInfos = userInfos;
     },
-    CHECK_USER(state, user)  {
-      state.user = user;
-      console.log(user);
+    CHECK_USER(state, userAccess)  {
+      state.userAccess = userAccess;
     },
     GET_ALL_POSTS(state, allPosts) {
       state.allPosts = allPosts;
@@ -102,7 +86,10 @@ export default createStore({
         .then((response) => {
           commit('SET_STATUS', '');
           commit('LOG_USER', response.data);
+          
+          localStorage.setItem('accesstoken', JSON.stringify(response.data));
           resolve(response);
+
         })
         .catch((error) => {
           commit('SET_STATUS', 'error_login');
@@ -111,11 +98,15 @@ export default createStore({
       })
     },
     getUserParams({ commit }) {
-      const user = JSON.parse(localStorage.getItem('user'));
-      commit('CHECK_USER', user)
+      console.log(this.state.userAccess);
+      const userAccess = JSON.parse(localStorage.getItem('accesstoken'));
+      commit('CHECK_USER', userAccess)
+
+      console.log("etape get User params:");
+      console.log(userAccess);
     },
     getUserProfile({ commit }) {
-      let id = this.state.user.userId;
+      let id = this.state.userAccess.userId;
       axiosInstance.get(`/users/${id}`)
       .then((response) => {
         commit('USER_PROFILE', response.data);
@@ -132,7 +123,7 @@ export default createStore({
       })
     },
     sendPost({ commit }, post) {
-      console.log(this.state.user);
+      console.log(this.state.userAccess);
       commit('CREATE_POST', post );
       return new Promise((resolve,reject) => {
         axiosInstance.post('/posts', post)
@@ -156,7 +147,7 @@ export default createStore({
       const id = this.state.post.id;
 
       return new Promise((resolve,reject) => {
-        axiosInstance.delete(`/posts/${id}`, {data: {userId: user.userId} })
+        axiosInstance.delete(`/posts/${id}`, {data: {userId: this.userAccess.userId} })
         .then((response) => {
           console.log(response.data);
           resolve(response);

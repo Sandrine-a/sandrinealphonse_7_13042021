@@ -7,21 +7,21 @@
       </div>
       <div class="post__form-input">
         <label for="content" class="input__label"></label>
-          <textarea v-model="content" class="input__field" type="mail" id="content" placeholder="Taper votre texte ici"></textarea>
-        
+          <textarea v-model="content" class="input__field" type="mail" id="content" placeholder="Taper votre texte ici"></textarea>     
       </div>
-      <div class="post__form-upload" @click="initUpload()">    
-         <button class="upload__btn">Télécharger</button>
+      
+      <div class="post__form-upload" >    
+         <button class="upload__btn" @click="initUpload" >Télécharger</button>
          <p class="upload__text">Ajouter une image</p>
-         <input class="input__field"  id="attachment" type="file" placeholder="Titres de la publication">      
+         <input class="input__field" id="attachment" type="file" ref="attachment" accept="image/*" @change="uploadImage" >      
       </div>
 
       <div class="post__form-buttons">
         <div class="btn__post">
-          <button @click="sendPost" class="btn__post-send" type="button"> Envoyer </button>
+          <button @click.stop.prevent="sendPost" class="btn__post-send" type="button"> Envoyer </button>
         </div>
         <div class="btn__post">
-          <button class="btn__post-cancel" type="button" @click="cancelWrite" > Annuler </button>
+          <button class="btn__post-cancel" type="button" @click.stop.prevent="cancelWrite" > Annuler </button>
         </div>
       </div>
 
@@ -38,23 +38,37 @@
     data() {
       return {
         title: '',
-        content:'',
-        userId:''
+        content:null,
+        userId:'',
+        attachment:null
       }
     },    
     computed: {
-        ...mapState(['user','status'])
+        ...mapState(['userAccess','status'])
     },
     methods: {
       initUpload() {
-        const uploadBtn = document.getElementById("attachment");
-        uploadBtn.click()
+       this.$refs.attachment.click()
+      },
+      uploadImage () {
+        console.log(this.attachment);
+        this.attachment = this.$refs.attachment.files[0];
+        console.log(this.attachment);
       },
       sendPost() {
+
+        let formData = new FormData();
+        formData.append('attachment', this.attachment)
+
+        console.log(formData);
+        this.attachment = formData;
+        console.log(formData);
+
         this.$store.dispatch('sendPost', {
           title: this.title,
           content: this.content,
-          userId: this.user.userId
+          userId: this.userAccess.userId,
+          attachment: formData
         })
         .then(() => this.$store.dispatch('getAllPosts'))
         .then(() => this.cancelWrite())
@@ -94,7 +108,6 @@
     width: 40%;
     min-height: 1.4rem;
     display: flex;
-    cursor: pointer;
    }
    &-buttons {
       display: flex;

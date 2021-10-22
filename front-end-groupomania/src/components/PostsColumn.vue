@@ -20,7 +20,7 @@
       PostsCard
     },
     computed: {
-      ...mapState(['allPosts','user'])
+      ...mapState(['allPosts','userAccess'])
     },
     methods: {
       deletePost(post) {

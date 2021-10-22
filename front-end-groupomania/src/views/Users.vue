@@ -25,22 +25,22 @@
     components: {
       Header,
       UsersIdentity
+    },  
+    computed: {
+      ...mapState({
+        user: 'userInfos',
+        userParams: 'userAccess'
+      })
     },
     mounted() {
-      console.log(typeof this.$store.state.user.userId);
-      if (this.$store.state.user.userId == -1 ) {
+      console.log(typeof this.userAccess.userId);
+      if (this.userAccess.userId == -1 ) {
         this.$router.push('/');
         return;
       }
       this.$store.dispatch('getUserParams');
       this.$store.dispatch('getUserProfile');
-    },  
-    computed: {
-      ...mapState({
-        user: 'userInfos',
-        userParams: 'user'
-      })
-    },
+    }
   }
 
 </script>

@@ -14,7 +14,7 @@
   export default {
     name:'AddPostSelect',   
     computed: {
-        ...mapState(['user','status'])
+        ...mapState(['userAccess','status'])
     },
     methods: {
       displaySuccesMessage() {

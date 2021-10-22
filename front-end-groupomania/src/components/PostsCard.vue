@@ -10,7 +10,7 @@
           </p>
         </div>
       </article>
-      <div class="posts__buttons" v-if=" this.datas.UserId == this.user.userId " >
+      <div class="posts__buttons" v-if=" this.datas.UserId == this.userAccess.userId " >
         <div class="btn__main">
           <button class="btn__main-modify" type="button"> Modifier </button>
         </div>
@@ -50,7 +50,7 @@ export default {
     datas: Object
   },
   computed: {
-    ...mapState(['user'])
+    ...mapState(['userAccess'])
   },
   methods: {
     deletePost() {

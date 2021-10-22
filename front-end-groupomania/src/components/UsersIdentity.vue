@@ -29,13 +29,13 @@
   export default {
     name: 'UsersIdentity',
     mounted() {
-      console.log(this.$store.state.user);
+      console.log(this.$store.state.userAccess);
       this.$store.dispatch('getUserProfile');
     },
     computed: {
       ...mapState({
         user: 'userInfos',
-        userParams: 'user'
+        userParams: 'userAccess'
       })
     },
     methods: {

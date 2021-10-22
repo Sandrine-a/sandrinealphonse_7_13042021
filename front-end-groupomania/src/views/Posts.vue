@@ -49,17 +49,18 @@
       }
     }, 
     computed: {
-      ...mapState(['user', 'allPosts'])
+      ...mapState(['userAccess', 'allPosts'])
     },
     created() {
       this.$store.dispatch('getUserParams');
       this.$store.dispatch('getAllPosts');
     },
     mounted() {
-      if (this.$store.state.user.userId == -1 ) {
+      if (this.userAccess.userId == -1 ) {
         this.$router.push('/');
         return;
       }
+      console.log(this.userAccess);
     },
     methods: {
       switchToWrite() {
