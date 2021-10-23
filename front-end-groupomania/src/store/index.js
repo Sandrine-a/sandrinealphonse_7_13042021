@@ -133,6 +133,7 @@ export default createStore({
         console.log('sendPost a partir dici');
         let formData = new FormData();
         formData.append('title', post.title)
+        formData.append('content', post.content)
         formData.append('attachment', post.attachment)
         formData.append('userId', post.userId)
         axiosInstance.post('/posts', formData )
@@ -141,7 +142,6 @@ export default createStore({
           commit('CREATE_POST', response.data );
           commit('REMOVE_ATTACHEMENT', null)
           commit('SET_STATUS', 'sent')
-          console.log(this.state.attachment);
           resolve(response);
         })
         .catch((error) => {
