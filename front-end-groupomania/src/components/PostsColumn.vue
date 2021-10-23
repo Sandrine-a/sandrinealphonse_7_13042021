@@ -27,9 +27,6 @@
     computed: {
       ...mapState(['allPosts','userAccess', 'allUsers']),
     },
-    mounted() {
-      console.log(this.allUsers);
-    },
     methods: {
       deletePost(post) {
         let result = confirm("Confirmez-vous la suppression?");

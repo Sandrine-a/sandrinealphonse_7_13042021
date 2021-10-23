@@ -114,12 +114,13 @@ exports.modifyPost = async (req,res,next) => {
     //PARAMS
     const postId = req.params.id;
     const userId = req.body.userId;
-      //Vérification de la complétion des inputs
-    if(!postId && !req.content && !req.userId || !postId && !req.attachment && !req.userId) {
-      return res.status(400).json({error: ' Tous les champs sont oblogatoires !'});
-     }; 
 
-    //Recherche d'un fichier dans la req pour l'isoler du post
+    //Vérification des inputs obligatoires
+    if(req.body.userId == null || req.body.title == null) {
+      return res.status(400).json({error: 'missing parameters'});
+       }; 
+
+    //Récupération du post selon la PJ
     const updatedPost = await req.file ? {
       ...req.body,
       attachment: `${req.protocol}://${req.get('host')}/images/posts/${req.file.filename}`
@@ -128,39 +129,66 @@ exports.modifyPost = async (req,res,next) => {
     }
     console.log(updatedPost);
 
-    const post = await models.Post.findOne({
-      attributes: ['id', 'title','content', 'attachment' ],
-      where: { id: postId, userId: userId }
-    })
-    .then( post => {
-      if(post.attachment) {
-        //Suppression de l'ancienne image de la BDD
-        const oldFilename = post.attachment.split('/images/posts/')[1];
-        try {
-          fs.unlinkSync(`images/posts/${oldFilename}`)
-        } catch(error) {
-          throw new Error("Erreur avec l'image envoyée")
-        } 
-        post.update({
-          title: updatedPost.title,
-          attachment: updatedPost.attachment
-        }, {
-          where: {
-            id: postId
-          }
-        })
-        .then(res.status(201).json({ message: 'Post image !'}))    
+    //Recherche d'un fichier dans la req pour l'isoler du post
+    try{
+      const post = await models.Post.findOne({
+        attributes: ['id', 'title','content', 'attachment' ],
+        where: { id: postId, userId: userId }
+      })
+      if(post) {
+        if(post.attachment && updatedPost.attachment) {
+          //Modification de l'ancienne image de la BDD
+          const oldFilename = post.attachment.split('/images/posts/')[1];
+          try {
+            fs.unlinkSync(`images/posts/${oldFilename}`)
+          } catch(error) {
+            throw new Error("Erreur avec l'image envoyée")
+          } 
+          post.update({
+            title: updatedPost.title,
+            content: updatedPost.content,
+            attachment: updatedPost.attachment
+          }, {
+            where: {
+              id: postId
+            }
+          })
+          .then(res.status(201).json({ message: 'CAS 1'}))    
+        } else if (post.attachment && !updatedPost.attachment) {
+            //Suppression de l'ancienne image de la BDD
+            const oldFilename = post.attachment.split('/images/posts/')[1];
+            try {
+              fs.unlinkSync(`images/posts/${oldFilename}`)
+            } catch(error) {
+              throw new Error("Erreur avec l'image envoyée")
+            } 
+            post.update({
+              title: updatedPost.title,
+              content: updatedPost.content,
+              attachment: null
+            }, {
+              where: {
+                id: postId
+              }
+            })
+            .then(res.status(201).json({ message: ' cas 2 !'}))  
+        }else {
+          post.update({
+            title: updatedPost.title,
+            content: updatedPost.content,
+            attachment: updatedPost.attachment
+          }, {
+            where: {
+              id: postId
+            }
+          })
+          .then(res.status(201).json({ message: ' CAS 3 !'}))  
+        }
       } else {
-        post.update({
-          title: updatedPost.title,
-          content: updatedPost.content
-        }, {
-          where: {
-            id: postId
-          }
-        })
-        .then(res.status(201).json({ message: ' Post content !'}))  
+        res.status(404).json({ message: ' Unable to verify user '})
       }
-    })   
-    .catch(error => res.status(404).json({ error : 'Not found'}));
+    }catch(error){
+      res.status(500).json({ error: 'cannot post message' })
+    }
+
 };

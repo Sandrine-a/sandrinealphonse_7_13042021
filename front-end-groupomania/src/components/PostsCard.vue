@@ -66,7 +66,6 @@ export default {
   },
   created() {
     this.getProfileFromPost()
-    console.log(this.author);
   },
   methods: {
     deletePost() {
@@ -74,9 +73,7 @@ export default {
     },
     getProfileFromPost() {
       for(let user of this.allUsers){
-        console.log(user.id);
        if(user.id == this.datas.UserId) {
-         console.log(user);
           this.author = user
        }
       }
