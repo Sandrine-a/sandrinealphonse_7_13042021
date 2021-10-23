@@ -13,8 +13,7 @@ axiosInstance.interceptors.request.use(function (config) {
   // Do something before request is sent
   const userAccess = JSON.parse(localStorage.getItem('accesstoken')); 
   if(userAccess) {
-    console.log(userAccess);
-    config.headers["Authorization"] = 'Bearer' + ' ' + userAccess.token  
+    config.headers["Authorization"] = 'Bearer' + ' ' + userAccess.token;
   } else {
     router.push('/');
   }

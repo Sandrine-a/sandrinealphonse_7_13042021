@@ -10,11 +10,13 @@
           <textarea v-model="content" class="input__field" type="mail" id="content" placeholder="Taper votre texte ici"></textarea>     
       </div>
       
-      <div class="post__form-upload" >    
+        <attachmentInputPost v-model="attachment" />
+
+<!--       <div class="post__form-upload" >    
          <button class="upload__btn" @click="initUpload" >Télécharger</button>
          <p class="upload__text">Ajouter une image</p>
          <input class="input__field" id="attachment" type="file" ref="attachment" accept="image/*" @change="uploadImage" >      
-      </div>
+      </div> -->
 
       <div class="post__form-buttons">
         <div class="btn__post">
@@ -32,38 +34,61 @@
 <script>
 // @ is an alias to /src
   import {mapState} from 'vuex';
+  import attachmentInputPost from '../components/AttachmentInputPost.vue'
 
   export default {
     name: 'AddPostForm',
+    components: {
+      attachmentInputPost
+    },  
     data() {
       return {
         title: '',
-        content:null,
-        userId:'',
-        attachment:null
+        content:'',
+        userId:''
       }
     },    
     computed: {
-        ...mapState(['userAccess','status'])
+        ...mapState(['userAccess','status','attachment']),
     },
     methods: {
-      initUpload() {
-       this.$refs.attachment.click()
-      },
-      uploadImage () {
+      async sendPost(post) {
         console.log(this.attachment);
-        this.attachment = this.$refs.attachment.files[0];
-        console.log(this.attachment);
-      },
-      sendPost() {
+        try {
+          if(this.attachment) {
+            console.log('ATTACHMENT FONCTION');
+            console.log(this.attachment.name);
+            post = {
+            title: this.title,
+            content: null,
+            attachment: this.attachment,
+            userId: this.userAccess.userId
+            }
+          await this.$store.dispatch('sendPost', post)
+          .then(() => this.$store.dispatch('getAllPosts'))
 
-        let formData = new FormData();
-        formData.append('attachment', this.attachment)
+          } else {
+            console.log('PAS ATTACH');
+            post = {
+              title:  this.title,
+              content: this.content,
+              attachment: null,
+              userId: this.userAccess.userId
+            }
+            await this.$store.dispatch('sendPost', post)
+            .then(() => this.$store.dispatch('getAllPosts'))
+            .then(() => this.cancelWrite())
+            .then(() => this.succesAlert())    
 
-        console.log(formData);
-        this.attachment = formData;
-        console.log(formData);
+          }
 
+        } catch(error) {
+          console.log(error);
+        }
+
+        
+
+/* 
         this.$store.dispatch('sendPost', {
           title: this.title,
           content: this.content,
@@ -73,7 +98,8 @@
         .then(() => this.$store.dispatch('getAllPosts'))
         .then(() => this.cancelWrite())
         .then(() => this.succesAlert())
-        .catch(error => console.log(error));
+        .catch(error => console.log(error)); */
+
       },
       succesAlert() {
         this.$emit('succes-status')
@@ -101,13 +127,6 @@
      display: flex;
      flex-direction: column;
      width: 80%;
-   }
-   &-upload {
-    border: 2px black solid;
-    border-radius: 10px;
-    width: 40%;
-    min-height: 1.4rem;
-    display: flex;
    }
    &-buttons {
       display: flex;
@@ -139,10 +158,6 @@
      color: $text-color-secondary;
    }
  }
-  #attachment {
-   font-weight: bold;
-   display: none;
- }
  .btn__post{
   height: 40px;
   width: auto;
@@ -171,22 +186,6 @@
     font-size: 4vh;
    }
  }
- .upload {
-  &__btn {
-    border-radius: 15px;
-    background-color: $secondary-color;
-    color: white;
-    font-weight: bold;
-    margin-left: 7px;
-    cursor: pointer;
-    margin: 2px;
-  }
-  &__text {
-    font-weight: bold;
-    font-size: 4vh;
-    margin: 2px 0 2px 20px;
-    color: $text-color-secondary;
-  }
- }
+
  
 </style>

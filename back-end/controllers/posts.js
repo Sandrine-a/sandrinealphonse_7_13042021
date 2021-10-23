@@ -64,7 +64,7 @@ exports.createPost = async (req,res,next) => {
 };
 
 exports.getAllPosts = async (req,res,next) => {
-   const allPosts = models.Post.findAll({
+   const allPosts = await models.Post.findAll({
      include: [{
        model:models.User,
        attributes: ['id']

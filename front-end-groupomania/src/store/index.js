@@ -1,6 +1,7 @@
 import { createStore } from 'vuex';
 
 import axiosInstance from '../services/axiosinstance';
+const FormData = require('form-data');
 
 
 export default createStore({
@@ -17,6 +18,7 @@ export default createStore({
       email: ''
     },
     allPosts: [],
+    attachment: '',
     post: {
       title: '',
       content:'',
@@ -49,6 +51,12 @@ export default createStore({
     GET_ALL_POSTS(state, allPosts) {
       state.allPosts = allPosts;
       console.log(allPosts);
+    },
+    GET_ATTACHMENT(state, attachment) {
+      state.attachment = attachment;
+    },
+    REMOVE_ATTACHEMENT(state, attachment) {
+      console.log(state + attachment);
     },
     CREATE_POST(state, post) {
       state.post = post;
@@ -113,11 +121,27 @@ export default createStore({
       .catch(() => {
       })
     },
+    getPostAttachment({ commit }, attachment) {
+      commit('GET_ATTACHMENT', attachment)
+      console.log('COMMIT:');
+    },
     sendPost({ commit }, post) {
-      console.log(this.state.userAccess);
       commit('CREATE_POST', post );
-      return new Promise((resolve,reject) => {
-        axiosInstance.post('/posts', post)
+      console.log('sendPost a partir dici');
+      let formData = new FormData();
+      formData.append('title', post.title)
+      formData.append('attachment', post.attachment)
+      formData.append('userId', post.userId)
+
+      axiosInstance.post('/posts', formData)
+      .then((response) => {
+        console.log(response);
+      })
+
+
+/*       return new Promise((resolve,reject) => {
+        console.log("envoie???");
+        axiosInstance.post('/posts', formData )
         .then((response) => {
           console.log(response.data);
           commit('CREATE_POST', response.data );
@@ -128,7 +152,7 @@ export default createStore({
           commit('SET_STATUS', 'error_sendpost');
           reject(error);
         })
-      })    
+      })   */  
     },
     deletePost({ commit }, post) {
       //Récupération du post envoyé et commit dans post:
