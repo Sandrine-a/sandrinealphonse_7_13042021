@@ -64,7 +64,8 @@
     },
     methods: {
       switchToWrite() {
-        this.mode = 'writePost'
+        this.mode = 'writePost';
+        this.$store.dispatch('removePostAttachment')
       },
       switchToRead() {
         this.mode ='read'

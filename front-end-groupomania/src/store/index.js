@@ -1,7 +1,6 @@
 import { createStore } from 'vuex';
 
 import axiosInstance from '../services/axiosinstance';
-const FormData = require('form-data');
 
 
 export default createStore({
@@ -56,7 +55,7 @@ export default createStore({
       state.attachment = attachment;
     },
     REMOVE_ATTACHEMENT(state, attachment) {
-      console.log(state + attachment);
+      state.attachment = attachment
     },
     CREATE_POST(state, post) {
       state.post = post;
@@ -123,36 +122,34 @@ export default createStore({
     },
     getPostAttachment({ commit }, attachment) {
       commit('GET_ATTACHMENT', attachment)
-      console.log('COMMIT:');
+    },
+    removePostAttachment({ commit } ) {
+      commit('REMOVE_ATTACHEMENT', null)
     },
     sendPost({ commit }, post) {
-      commit('CREATE_POST', post );
-      console.log('sendPost a partir dici');
-      let formData = new FormData();
-      formData.append('title', post.title)
-      formData.append('attachment', post.attachment)
-      formData.append('userId', post.userId)
 
-      axiosInstance.post('/posts', formData)
-      .then((response) => {
-        console.log(response);
-      })
-
-
-/*       return new Promise((resolve,reject) => {
-        console.log("envoie???");
+      return new Promise((resolve,reject) => {
+        commit('CREATE_POST', post );
+        console.log('sendPost a partir dici');
+        let formData = new FormData();
+        formData.append('title', post.title)
+        formData.append('attachment', post.attachment)
+        formData.append('userId', post.userId)
         axiosInstance.post('/posts', formData )
         .then((response) => {
-          console.log(response.data);
+          console.log(response);
           commit('CREATE_POST', response.data );
+          commit('REMOVE_ATTACHEMENT', null)
           commit('SET_STATUS', 'sent')
+          console.log(this.state.attachment);
           resolve(response);
         })
         .catch((error) => {
           commit('SET_STATUS', 'error_sendpost');
           reject(error);
         })
-      })   */  
+      })   
+
     },
     deletePost({ commit }, post) {
       //Récupération du post envoyé et commit dans post:

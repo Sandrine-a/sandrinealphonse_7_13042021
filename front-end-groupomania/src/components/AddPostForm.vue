@@ -12,12 +12,6 @@
       
         <attachmentInputPost v-model="attachment" />
 
-<!--       <div class="post__form-upload" >    
-         <button class="upload__btn" @click="initUpload" >Télécharger</button>
-         <p class="upload__text">Ajouter une image</p>
-         <input class="input__field" id="attachment" type="file" ref="attachment" accept="image/*" @change="uploadImage" >      
-      </div> -->
-
       <div class="post__form-buttons">
         <div class="btn__post">
           <button @click.stop.prevent="sendPost" class="btn__post-send" type="button"> Envoyer </button>
@@ -66,6 +60,9 @@
             }
           await this.$store.dispatch('sendPost', post)
           .then(() => this.$store.dispatch('getAllPosts'))
+          .then(() => this.cancelWrite())
+          .then(() => this.succesAlert())
+          .catch(error => console.log(error)); 
 
           } else {
             console.log('PAS ATTACH');
