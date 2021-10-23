@@ -17,6 +17,8 @@ router.get('/:id', auth, userCtrl.getUserProfile);
 
 router.put('/:id', auth, multer.usersStorage, userCtrl.updateUserProfile);
 
+router.get('/', auth, userCtrl.getAllUsers);
+
 //Routing TODO
 /* 
 

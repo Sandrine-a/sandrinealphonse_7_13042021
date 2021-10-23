@@ -37,6 +37,7 @@ exports.createPost = async (req,res,next) => {
         //Creéation du post si file
         await models.Post.create({
           title: title,
+          content: content,
           attachment: newPost.attachment,
           likes: 0,
           comments: 0,

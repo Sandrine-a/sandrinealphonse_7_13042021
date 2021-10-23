@@ -1,17 +1,23 @@
 <template>
 
+
   <div class="posts__card">
     <div class="posts__container">
       <article class="posts__content">
         <h3 class="posts__content-title"> {{ datas.title }} </h3>
-        <div class="posts__content-article">
-          <p class="posts__content-paragraph">
-           {{ datas.content }}
-          </p>
-        </div>
         <div class="posts__attachment" v-if=" datas.attachment " >
           <img :src="datas.attachment" class="posts__attachment-img" >
         </div>
+        <div class="posts__content-article">
+          <p class="posts__content-paragraph">
+            {{ datas.content }}
+          </p>
+        </div>
+
+        <div class="posts__author">
+          <p class="posts__author-name" >  {{ this.author.firstName }} {{this.author.lastName }} </p>
+        </div>
+
       </article>
       <div class="posts__buttons" v-if=" this.datas.UserId == this.userAccess.userId " >
         <div class="btn__card">
@@ -46,20 +52,37 @@ export default {
   name: "PostsCard",
   data() {
     return {
-      post: {}
+      post: {},
+      allUsersTab: [],
+      author: ''
     }
   },
   props: {
-    datas: Object
+    datas: Object,
+    user: Object
   },
   computed: {
-    ...mapState(['userAccess'])
+    ...mapState(['userAccess', 'userInfos', 'allUsers']),
+  },
+  created() {
+    this.getProfileFromPost()
+    console.log(this.author);
   },
   methods: {
     deletePost() {
-      this.$emit('delete-post',  this.datas )
+      this.$emit('delete-post', this.datas )
+    },
+    getProfileFromPost() {
+      for(let user of this.allUsers){
+        console.log(user.id);
+       if(user.id == this.datas.UserId) {
+         console.log(user);
+          this.author = user
+       }
+      }
     }
   }
+
 
 }
 </script>
@@ -89,13 +112,18 @@ export default {
       height: 450px;
       &-img {
         object-fit: cover;
-        width: 95%; 
+        width: 100%; 
         height: 100%;     }
+    }
+    &__author {
+      text-align: start;
+      font-weight: bold;
+      font-style: italic;
     }
     &__container {
       display: flex;
       flex-direction: column;
-      padding: 20px;
+      padding: 30px;
     }
     &__buttons {
       display: flex;

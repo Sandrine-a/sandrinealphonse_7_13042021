@@ -16,11 +16,19 @@
 
   export default {
     name: 'PostsColumn',
+    data() {
+      return {
+        test: []
+      }
+    },
     components: {
       PostsCard
     },
     computed: {
-      ...mapState(['allPosts','userAccess'])
+      ...mapState(['allPosts','userAccess', 'allUsers']),
+    },
+    mounted() {
+      console.log(this.allUsers);
     },
     methods: {
       deletePost(post) {
@@ -30,7 +38,7 @@
           .then(() => this.$store.dispatch('getAllPosts'))
           .catch(error => console.log(error));
         }
-      }     
+      } 
     }
   }
   

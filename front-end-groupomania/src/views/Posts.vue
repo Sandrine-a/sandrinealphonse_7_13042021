@@ -11,7 +11,7 @@
         <img src="../assets/groupomania-icon.svg" alt="Logo miniature" class="addPost__logo"/>
       </section>
 
-        <AddPostSelect @click="switchToWrite" @keyup.enter="switchToWrite"  v-if=" mode == 'read'"/>
+        <AddPostSelect @click="switchToWrite" @keyup.enter="switchToWrite"  v-if=" mode == 'read'" />
         <AddPostForm @write-cancel="switchToRead" v-else/>
 
     </div> 
@@ -26,7 +26,7 @@
 
 <script>
 // @ is an alias to /src
-  import {mapState} from 'vuex';
+  import { mapState } from 'vuex';
 
   import Header from '../components/Header.vue';
   import PostsColumn from '../components/PostsColumn.vue';
@@ -45,22 +45,25 @@
     data() {
       return {
         posts: [],
+        users:[],
+        profilesFromPosts: [],
         mode: 'read'
       }
     }, 
     computed: {
-      ...mapState(['userAccess', 'allPosts'])
+      ...mapState(['userAccess', 'allPosts', 'allUsers']),
     },
     created() {
       this.$store.dispatch('getUserParams');
     },
     mounted() {
-      console.log(this.userAccess);
       if (!this.userAccess) {
         this.$router.push('/');
         return;
       }
       this.$store.dispatch('getAllPosts');
+
+      this.$store.dispatch('getAllUsers');
     },
     methods: {
       switchToWrite() {

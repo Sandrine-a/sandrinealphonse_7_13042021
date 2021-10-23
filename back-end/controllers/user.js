@@ -155,6 +155,25 @@ exports.updateUserProfile = async (req,res,next) => {
   .catch((error) => res.status(500).json({ error: error }));
 };
 
+exports.getAllUsers = async (req,res,next) => {
+  const allPosts = await models.User.findAll({
+    attributes: ['id', 'firstName', 'lastName', 'email', 'isAdmin', 'pPicture'],
+/*     include: [{
+      model:models.User,  //////RAJouter table de liaison des commentaires
+      attributes: ['id']
+    }] */
+  })
+  .then(users => {
+    if(users) {
+      console.log(users);
+      res.status(200).json(users);
+    } else {
+      return res.status(404).json({ error: 'No users found' })
+    }
+  })
+  .catch((error) => res.status(500).json({ error: error }));
+};
+
 
 //MIDDLEWARE TO DO
 /* 

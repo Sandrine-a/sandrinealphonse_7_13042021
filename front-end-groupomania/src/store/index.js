@@ -17,6 +17,7 @@ export default createStore({
       email: ''
     },
     allPosts: [],
+    allUsers: [],
     attachment: '',
     post: {
       title: '',
@@ -51,6 +52,10 @@ export default createStore({
       state.allPosts = allPosts;
       console.log(allPosts);
     },
+    GET_ALL_USERS(state, allUsers) {
+      console.log(allUsers);
+      state.allUsers = allUsers;
+    },
     GET_ATTACHMENT(state, attachment) {
       state.attachment = attachment;
     },
@@ -63,7 +68,6 @@ export default createStore({
     },
     POST_TO_DELETE(state, post) {
       state.post = post;
-      console.log(post);
     }
   },
   actions: {
@@ -91,7 +95,6 @@ export default createStore({
           commit('SET_STATUS', '');
           commit('LOG_USER', response.data);
           resolve(response);
-
         })
         .catch((error) => {
           commit('SET_STATUS', 'error_login');
@@ -119,6 +122,21 @@ export default createStore({
       })
       .catch(() => {
       })
+    },
+    getAllUsers({ commit }) {
+      commit('SET_STATUS', 'loading');
+      return new Promise((resolve,reject) => {
+        commit('SET_STATUS', '');
+        axiosInstance.get('/users')
+        .then((response) => {
+          console.log(response.data);
+          commit('GET_ALL_USERS', response.data)
+        })
+        .catch((error) => {
+          commit('SET_STATUS', 'error_allUsers');
+          reject(error);
+        })
+      })  
     },
     getPostAttachment({ commit }, attachment) {
       commit('GET_ATTACHMENT', attachment)

@@ -54,7 +54,7 @@
             console.log(this.attachment.name);
             post = {
             title: this.title,
-            content: null,
+            content: this.content,
             attachment: this.attachment,
             userId: this.userAccess.userId
             }
