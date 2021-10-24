@@ -9,7 +9,6 @@ const fs = require('fs');
 const { title } = require('process'); */
 
 exports.createPost = async (req,res,next) => { 
-  console.log("** ** CONTROLEUR CREATE POST");
   //Params
   const { title, content, userId } = req.body;
 
@@ -30,10 +29,9 @@ exports.createPost = async (req,res,next) => {
       } : {
         ...req.body
       }
-      console.log(newPost);
+      
 
       if(req.file) {
-        console.log('Post with pic');
         //Creéation du post si file
         await models.Post.create({
           title: title,
@@ -45,7 +43,6 @@ exports.createPost = async (req,res,next) => {
           })
           .then((post) => res.status(201).json({ post }))  
       } else {
-        console.log('Post content only:');
         //Si post text 
         await models.Post.create({
           title: title,
@@ -84,7 +81,7 @@ exports.getAllPosts = async (req,res,next) => {
 };
 
 exports.getOnePost = async (req,res,next) => {
-  console.log("** ** CONTROLEUR GetOne POST");
+  
   //PARAMS
   const postId = req.params.id;
 
@@ -101,7 +98,6 @@ exports.getOnePost = async (req,res,next) => {
 };
 
 exports.deletePost = async (req,res,next) => {
-  console.log("** ** CONTROLEUR DELETE POST");
   //PARAMS
   const postId = req.params.id;
   const userId = req.body.userId;
@@ -127,7 +123,6 @@ exports.deletePost = async (req,res,next) => {
 };
 
 exports.modifyPost = async (req,res,next) => {
-  console.log('*** ***MODIFY CONTROLEUR');
     //PARAMS
     const postId = req.params.id;
     const userId = req.body.userId;
@@ -144,7 +139,6 @@ exports.modifyPost = async (req,res,next) => {
     } : {
       ...req.body
     }
-    console.log(updatedPost);
 
     //Recherche d'un fichier dans la req pour l'isoler du post
     try{

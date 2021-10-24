@@ -10,11 +10,11 @@
           <textarea v-model="content" class="input__field" type="mail" id="content" placeholder="Taper votre texte ici"></textarea>     
       </div>
       
-        <attachmentInputPost v-model="attachment" for="" :datas="datas" :default-src="datas.attachment" />
+        <attachmentInputPost v-model="attachment" :mode="mode" :values="values" :default-src="values.attachment" />
 
       <div class="post__form-buttons">
         <div class="btn__post">
-          <button @click.stop.prevent="sendPost" class="btn__post-send" type="button"> Envoyer </button>
+          <button @click.stop.prevent="" class="btn__post-send" type="button"> Envoyer </button>
         </div>
         <div class="btn__post">
           <button class="btn__post-cancel" type="button" @click.stop.prevent="cancelWrite"  > Annuler </button>
@@ -31,65 +31,30 @@
   import attachmentInputPost from '../components/AttachmentInputPost.vue'
 
   export default {
-    name: 'AddPostForm',
+    name: 'UpdatePostForm',
     components: {
       attachmentInputPost
     },  
     data() {
       return {
-        title: this.datas.title,
-        content:this.datas.content,
-        userId:this.datas.title
+        title: this.values.title,
+        content:this.values.content,
+        userId:this.values.title,
+        mode: 'updating'
+/*         post: this.post */
       }
     },
     props: {
-      datas: Object,
-      user: Object
+      user: Object,
+      values: Object
     }, 
     computed: {
         ...mapState(['userAccess','status','attachment', 'post']),
     },/*  */
     mounted(){
-      console.log(this.post);
+      console.log(this.values);
     },
     methods: {
-      async sendPost(post) {
-        console.log(this.attachment);
-        try {
-          if(this.attachment) {
-            console.log('ATTACHMENT FONCTION');
-            console.log(this.attachment.name);
-            post = {
-              title: this.title,
-              content: this.content,
-              attachment: this.attachment,
-              userId: this.userAccess.userId
-            }
-          await this.$store.dispatch('sendPost', post)
-          .then(() => this.$store.dispatch('getAllPosts'))
-          .then(() => this.cancelWrite())
-          .then(() => this.succesAlert())
-          .catch(error => console.log(error)); 
-
-          } else {
-            console.log('PAS ATTACH');
-            post = {
-              title:  this.title,
-              content: this.content,
-              attachment: null,
-              userId: this.userAccess.userId
-            }
-            await this.$store.dispatch('sendPost', post)
-            .then(() => this.$store.dispatch('getAllPosts'))
-            .then(() => this.cancelWrite())
-            .then(() => this.succesAlert())    
-
-          }
-
-        } catch(error) {
-          console.log(error);
-        }
-      },
       succesAlert() {
         this.$emit('succes-status')
       },
@@ -120,7 +85,7 @@
    &-buttons {
       display: flex;
       justify-content: space-between;
-      width: 60%;
+      width: auto;
     }
  }
  .input{

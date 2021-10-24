@@ -170,7 +170,7 @@ export default createStore({
       commit('REMOVE_ATTACHEMENT', null)
     },
     sendPost({ commit }, post) {
-
+      console.log('sendpost');
       return new Promise((resolve,reject) => {
         commit('CREATE_POST', post );
         console.log('sendPost a partir dici');

@@ -14,7 +14,7 @@
 
       <div class="post__form-buttons">
         <div class="btn__post">
-          <button @click.stop="sendPost" class="btn__post-send"> Envoyer </button>
+          <button @click.stop.prevent="sendPost" class="btn__post-send"> Envoyer </button>
         </div>
         <div class="btn__post">
           <button class="btn__post-cancel" type="button" @click.stop.prevent="cancelWrite" > Annuler </button>
@@ -48,6 +48,7 @@
     methods: {
       async sendPost(post) {
         console.log(this.attachment);
+        console.log('sending');
         try {
           if(this.attachment) {
             console.log('ATTACHMENT FONCTION');
@@ -76,7 +77,7 @@
             .then(() => this.$store.dispatch('getAllPosts'))
             .then(() => this.cancelWrite())
             .then(() => this.succesAlert())    
-
+            .catch(error => console.log(error)); 
           }
 
         } catch(error) {
@@ -113,7 +114,7 @@
    &-buttons {
       display: flex;
       justify-content: space-between;
-      width: 60%;
+      width: auto;
     }
  }
  .input{
@@ -129,7 +130,7 @@
  }
  #text {
    font-weight: bold;
-   font-size: 4vh;
+   font-size: 3vh;
    &::placeholder{
      color: $text-color-secondary;
    }

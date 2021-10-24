@@ -40,7 +40,7 @@
 
     </div>
     <div class="posts__form" v-else >
-      <UpdatePostForm  @write-cancel="switchToRead" :datas="datas" /> 
+      <UpdatePostForm  @write-cancel="switchToRead" v-for="values in post" :key="values" :values="values"/> 
     </div>
   </div>
   
@@ -84,7 +84,10 @@ export default {
     },
     updatePost() {
       this.$store.dispatch('getOnePost', {id: this.datas.id})
-      .then(() => this.mode = 'updating')
+      .then((response) => {
+        console.log(this.post);
+        this.post = response.data;
+        this.mode = 'updating'})
       .catch(error => console.log(error));
     },
     switchToRead() {

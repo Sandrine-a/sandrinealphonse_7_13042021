@@ -11,7 +11,7 @@
         <img src="../assets/groupomania-icon.svg" alt="Logo miniature" class="addPost__logo"/>
       </section>
 
-        <AddPostSelect @click="switchToWrite" @keyup.enter="switchToWrite"  v-if=" mode == 'read'" />
+        <AddPostSelect @click.stop.prevent="switchToWrite" @keyup.enter="switchToWrite"  v-if=" mode == 'read'" />
         <AddPostForm @write-cancel="switchToRead" v-else/>
 
     </div> 
@@ -41,7 +41,7 @@
       Header,
       PostsCard,
       AddPostSelect,
-      AddPostForm 
+      AddPostForm,
     },
     data() {
       return {

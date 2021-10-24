@@ -1,9 +1,10 @@
 <template>
 
   <div>
-    <img :src="src" alt="Image du post" class="upload__img"  v-if="datas.attachment != null ">  
+    <img :src="src" alt="Image du post" class="upload__img"  v-if="mode == 'updating' && values.attachment != null ">
+     <img :src="src" alt="Image du post" class="upload__img" v-if=" status == 'imgUploaded' " > 
     <div class="post__form-upload" >    
-        <button class="upload__btn" type="button" @click="initUpload" >Télécharger</button>
+        <button class="upload__btn" type="button" @click.stop.prevent="initUpload" >Télécharger</button>
         <p class="upload__text">Ajouter une image</p>
         <input class="input__field" id="attachment" type="file" ref="attachment" name="attachment" accept="image/*" @change="uploadImage" >    
     </div>
@@ -16,7 +17,8 @@
   export default {
     name:'attachmentInputPost',
     props: {
-      datas: Object,
+      values: Object,
+      mode: String,
       value: File,
       defaultSrc: String,
       formData: Object
@@ -28,9 +30,6 @@
         attachment: this.value
       }
     },
-/*     mounted() {
-      console.log(this.datas.attachment);
-    }, */
     methods: {
       initUpload() {
        this.$refs.attachment.click()
@@ -67,9 +66,13 @@
     &-upload {
       border: 2px black solid;
       border-radius: 10px;
-      width: 40%;
+      width: 45%;
+      max-height: 40px;
       min-height: 1.4rem;
       display: flex;
+    }
+    &-buttons {
+      width: auto;
     }
   }
   .input{
@@ -77,7 +80,7 @@
     background-color: white;
     border: 2px black solid;
     border-radius: 10px;
-    min-height: 30px;
+    max-height: 40px;
     }
   }
   .upload {
@@ -92,7 +95,7 @@
     }
     &__text {
       font-weight: bold;
-      font-size: 4vh;
+      font-size: 3vh;
       margin: 2px 0 2px 20px;
       color: $text-color-secondary;
     }
