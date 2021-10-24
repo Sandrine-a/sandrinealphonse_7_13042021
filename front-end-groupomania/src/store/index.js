@@ -28,6 +28,13 @@ export default createStore({
       userId:'',
       createdAt:'',
       attachment:''
+    },
+    postUp: {
+      id: '',
+      title:'',
+      content:'',
+      attachment:'',
+      userId:''
     }
   },
   getters: {
@@ -65,6 +72,10 @@ export default createStore({
     CREATE_POST(state, post) {
       state.post = post;
       console.log(post);
+    },
+    GET_POST(state, postUp) {
+      state.post = postUp;
+      console.log(postUp);
     },
     POST_TO_DELETE(state, post) {
       state.post = post;
@@ -113,6 +124,20 @@ export default createStore({
         commit('USER_PROFILE', response.data);
       })
       .catch(() => {
+      })
+    },
+    getOnePost({ commit}, post) {
+      console.log(post.id);
+      return new Promise((resolve,reject) => {
+        axiosInstance.get(`/posts/${post.id}`)
+        .then((response) => {
+          commit('GET_POST', response.data);
+          resolve(response);
+        })
+        .catch((error) => {
+          commit('SET_STATUS', 'error_getPost');
+          reject(error);
+        })
       })
     },
     getAllPosts({ commit }) {

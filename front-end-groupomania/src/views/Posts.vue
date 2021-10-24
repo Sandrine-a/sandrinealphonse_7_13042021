@@ -17,9 +17,10 @@
     </div> 
 
     <div class="card__column">
-      <PostsColumn />
+      <section class="posts__column" >
+        <PostsCard v-for="(item, index) in allPosts" :datas="item" :key="index" @delete-post="deletePost" />
+      </section>
     </div>
-    
   </div>
   
 </template>
@@ -29,16 +30,16 @@
   import { mapState } from 'vuex';
 
   import Header from '../components/Header.vue';
-  import PostsColumn from '../components/PostsColumn.vue';
   import AddPostSelect from '../components/AddPostSelect.vue';
   import AddPostForm from '../components/AddPostForm.vue';
+  import PostsCard from '../components/PostsCard.vue';
   
 
   export default {
     name: 'Posts',
     components: {
       Header,
-      PostsColumn,
+      PostsCard,
       AddPostSelect,
       AddPostForm 
     },
@@ -72,7 +73,15 @@
       },
       switchToRead() {
         this.mode ='read'
-      }
+      },
+      deletePost(post) {
+        let result = confirm("Confirmez-vous la suppression?");
+        if(result) {
+          this.$store.dispatch('deletePost', post )
+          .then(() => this.$store.dispatch('getAllPosts'))
+          .catch(error => console.log(error));
+        }
+      } 
     }
   }
 
@@ -111,6 +120,13 @@
     margin-left: 40px;
     width: 70%;
   }
+  .posts__column {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+   }
+
   
 
 

@@ -2,7 +2,7 @@
 
 
   <div class="posts__card">
-    <div class="posts__container">
+    <div class="posts__container" v-if=" mode == 'read'">
       <article class="posts__content">
         <h3 class="posts__content-title"> {{ datas.title }} </h3>
         <div class="posts__attachment" v-if=" datas.attachment " >
@@ -21,7 +21,7 @@
       </article>
       <div class="posts__buttons" v-if=" this.datas.UserId == this.userAccess.userId " >
         <div class="btn__card">
-          <button class="btn__card-modify" type="button"> Modifier </button>
+          <button class="btn__card-modify" type="button" @click="updatePost"> Modifier </button>
         </div>
         <div class="btn__card">
           <button class="btn__card-delete" type="button" @click="deletePost" > Supprimer </button>
@@ -39,7 +39,9 @@
       </section>
 
     </div>
-    
+    <div class="posts__form" v-else >
+      <UpdatePostForm  @write-cancel="switchToRead" :datas="datas" /> 
+    </div>
   </div>
   
 </template>
@@ -47,14 +49,19 @@
 <script>
 // @ is an alias to /src
   import {mapState} from 'vuex'; 
+  import UpdatePostForm from '../components/UpdatePostForm.vue'
 
 export default {
   name: "PostsCard",
+  components: {
+    UpdatePostForm
+  },
   data() {
     return {
       post: {},
       allUsersTab: [],
-      author: ''
+      author: '',
+      mode: 'read'
     }
   },
   props: {
@@ -68,16 +75,24 @@ export default {
     this.getProfileFromPost()
   },
   methods: {
-    deletePost() {
-      this.$emit('delete-post', this.datas )
-    },
     getProfileFromPost() {
       for(let user of this.allUsers){
        if(user.id == this.datas.UserId) {
           this.author = user
        }
       }
-    }
+    },
+    updatePost() {
+      this.$store.dispatch('getOnePost', {id: this.datas.id})
+      .then(() => this.mode = 'updating')
+      .catch(error => console.log(error));
+    },
+    switchToRead() {
+      this.mode ='read'
+    },
+    deletePost() {
+      this.$emit('delete-post', this.datas )
+    },
   }
 
 
@@ -120,6 +135,9 @@ export default {
     &__container {
       display: flex;
       flex-direction: column;
+      padding: 30px;
+    }
+    &__form{
       padding: 30px;
     }
     &__buttons {

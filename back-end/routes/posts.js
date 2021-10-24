@@ -12,12 +12,14 @@ router.post('/', auth, multer.postsStorage, postCtrl.createPost);
 
 router.get('/', auth, postCtrl.getAllPosts);
 
+router.get('/:id', auth, postCtrl.getOnePost);
+
 router.put('/:id', auth, multer.postsStorage, postCtrl.modifyPost);
 
 router.delete('/:id', auth,  postCtrl.deletePost);
 
 //Routes TODO
-/* router.get('/:id', postCtrl.getOnePost);
+/* 
 router.put('/:id', postCtrl.modifyPost);
 router.get('/', postCtrl.AllPosts);
  */

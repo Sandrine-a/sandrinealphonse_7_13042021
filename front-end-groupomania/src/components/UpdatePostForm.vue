@@ -10,14 +10,14 @@
           <textarea v-model="content" class="input__field" type="mail" id="content" placeholder="Taper votre texte ici"></textarea>     
       </div>
       
-        <attachmentInputPost v-model="attachment" />
+        <attachmentInputPost v-model="attachment" for="" :datas="datas" :default-src="datas.attachment" />
 
       <div class="post__form-buttons">
         <div class="btn__post">
-          <button @click.stop="sendPost" class="btn__post-send"> Envoyer </button>
+          <button @click.stop.prevent="sendPost" class="btn__post-send" type="button"> Envoyer </button>
         </div>
         <div class="btn__post">
-          <button class="btn__post-cancel" type="button" @click.stop.prevent="cancelWrite" > Annuler </button>
+          <button class="btn__post-cancel" type="button" @click.stop.prevent="cancelWrite"  > Annuler </button>
         </div>
       </div>
 
@@ -37,13 +37,20 @@
     },  
     data() {
       return {
-        title: '',
-        content:'',
-        userId:''
+        title: this.datas.title,
+        content:this.datas.content,
+        userId:this.datas.title
       }
-    },    
+    },
+    props: {
+      datas: Object,
+      user: Object
+    }, 
     computed: {
-        ...mapState(['userAccess','status','attachment']),
+        ...mapState(['userAccess','status','attachment', 'post']),
+    },/*  */
+    mounted(){
+      console.log(this.post);
     },
     methods: {
       async sendPost(post) {

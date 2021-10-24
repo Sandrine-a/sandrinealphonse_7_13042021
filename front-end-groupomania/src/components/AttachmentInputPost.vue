@@ -1,11 +1,11 @@
 <template>
 
   <div>
-    <img :src="src" alt="Image du post" class="upload__img" v-if=" status == 'imgUploaded' " >  
+    <img :src="src" alt="Image du post" class="upload__img"  v-if="datas.attachment != null ">  
     <div class="post__form-upload" >    
         <button class="upload__btn" type="button" @click="initUpload" >Télécharger</button>
         <p class="upload__text">Ajouter une image</p>
-        <input class="input__field" id="attachment" type="file" ref="attachment" accept="image/*" @change="uploadImage" >    
+        <input class="input__field" id="attachment" type="file" ref="attachment" name="attachment" accept="image/*" @change="uploadImage" >    
     </div>
 
   </div>
@@ -16,16 +16,21 @@
   export default {
     name:'attachmentInputPost',
     props: {
+      datas: Object,
       value: File,
+      defaultSrc: String,
       formData: Object
     },
     data() {
       return {
-        src: null,
+        src: this.defaultSrc,
         status:'',
         attachment: this.value
       }
     },
+/*     mounted() {
+      console.log(this.datas.attachment);
+    }, */
     methods: {
       initUpload() {
        this.$refs.attachment.click()
@@ -48,7 +53,7 @@
         this.status = 'imgUploaded';
         //Envoie du file dans le store
         this.$store.dispatch('getPostAttachment', this.attachment) 
-      },
+      }
     }
 
   }

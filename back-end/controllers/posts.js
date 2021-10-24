@@ -83,6 +83,23 @@ exports.getAllPosts = async (req,res,next) => {
   );
 };
 
+exports.getOnePost = async (req,res,next) => {
+  console.log("** ** CONTROLEUR GetOne POST");
+  //PARAMS
+  const postId = req.params.id;
+
+  const post = await models.Post.findOne({
+    attributes: ['id', 'title','content', 'attachment','UserId' ],
+    where: { id: postId}
+  })
+  .then((post) => {
+    res.status(200).json({post});
+  })
+  .catch((error) => {
+    res.status(404).json({error: error});
+  })
+};
+
 exports.deletePost = async (req,res,next) => {
   console.log("** ** CONTROLEUR DELETE POST");
   //PARAMS
