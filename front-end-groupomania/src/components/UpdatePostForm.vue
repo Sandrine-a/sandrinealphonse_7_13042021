@@ -10,11 +10,11 @@
           <textarea v-model="content" class="input__field" type="mail" id="content" placeholder="Taper votre texte ici"></textarea>     
       </div>
       
-        <attachmentInputPost v-model="attachment" :mode="mode" :values="values" :default-src="values.attachment" />
+      <UpdateAttachmentInput v-model="attachment" :mode="mode" :infos="infos" :default-src="infos.attachment" class="post__form-render" />
 
       <div class="post__form-buttons">
         <div class="btn__post">
-          <button @click.stop.prevent="" class="btn__post-send" type="button"> Envoyer </button>
+          <button @click.stop.prevent="sendUpdatedPost" class="btn__post-send" type="button"> Envoyer </button>
         </div>
         <div class="btn__post">
           <button class="btn__post-cancel" type="button" @click.stop.prevent="cancelWrite"  > Annuler </button>
@@ -28,35 +28,71 @@
 <script>
 // @ is an alias to /src
   import {mapState} from 'vuex';
-  import attachmentInputPost from '../components/AttachmentInputPost.vue'
+  import UpdateAttachmentInput from '../components/UpdateAttachmentInput.vue'
 
   export default {
     name: 'UpdatePostForm',
     components: {
-      attachmentInputPost
+      UpdateAttachmentInput
     },  
     data() {
       return {
-        title: this.values.title,
-        content:this.values.content,
-        userId:this.values.title,
+        title: this.infos.title,
+        content:this.infos.content,
+        userId:this.infos.title,
+        attachment: this.infos.attachment,
         mode: 'updating'
-/*         post: this.post */
       }
     },
     props: {
       user: Object,
-      values: Object
+      infos: Object
     }, 
     computed: {
-        ...mapState(['userAccess','status','attachment', 'post']),
+        ...mapState(['userAccess','status', 'post']),
     },/*  */
     mounted(){
-      console.log(this.values);
+      console.log(this.infos);
     },
     methods: {
-      succesAlert() {
-        this.$emit('succes-status')
+      async sendUpdatedPost(post) {
+        console.log(this.attachment);
+        console.log(post);
+        try {
+          if(this.attachment) {
+            console.log('ATTACHMENT FONCTION');
+            console.log(this.attachment.name);
+            console.log(this.id);
+            post = {
+              title: this.title,
+              content: this.content,
+              attachment: this.attachment,
+              userId: this.userAccess.userId,
+              id: this.infos.id
+            }
+          await this.$store.dispatch('sendUpdatedPost', post)
+          .then(() => this.$store.dispatch('getAllPosts'))
+          .then(() => this.cancelWrite())
+          .catch(error => console.log(error)); 
+          } else {
+            console.log('PAS ATTACH');
+            console.log(this.id);
+            post = {
+              title:  this.title,
+              content: this.content,
+/*               attachment: null, */
+              userId: this.userAccess.userId,
+              id: this.infos.id
+            }
+            await this.$store.dispatch('sendUpdatedPost', post)
+            .then(() => this.$store.dispatch('getAllPosts'))
+            .then(() => this.cancelWrite())   
+            .catch(error => console.log(error)); 
+          }
+
+        } catch(error) {
+          console.log(error);
+        }
       },
       cancelWrite () {
         this.$emit('write-cancel', { mode: 'read' })
@@ -75,12 +111,15 @@
    display: flex;
    flex-direction: column;
    justify-content: space-between; 
-   min-height: 350px;
-    
+   min-height: 350px;  
    &-input {
      display: flex;
      flex-direction: column;
      width: 80%;
+     min-height: 60px;
+   }
+   &-render {
+     text-align: start;
    }
    &-buttons {
       display: flex;
@@ -107,7 +146,7 @@
    }
  }
  #content {
-   min-height: 100px;
+   min-height: 60px;
    &::placeholder{
      color: $text-color-secondary;
    }
@@ -126,7 +165,7 @@
     border: none;
     cursor: pointer;
     font-weight: bold;
-    font-size: 4vh;
+    font-size: 1.2rem;
    }
    &-cancel{
     color: white;

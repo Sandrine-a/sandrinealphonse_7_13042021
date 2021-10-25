@@ -1,7 +1,9 @@
 //Imports
+require('dotenv').config();
+
 const express = require ('express');
 
-require('dotenv').config();
+const cors = require('cors');
 
 const Sequelize  = require('sequelize');
 
@@ -21,13 +23,25 @@ const db = new Sequelize(process.env.DB_NAME, process.env.DB_USER, process.env.D
   dialect: process.env.DB_DIALECT
 });
 
-//Paramettrage des headers pour CORS
+//Gestion des erreurs de CORS:
+app.use(
+  cors({
+    origin(_, callback) {
+      callback(null, true);
+    },
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+    credentials: true,
+    exposedHeaders: ['X-Filename'],
+  }),
+);
+
+/* //Paramettrage des headers pour CORS
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
   next();
-});
+}); */
 
 app.use(express.urlencoded({extended: true}));
 app.use(express.json());

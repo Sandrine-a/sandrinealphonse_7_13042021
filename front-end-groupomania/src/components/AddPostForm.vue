@@ -39,20 +39,25 @@
       return {
         title: '',
         content:'',
-        userId:''
+        userId:'',
+        attachment:''
       }
     },    
     computed: {
-        ...mapState(['userAccess','status','attachment']),
+        ...mapState(['userAccess','status']),
+    },
+    watch: {
+      attachment(oldValue, newValue) {
+        console.log(oldValue)
+        console.log(newValue)
+      }
     },
     methods: {
       async sendPost(post) {
-        console.log(this.attachment);
         console.log('sending');
         try {
           if(this.attachment) {
             console.log('ATTACHMENT FONCTION');
-            console.log(this.attachment.name);
             post = {
               title: this.title,
               content: this.content,
@@ -155,7 +160,7 @@
     border: none;
     cursor: pointer;
     font-weight: bold;
-    font-size: 4vh;
+    font-size: 1.2rem;
    }
    &-cancel{
     color: white;

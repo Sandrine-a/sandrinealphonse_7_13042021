@@ -29,7 +29,7 @@ export default createStore({
       createdAt:'',
       attachment:''
     },
-    postUp: {
+    oldPost: {
       id: '',
       title:'',
       content:'',
@@ -73,9 +73,9 @@ export default createStore({
       state.post = post;
       console.log(post);
     },
-    GET_POST(state, postUp) {
-      state.post = postUp;
-      console.log(postUp);
+    GET_POST(state, oldPost) {
+      state.oldPost = oldPost;
+      console.log(oldPost);
     },
     POST_TO_DELETE(state, post) {
       state.post = post;
@@ -127,7 +127,6 @@ export default createStore({
       })
     },
     getOnePost({ commit}, post) {
-      console.log(post.id);
       return new Promise((resolve,reject) => {
         axiosInstance.get(`/posts/${post.id}`)
         .then((response) => {
@@ -154,7 +153,6 @@ export default createStore({
         commit('SET_STATUS', '');
         axiosInstance.get('/users')
         .then((response) => {
-          console.log(response.data);
           commit('GET_ALL_USERS', response.data)
         })
         .catch((error) => {
@@ -193,6 +191,33 @@ export default createStore({
         })
       })   
 
+    },
+    sendUpdatedPost({ commit }, post) {
+      console.log('sendUpdate');
+      return new Promise((resolve,reject) => {
+        commit('CREATE_POST', post );
+        console.log('sendPost a partir dici');
+        console.log(post.attachment);
+        const id = post.id;
+
+        let formData = new FormData();
+        formData.append('title', post.title)
+        formData.append('content', post.content)
+        formData.append('attachment', post.attachment)
+        formData.append('userId', post.userId)
+        axiosInstance.put(`/posts/${id}`, formData )
+        .then((response) => {
+          console.log(response.data);
+          commit('CREATE_POST', response.data );
+          commit('REMOVE_ATTACHEMENT', null)
+          commit('SET_STATUS', 'sent')
+          resolve(response);
+        })
+        .catch((error) => {
+          commit('SET_STATUS', 'error_sendpost');
+          reject(error);
+        })
+      }) 
     },
     deletePost({ commit }, post) {
       //Récupération du post envoyé et commit dans post:

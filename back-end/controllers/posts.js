@@ -5,9 +5,6 @@ const models = require('../models');
 
 const fs = require('fs');
 
-/* const Post = require('../models/Post');
-const { title } = require('process'); */
-
 exports.createPost = async (req,res,next) => { 
   //Params
   const { title, content, userId } = req.body;
@@ -81,7 +78,6 @@ exports.getAllPosts = async (req,res,next) => {
 };
 
 exports.getOnePost = async (req,res,next) => {
-  
   //PARAMS
   const postId = req.params.id;
 
@@ -139,7 +135,6 @@ exports.modifyPost = async (req,res,next) => {
     } : {
       ...req.body
     }
-
     //Recherche d'un fichier dans la req pour l'isoler du post
     try{
       const post = await models.Post.findOne({
@@ -164,7 +159,7 @@ exports.modifyPost = async (req,res,next) => {
               id: postId
             }
           })
-          .then(res.status(201).json({ message: 'CAS 1'}))    
+          .then(res.status(201).json({ post }))    
         } else if (post.attachment && !updatedPost.attachment) {
             //Suppression de l'ancienne image de la BDD
             const oldFilename = post.attachment.split('/images/posts/')[1];
@@ -182,7 +177,7 @@ exports.modifyPost = async (req,res,next) => {
                 id: postId
               }
             })
-            .then(res.status(201).json({ message: ' cas 2 !'}))  
+            .then(res.status(201).json({ post }))  
         }else {
           post.update({
             title: updatedPost.title,
@@ -193,7 +188,7 @@ exports.modifyPost = async (req,res,next) => {
               id: postId
             }
           })
-          .then(res.status(201).json({ message: ' CAS 3 !'}))  
+          .then(res.status(201).json({ post }))  
         }
       } else {
         res.status(404).json({ message: ' Unable to verify user '})
