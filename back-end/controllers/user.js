@@ -42,7 +42,7 @@ exports.signup = async (req,res,next) => {
 };
 
 exports.login = async (req,res,next) => { 
-
+  console.log("controleur LOGIN");
   //Recuperation des param
   const email = req.body.email;
   const password = req.body.password;

@@ -3,7 +3,7 @@
   <div>
     <div class="attachment__img" v-if=" this.attachment || infos.attachment != null ">
       <img :src="src" alt="Image du post à modifier" class="upload__img" >
-      <button id="cancel__btn" type="button" @click="remove">X</button>
+      <button id="cancel__btn" @click.stop.prevent="remove">X</button>
     </div> 
 <!--     <div class="attachment__img" v-if=" status == 'imgUploaded' ">
       <img :src="src" alt="Image du post"  class="upload__img"> 

@@ -16,7 +16,7 @@ router.get('/:id', auth, postCtrl.getOnePost);
 
 router.put('/:id', auth, multer.postsStorage, postCtrl.modifyPost);
 
-router.delete('/:id', auth,  postCtrl.deletePost);
+router.delete('/:id', auth, multer.postsStorage, postCtrl.deletePost);
 
 //Routes TODO
 /* 

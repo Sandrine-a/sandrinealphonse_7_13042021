@@ -49,7 +49,7 @@ exports.createPost = async (req,res,next) => {
           UserId: userId
           })
           .then((post) => res.status(201).json({ post }))     
-      }
+        }
     } catch (error) {
       res.status(400).json({ error })
     }
@@ -60,21 +60,23 @@ exports.createPost = async (req,res,next) => {
 
 exports.getAllPosts = async (req,res,next) => {
    const allPosts = await models.Post.findAll({
-     include: [{
+     include: [
+       {
        model:models.User,
        attributes: ['id']
-     }]
+     }, 
+/*      {
+      model:models.Comment,
+      attributes: ['id']
+     } */
+    ]
    })
   .then((posts) => {
-      res.status(200).json(posts);
-    }
-  )
+    res.status(200).json(posts)
+  })
   .catch((error) => {
-      res.status(400).json({
-        error: error
-      });
-    }
-  );
+    res.status(400).json({error: error})
+  });
 };
 
 exports.getOnePost = async (req,res,next) => {
