@@ -56,15 +56,16 @@
     },
     created() {
       this.$store.dispatch('getUserParams');
+
+      this.$store.dispatch('getAllPosts');
+        
+      this.$store.dispatch('getAllUsers');
     },
     mounted() {
       if (!this.userAccess) {
         this.$router.push('/');
         return;
       }
-      this.$store.dispatch('getAllPosts');
-
-      this.$store.dispatch('getAllUsers');
     },
     methods: {
       switchToWrite() {
@@ -81,7 +82,7 @@
           .then(() => this.$store.dispatch('getAllPosts'))
           .catch(error => console.log(error));
         }
-      } 
+      }
     }
   }
 

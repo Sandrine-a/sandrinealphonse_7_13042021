@@ -21,27 +21,44 @@
       </article>
       <div class="posts__buttons" v-if=" this.datas.UserId == this.userAccess.userId " >
         <div class="btn__card">
-          <button class="btn__card-modify" type="button" @click="updatePost"> Modifier </button>
+          <button class="btn__card-modify" type="button" @click.stop.prevent="updatePost"> Modifier </button>
         </div>
         <div class="btn__card">
-          <button class="btn__card-delete" type="button" @click="deletePost" > Supprimer </button>
+          <button class="btn__card-delete" type="button" @click.stop.prevent="deletePost" > Supprimer </button>
         </div>
       </div>
       <section class="posts__reactions">
-        <div class="posts__reactions-comments">
-          <p>
-            0 commentaire
-          </p>
-        </div>
-        <div class="posts__reactions-likes">
+       <div class="posts__reactions-likes">
           <fa icon="heart" class="posts__reactions-icon"/>
         </div>
-      </section>
 
+        <div class="posts__comments">
+          <p class=posts__comments-total>
+            {{commentsLength}} commentaire<span v-if="commentsLength > 0" >s</span>
+          </p>
+          <form class="posts__comments-input">
+            <p class="comments__field">
+              <label for="reaction" class="comments__label"></label>
+                <input type="text" v-model="reaction" class="comments__textarea" id="reaction" :ref="reaction" placeholder="Commenter">   
+            </p>
+            <div class="comments__controls">
+              <button class="comments__controls-validate" @click.stop.prevent="sendComment" >
+                <fa icon="check-square" class="icon__validateCom"/>
+              </button>
+               <button type="reset" class="comments__controls-cancel" >
+                <fa icon="window-close" class="icon__cancelCom"/>
+              </button>
+            </div>
+          </form>
+        </div>
+
+      </section>
     </div>
+
     <div class="posts__form" v-else >
       <UpdatePostForm  @write-cancel="switchToRead" v-for="infos in post" :key="infos" :infos="infos"/> 
     </div>
+
   </div>
   
 </template>
@@ -61,7 +78,9 @@ export default {
       post: {},
       allUsersTab: [],
       author: '',
-      mode: 'read'
+      mode: 'read',
+      reaction:'',
+      allComments: []
     }
   },
   props: {
@@ -70,9 +89,19 @@ export default {
   },
   computed: {
     ...mapState(['userAccess', 'userInfos', 'allUsers']),
+    commentsLength() {
+      return this.allComments.length
+    }
   },
+/*   watch: {
+    allComments(oldValue,newValue) {
+      console.log(oldValue);
+      console.log(newValue);
+    }
+  }, */
   created() {
-    this.getProfileFromPost()
+    this.getProfileFromPost();
+    this.getAllComments();
   },
   methods: {
     getProfileFromPost() {
@@ -94,6 +123,14 @@ export default {
     },
     deletePost() {
       this.$emit('delete-post', this.datas )
+    },
+    getAllComments() {
+      this.$store.dispatch('getAllComments', {postId: this.datas.id})
+      .then(response => this.allComments = response.data)
+    },
+    sendComment() {
+      this.$store.dispatch('sendComment', {postId: this.datas.id, userId: this.userAccess.userId, content: this.reaction})
+      .then(()=> this.getAllComments() )
     },
   }
 
@@ -149,10 +186,13 @@ export default {
     }
     &__reactions {
       display: flex;
-      justify-content: space-between;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: flex-start;
       margin-top: 10px;
       &-likes {
-        padding-top: 15px;
+        align-self: flex-end;
+        padding-top: 5px;
         padding-right: 20px;
         width: 30px;
         height: 30px;
@@ -160,6 +200,52 @@ export default {
       &-icon {
         height: 100%;
         width: 100%;
+      }
+    }
+    &__comments {
+      width: 100%;
+      &-total {
+        text-align: start;
+        margin-bottom: 0;
+      }
+    }
+  }
+  .comments {
+      &__field {
+        margin-bottom: 2px;
+      }
+    &__textarea {
+      width: 100%;
+      border-bottom: none;
+      border-right: none;
+      border-top: 1px solid black;
+      min-height: 40px;
+      &::placeholder{
+        color: $text-color-secondary;
+        font-style: italic;
+        padding-left: 10px;
+      }
+
+    }
+    &__controls {
+      display: flex;
+      cursor: pointer;
+      height: 20px;
+      &-cancel, &-validate {
+        cursor: pointer;
+        border: none;
+        color: $secondary-color;
+        background-color: white;
+        border-radius: 15px;
+      }
+    }
+  }
+  .icon{
+    &__validateCom, &__cancelCom{
+      width: 40px;
+      height: 100%;
+      &:hover {
+        color: $tertiary-color;
       }
     }
   }

@@ -7,7 +7,7 @@
       </div>
       <div class="post__form-input">
         <label for="content" class="input__label"></label>
-          <textarea v-model="content" class="input__field" type="mail" id="content" placeholder="Taper votre texte ici"></textarea>     
+          <textarea v-model="content" class="input__field" id="content" placeholder="Taper votre texte ici"></textarea>     
       </div>
       
         <attachmentInputPost v-model="attachment" />

@@ -6,16 +6,16 @@ const models = require('../models');
 
 exports.createComment = async (req,res,next) => {
   //PARAMS
+  console.log(req.params.postId);
   const postId = req.params.postId;
   const userId = req.body.userId;
-
-  console.log("CONROLEUR COMMENT");
 
   ///Recherche du post en Bdd
   const postExist = await models.Post.findOne({
     where: { id: postId }
   })
   if(postExist) {
+    console.log("CONROLEUR COMMENT");
     //Recherche de l'user qui commente 
     try{
       const userExist = await models.User.findOne({

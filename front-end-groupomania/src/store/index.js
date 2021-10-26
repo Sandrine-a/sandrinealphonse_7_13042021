@@ -35,6 +35,12 @@ export default createStore({
       content:'',
       attachment:'',
       userId:''
+    },
+    allComments: [],
+    comment:{
+      userId:'',
+      postId:'',
+      content:'',
     }
   },
   getters: {
@@ -79,6 +85,14 @@ export default createStore({
     },
     POST_TO_DELETE(state, post) {
       state.post = post;
+    },
+    GET_ALL_COMMENTS(state, allComments) {
+      console.log(allComments);
+      state.allComments = allComments;
+    },
+    GET_COMMENT(state, comment) {
+      this.comment = comment;
+      console.log(comment);
     }
   },
   actions: {
@@ -147,6 +161,37 @@ export default createStore({
       .catch(() => {
       })
     },
+    getAllComments({ commit}, posts) {
+      return new Promise((resolve,reject) => {
+        axiosInstance.get(`/posts/${posts.postId}/comments`)
+        .then((response) => {
+          commit('GET_ALL_COMMENTS', response.data)
+          resolve(response);
+        })
+        .catch((error) => {reject(error)})
+      })
+    },
+    sendComment({ commit }, comment) {
+      console.log(comment);
+      console.log(comment.userId);
+      return new Promise((resolve,reject) => {
+        commit('GET_COMMENT', comment );
+        console.log('Send comment a partir dici');
+        let commentDatas = {userId: comment.userId, content: comment.content}
+        
+        axiosInstance.post(`/posts/${comment.postId}/comments`, commentDatas)
+        .then((response) => {
+          console.log(response);
+          commit('GET_COMMENT', response);
+          commit('SET_STATUS', 'sent')
+          resolve(response);
+        })
+        .catch((error) => {
+          commit('SET_STATUS', 'error_sendpost');
+          reject(error);
+        })
+      })  
+    },
     getAllUsers({ commit }) {
       commit('SET_STATUS', 'loading');
       return new Promise((resolve,reject) => {
@@ -154,6 +199,7 @@ export default createStore({
         axiosInstance.get('/users')
         .then((response) => {
           commit('GET_ALL_USERS', response.data)
+          resolve(response);
         })
         .catch((error) => {
           commit('SET_STATUS', 'error_allUsers');
@@ -168,7 +214,6 @@ export default createStore({
       commit('REMOVE_ATTACHEMENT', null)
     },
     sendPost({ commit }, post) {
-      console.log('sendpost');
       return new Promise((resolve,reject) => {
         commit('CREATE_POST', post );
         console.log('sendPost a partir dici');
@@ -190,7 +235,6 @@ export default createStore({
           reject(error);
         })
       })   
-
     },
     sendUpdatedPost({ commit }, post) {
       console.log('sendUpdate');
@@ -222,8 +266,6 @@ export default createStore({
     deletePost({ commit }, post) {
       //Récupération du post envoyé et commit dans post:
       commit('POST_TO_DELETE', post)
-      console.log(this.state.post.id);
-      console.log(this.state.userAccess.userId);
       //Puis, récupération de l'id du post dans le state
       const id = this.state.post.id;
 
