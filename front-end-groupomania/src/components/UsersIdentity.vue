@@ -9,9 +9,9 @@
         <p class="label">Ma photo</p>
       </div>    
       <p class="label"> Nom: </p>
-      <p> {{ user.lastName }} </p>
+      <p> {{ this.userInfos.lastName }} </p>
       <p class="label">Prénom:</p>
-      <p>{{ user.firstName }}</p>
+      <p>{{ this.userInfos.firstName }}</p>
     </div>
     <div class="card__button">
       <div class="btn__main">
@@ -28,20 +28,16 @@
 
   export default {
     name: 'UsersIdentity',
-    mounted() {
-      console.log(this.$store.state.userAccess);
-      this.$store.dispatch('getUserProfile');
-    },
     computed: {
-      ...mapState({
-        user: 'userInfos',
-        userParams: 'userAccess'
-      })
+      ...mapState(['userInfos','userAccess'])
     },
     methods: {
 /*       getUserForm() {
         console.log("User Form");
       } */
+    },
+    mounted() {
+      console.log('user');
     }
   }
 </script>
@@ -98,7 +94,7 @@
     border: none;
     cursor: pointer;
     font-weight: bold;
-    font-size: 4vh;
+    font-size: 1.2rem;
     }
   }
 </style>

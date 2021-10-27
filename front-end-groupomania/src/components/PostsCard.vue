@@ -33,9 +33,11 @@
         </div>
 
         <div class="posts__comments">
-          <p class=posts__comments-total>
-            {{commentsLength}} commentaire<span v-if="commentsLength > 0" >s</span>
-          </p>
+          <a @click="displayComments"> 
+            <p class=posts__comments-total>
+              {{commentsLength}} commentaire<span v-if="commentsLength > 0" >s</span>
+            </p>
+          </a>
           <form class="posts__comments-input">
             <p class="comments__field">
               <label for="reaction" class="comments__label"></label>
@@ -49,7 +51,13 @@
                 <fa icon="window-close" class="icon__cancelCom"/>
               </button>
             </div>
-          </form>
+          </form >
+          <div class="posts__comments-display" v-if="status == 'displayCom'">
+            <p class="comments__content" v-for="(item, index) in allComments" :key="index">
+              {{ item.content}}
+            </p>
+          </div>
+        
         </div>
 
       </section>
@@ -80,7 +88,8 @@ export default {
       author: '',
       mode: 'read',
       reaction:'',
-      allComments: []
+      allComments: [],
+      status:''
     }
   },
   props: {
@@ -132,6 +141,9 @@ export default {
       this.$store.dispatch('sendComment', {postId: this.datas.id, userId: this.userAccess.userId, content: this.reaction})
       .then(()=> this.getAllComments() )
     },
+    displayComments() {
+      this.status='displayCom'
+    }
   }
 
 
@@ -207,11 +219,12 @@ export default {
       &-total {
         text-align: start;
         margin-bottom: 0;
+        cursor: pointer;
       }
     }
   }
   .comments {
-      &__field {
+    &__field {
         margin-bottom: 2px;
       }
     &__textarea {
@@ -239,6 +252,13 @@ export default {
         border-radius: 15px;
       }
     }
+    &__content {
+    background-color: $secondary-color;
+    color: white;
+    text-align: start;
+    padding-left: 20px;
+    border-radius:15px;
+  }
   }
   .icon{
     &__validateCom, &__cancelCom{

@@ -55,7 +55,7 @@
         this.status = 'imgUploaded';
         },
         remove() {
-          this.src = this.defaultSrc;
+          this.src = '';
           this.$emit('update:modelValue', null);
           this.status = ''
         }

@@ -4,8 +4,10 @@
     <Header/>
 
     <div>
-      <h1>Profil</h1>
+      <h1 lass="profil__title">Profil</h1>
+      <section class="profil__card">
         <UsersIdentity /> 
+      </section> 
         
     </div>
     
@@ -27,19 +29,19 @@
       UsersIdentity
     },  
     computed: {
-      ...mapState({
-        user: 'userInfos',
-        userParams: 'userAccess'
-      })
+      ...mapState(['userInfos','userAccess'])
     },
     mounted() {
-      console.log(typeof this.userAccess.userId);
+      console.log(this.userAccess);
       if (this.userAccess.userId == -1 ) {
         this.$router.push('/');
         return;
       }
       this.$store.dispatch('getUserParams');
       this.$store.dispatch('getUserProfile');
+    },
+    methods: {
+
     }
   }
 
@@ -51,6 +53,11 @@
 
   .main {
     background-color: $bg-color;
+  }
+  .profil{
+    &__card{
+      padding-bottom: 100px;
+    }
   }
 
 </style>
