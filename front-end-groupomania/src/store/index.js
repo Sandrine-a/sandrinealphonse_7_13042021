@@ -191,6 +191,17 @@ export default createStore({
         })
       })  
     },
+    deleteComment({ commit }, comment) {
+      return new Promise((resolve,reject) => {
+        axiosInstance.delete(`/posts/${comment.PostId}/comments/${comment.id}`, {comment: {postId: comment.PostId}, commentId: comment.id })
+        .then((response) => {
+          console.log(response.data);
+          commit('GET_COMMENT', response);
+          resolve(response);
+        })
+        .catch((error) => {reject(error)})
+      })
+    },
     getAllUsers({ commit }) {
       commit('SET_STATUS', 'loading');
       return new Promise((resolve,reject) => {

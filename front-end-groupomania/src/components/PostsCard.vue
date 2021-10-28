@@ -54,16 +54,19 @@
               </button>
             </div>
           </form >
-          <section class="posts__comments-display" v-if="!isHidden">
-
+          <section class="posts__comments-render" v-if="!isHidden">
             <div class="comments__content" v-for="item in allComments" :key="item">
-              <p>
-                {{ item.content}}
-              </p>
-              <p >
-                {{ this.comAuthor.firstname }}
-                {{ item.UserId }}
-              </p>
+              <div class="comments__content-items">
+                <p v-for="user in this.allUsers" :key="user" class="comments__content-author">
+                  <span v-if="user.id == item.UserId">
+                  {{ user.firstName }} {{ user.lastName }}
+                  </span>
+                </p>
+                <p class="comments__content-text">
+                  {{ item.content}}
+                </p>
+              </div>
+              <div class="comments__content-delete" v-if="item.UserId == this.userAccess.userId" @click.stop.prevent="deleteComment(item)">x</div>
             </div>
           </section>
         
@@ -93,22 +96,16 @@ export default {
   data() {
     return {
       post: {},
-      allUsersTab: [],
       author: '',
       mode: 'read',
       reaction:'',
       allComments: [],
       isHidden: true,
-      status: '',
-      comAuthor:''
+      status: ''
     }
   },
-  mounted() {
-    console.log(this.item);
-  },
   props: {
-    datas: Object,
-    user: Object
+    datas: Object
   },
   computed: {
     ...mapState(['userAccess', 'userInfos', 'allUsers','comment']),
@@ -144,36 +141,11 @@ export default {
       this.mode ='read'
     },
     deletePost() {
-      this.$emit('delete-post', this.datas )
+      this.$emit('delete-post', this.datas)
     },
     getAllComments() {
       this.$store.dispatch('getAllComments', {postId: this.datas.id})
       .then(response => this.allComments = response.data)
-      .then(() => this.getProfileFromComment())
-    },
-    getProfileFromComment() {
-      console.log(this.allComments.UserId);
-
-      for(let u of this.allUsers){
-        console.log(u.id)
-        if(u.id == this.allComments[0].UserId) {
-          
-          this.comAuthor == u
-          console.log(u);
-        }
-      }
-       
-
-/*         if(this.user.id == com.UserId) {
-          console.log('it');
-        } */
-    
-/*       for(let com of this.allComments){
-        console.log(com);
-        console.log(this.allUsers);
-        console.log(com.UserId);
-        console.log(this.item);    
-      } */
     },
     sendComment() {
       this.$store.dispatch('sendComment', {postId: this.datas.id, userId: this.userAccess.userId, content: this.reaction})
@@ -187,6 +159,10 @@ export default {
     resetInput() {
       this.reaction = ''
     },
+    deleteComment(com) {
+      this.$store.dispatch('deleteComment', com)
+      .then(()=> this.getAllComments())
+    }
   }
 
 
@@ -271,6 +247,9 @@ export default {
           text-decoration: underline;
         }
       }
+      &-render {
+        margin-top: 15px;
+      }
     }
   }
   .comments {
@@ -303,11 +282,27 @@ export default {
       }
     }
     &__content {
-    background-color: $secondary-color;
-    color: white;
-    text-align: start;
+    background-color: $primary-color;
+    color:$text-color-secondary;
     padding-left: 20px;
     border-radius:15px;
+    margin-top: 15px;
+    display: flex;
+    justify-content: space-between;
+    &-items {
+      text-align: start;
+    }
+    &-delete {
+      cursor: pointer;
+      padding-right: 10px;
+    }
+    &-author {
+      font-weight: bold;
+      margin-bottom: 0;
+    }
+    &-text {
+      margin-top: 0;
+    }
   }
   }
   .icon{

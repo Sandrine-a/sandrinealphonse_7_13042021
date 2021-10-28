@@ -46,7 +46,6 @@
     data() {
       return {
         posts: [],
-        users:[],
         profilesFromPosts: [],
         mode: 'read'
       }

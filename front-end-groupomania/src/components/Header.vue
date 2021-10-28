@@ -31,12 +31,6 @@ export default {
     ...mapState(['userInfos','userAccess'])
   },
   methods: {
-/*     getUserParams() {
-      this.$store.dispatch('getUserParams');
-    } */
-  },
-  mounted() {
-    console.log(this.userAccess);
   }
 }
 
