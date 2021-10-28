@@ -18,7 +18,7 @@
 
     <div class="card__column">
       <section class="posts__column" >
-        <PostsCard v-for="(item, index) in allPosts" :datas="item" :key="index" @delete-post="deletePost" />
+        <PostsCard v-for="(item, index) in allPosts.slice().reverse()" :datas="item" :key="index" @delete-post="deletePost" />
       </section>
     </div>
   </div>
@@ -51,14 +51,17 @@
       }
     }, 
     computed: {
-      ...mapState(['userAccess', 'allPosts', 'allUsers']),
+      ...mapState(['userAccess', 'allPosts', 'allUsers'])
     },
     created() {
       this.$store.dispatch('getUserParams');
 
       this.$store.dispatch('getAllPosts');
+
+/*       this.posts = this.allPosts */
         
       this.$store.dispatch('getAllUsers');
+
     },
     mounted() {
       if (!this.userAccess) {
@@ -81,7 +84,16 @@
           .then(() => this.$store.dispatch('getAllPosts'))
           .catch(error => console.log(error));
         }
-      }
+      },
+
+      sortPostsById() {
+        this.allPosts.sort((a,b)=> {
+          b.id - a.id
+        })
+        console.log('toto');
+        console.log(this.allPosts);
+        }
+
     }
   }
 
