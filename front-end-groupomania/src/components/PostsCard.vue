@@ -33,17 +33,19 @@
         </div>
 
         <div class="posts__comments">
-          <a @click="displayComments"> 
-            <p class=posts__comments-total>
-              {{commentsLength}} commentaire<span v-if="commentsLength > 0" >s</span>
-            </p>
-          </a>
-          <form class="posts__comments-input">
+          <section class="posts__comments-total">
+            <a @click.stop.prevent="isHidden = !isHidden"> 
+              <p >
+                {{commentsLength}} commentaire<span v-if="commentsLength > 0" >s</span>
+              </p>
+            </a>
+          </section>
+          <form class="posts__comments-input" >
             <p class="comments__field">
               <label for="reaction" class="comments__label"></label>
-                <input type="text" v-model="reaction" class="comments__textarea" id="reaction" :ref="reaction" placeholder="Commenter">   
+                <input type="text" v-model="reaction" class="comments__textarea" id="reaction"  placeholder="Commenter">   
             </p>
-            <div class="comments__controls">
+            <div class="comments__controls" v-if=" status == 'commenting'">
               <button class="comments__controls-validate" @click.stop.prevent="sendComment" >
                 <fa icon="check-square" class="icon__validateCom"/>
               </button>
@@ -52,11 +54,18 @@
               </button>
             </div>
           </form >
-          <div class="posts__comments-display" v-if="status == 'displayCom'">
-            <p class="comments__content" v-for="(item, index) in allComments" :key="index">
-              {{ item.content}}
-            </p>
-          </div>
+          <section class="posts__comments-display" v-if="!isHidden">
+
+            <div class="comments__content" v-for="item in allComments" :key="item">
+              <p>
+                {{ item.content}}
+              </p>
+              <p >
+                {{ this.comAuthor.firstname }}
+                {{ item.UserId }}
+              </p>
+            </div>
+          </section>
         
         </div>
 
@@ -89,25 +98,29 @@ export default {
       mode: 'read',
       reaction:'',
       allComments: [],
-      status:''
+      isHidden: true,
+      status: '',
+      comAuthor:''
     }
+  },
+  mounted() {
+    console.log(this.item);
   },
   props: {
     datas: Object,
     user: Object
   },
   computed: {
-    ...mapState(['userAccess', 'userInfos', 'allUsers']),
+    ...mapState(['userAccess', 'userInfos', 'allUsers','comment']),
     commentsLength() {
       return this.allComments.length
     }
   },
-/*   watch: {
-    allComments(oldValue,newValue) {
-      console.log(oldValue);
-      console.log(newValue);
+  watch: {
+    reaction() {
+      return this.status = 'commenting'
     }
-  }, */
+  },
   created() {
     this.getProfileFromPost();
     this.getAllComments();
@@ -136,14 +149,44 @@ export default {
     getAllComments() {
       this.$store.dispatch('getAllComments', {postId: this.datas.id})
       .then(response => this.allComments = response.data)
+      .then(() => this.getProfileFromComment())
+    },
+    getProfileFromComment() {
+      console.log(this.allComments.UserId);
+
+      for(let u of this.allUsers){
+        console.log(u.id)
+        if(u.id == this.allComments[0].UserId) {
+          
+          this.comAuthor == u
+          console.log(u);
+        }
+      }
+       
+
+/*         if(this.user.id == com.UserId) {
+          console.log('it');
+        } */
+    
+/*       for(let com of this.allComments){
+        console.log(com);
+        console.log(this.allUsers);
+        console.log(com.UserId);
+        console.log(this.item);    
+      } */
     },
     sendComment() {
       this.$store.dispatch('sendComment', {postId: this.datas.id, userId: this.userAccess.userId, content: this.reaction})
-      .then(()=> this.getAllComments() )
+      .then(()=> {
+        this.resetInput()
+        this.getAllComments()
+        this.isHidden = false
+      })
+      .catch(error => console.log(error))
     },
-    displayComments() {
-      this.status='displayCom'
-    }
+    resetInput() {
+      this.reaction = ''
+    },
   }
 
 
@@ -202,6 +245,7 @@ export default {
       justify-content: flex-start;
       align-items: flex-start;
       margin-top: 10px;
+      width:100%;
       &-likes {
         align-self: flex-end;
         padding-top: 5px;
@@ -216,10 +260,16 @@ export default {
     }
     &__comments {
       width: 100%;
+      display: flex;
+      flex-direction: column;
       &-total {
         text-align: start;
         margin-bottom: 0;
         cursor: pointer;
+        max-width: 138px;
+        &:hover {
+          text-decoration: underline;
+        }
       }
     }
   }

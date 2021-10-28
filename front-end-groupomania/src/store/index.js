@@ -87,11 +87,10 @@ export default createStore({
       state.post = post;
     },
     GET_ALL_COMMENTS(state, allComments) {
-      console.log(allComments);
       state.allComments = allComments;
     },
     GET_COMMENT(state, comment) {
-      this.comment = comment;
+      state.comment = comment;
       console.log(comment);
     }
   },

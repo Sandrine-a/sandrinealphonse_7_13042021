@@ -90,17 +90,6 @@ exports.getAllComments = async (req,res,next) => {
     })
     if(postExist) {
       const allComments = await models.Comment.findAll({
-        include: [
-/*           {//inclure  belongs to User
-          model:models.User,
-          attributes: ['id']
-        }, 
-         {//Inclure belongs to Post et user Facultatif
-         model:models.Post,
-         attributes: ['id'],
-         include: { model: models.User, attributes: ['id']  }
-        } */
-       ],
        where: { postId: postId }
       })
      .then((allComments) => {res.status(200).json(allComments)})
