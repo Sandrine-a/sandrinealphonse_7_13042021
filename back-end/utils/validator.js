@@ -11,8 +11,8 @@ exports.loginValidator = () => {
 
 exports.signupValidator = () => {
   return [
-    body('lastname', 'please a lastname valid').isLength({ min: 1, max: 200}),
-    body('firstname', 'please enter a firstname valid').isLength({ min: 1, max: 200}),
+    body('lastName', 'please a lastname valid').isLength({ min: 1, max: 200}),
+    body('firstName', 'please enter a firstname valid').isLength({ min: 1, max: 200}),
     body('email', 'please enter a valid email').toLowerCase().isEmail().isLength({ min: 3, max: 200}),
     body('password', 'please enter a password with min 6 characters').isLength({ min: 6, max: 300}),
   ]

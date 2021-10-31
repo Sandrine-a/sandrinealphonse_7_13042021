@@ -49,12 +49,12 @@
         this.src = e.target.result;
         }
         this.status = 'imgUploaded';
-        },
-        remove() {
-          this.src = '';
-          this.$emit('update:modelValue', null);
-          this.status = ''
-        }
+      },
+      remove() {
+        this.src = '';
+        this.$emit('update:modelValue', null);
+        this.status = ''
+      }
     }
 
   }

@@ -12,8 +12,9 @@ export default createStore({
     },
     userInfos: {
       userId:'',
-      firstname: '',
-      lastname: '',
+      firstName: '',
+      lastName: '',
+      pPicture: '',
       email: ''
     },
     allPosts: [],
@@ -292,7 +293,14 @@ export default createStore({
     updateIdentity({ commit }, userInfos) {
       console.log(userInfos);
       return new Promise((resolve,reject) => {
-        axiosInstance.put(`/users/${this.state.userAccess.userId}`,userInfos )
+               
+        let formData = new FormData();
+        formData.append('userId', userInfos.userId)
+        formData.append('lastName', userInfos.lastName)
+        formData.append('firstName', userInfos.firstName)
+        formData.append('pPicture', userInfos.pPicture)
+
+        axiosInstance.put(`/users/${this.state.userAccess.userId}`, formData )
         .then((response) => {
           console.log(response.data);
           commit('USER_PROFILE', response.data );

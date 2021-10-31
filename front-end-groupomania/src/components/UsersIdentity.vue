@@ -2,9 +2,10 @@
 
   <section class="card">
     <div class="card__informations">   
-      <div class="card__photo">
+      <div class="card__photo" v-if="mode == 'read'">
         <div class="card__photo-item">
-          <fa icon="user-alt-slash" class="card__photo-icon"/>
+          <fa icon="user-alt-slash" class="card__photo-icon" v-if="src == null "/>
+          <img :src="src" alt="avatar profile" class="card__photo-pPicture" v-else/>
         </div>
         <p class="label">Ma photo</p>
       </div>
@@ -16,14 +17,26 @@
       </div>
 
       <div div class="card__form" v-if=" mode == 'updating' ">
+        
         <form class="identity__form"> 
-          <div class="identity__form-input">
-            <label for="lastname" class="identity__form-label">Nom: </label>
-              <input v-model="lastname" class="identity__form-field" type="text" id="lastname" placeholder="Taper le nom" required>
+
+          <div class="card__photo" >   
+            <div class="card__photo-item" >
+              <fa icon="user-alt-slash" class="card__photo-icon" v-if="src == null "/>
+              <img :src="src" alt="Image du post à modifier" class="card__photo-pPicture" v-if=" status = 'uploading' && src != null" >
+            </div>
+            <div class="identity__form-upload" >  
+              <label for="pPicture" class="identity__form-label">Ma Photo </label>
+              <input class="input__field" id="pPicture" type="file" ref="pPicture" accept="image/*" @change="uploadPpicture" placeholder="Télécharger">    
+            </div>
           </div>
           <div class="identity__form-input">
-            <label for="firstname" class="identity__form-label">Prénom:</label>
-            <input v-model="firstname" class="identity__form-field" type="text" id="firstname" placeholder="Taper le prénnom" required>   
+            <label for="lastName" class="identity__form-label">Nom: </label>
+              <input v-model="lastName" class="identity__form-field" type="text" id="lastName" placeholder="Taper le nom" required>
+          </div>
+          <div class="identity__form-input">
+            <label for="firstName" class="identity__form-label">Prénom:</label>
+            <input v-model="firstName" class="identity__form-field" type="text" id="firstName" placeholder="Taper le prénnom" required>   
           </div>
         </form>
       </div>
@@ -51,9 +64,13 @@
     name: 'UsersIdentity',
     data() {
       return {
-        lastname: this.$store.state.userInfos.lastName,
-        firstname: this.$store.state.userInfos.firstName,
-        mode:'read'
+        lastName: this.$store.state.userInfos.lastName,
+        firstName: this.$store.state.userInfos.firstName,
+        src: this.$store.state.userInfos.pPicture,
+        pPicture:this.$store.state.userInfos.pPicture,
+        email: this.$store.state.userInfos.email,
+        mode:'read',
+        status:''
       }
     },
     computed: {
@@ -68,20 +85,38 @@
         this.mode = 'updating'
       },
       updateIdentity(userInfos) {
+        console.log(this.pPicture);
         userInfos = {
-          lastname: this.lastname,
-          firstname: this.firstname,
+          lastName: this.lastName,
+          firstName: this.firstName,
+          email: this.email,
+          pPicture: this.pPicture,
           userId: this.userAccess.userId,
         }
         this.$store.dispatch('updateIdentity', userInfos)
         .then(()=> {
           this.$emit('get-profile')
           this.mode = 'read'
+          console.log('end of updateIdentity');
+          console.log(this.userInfos);
         })
       },
       cancelUpdate() {
         this.mode = 'read'
-      }
+      },
+      uploadPpicture(e) {
+        this.pPicture = e.target.files[0];
+        console.log(this.pPicture);
+  
+        //Rendu dans la div image 
+        let reader = new FileReader()
+        reader.readAsDataURL(this.pPicture);
+        reader.onload = (e) => {
+        this.src = e.target.result;
+        }
+
+        this.status = 'uploading';
+      },
     }
   }
 </script>
@@ -117,6 +152,11 @@
         width: 80%;
         height: 80%;
       }
+      &-pPicture {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
     }
     &__datas {
       text-align: start;
@@ -147,6 +187,11 @@
         border-radius: 10px;
         min-height: 25px;
         margin-bottom: 15px;
+      }
+      &-upload {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
       }
     }
     .btn__identity{

@@ -32,7 +32,7 @@ const postsStorage = multer.diskStorage({
   }
 });
 
-exports.usersStorage = multer({ storage: usersStorage}).single('photo');
+exports.usersStorage = multer({ storage: usersStorage}).single('pPicture');
 
 exports.postsStorage = multer({ storage: postsStorage }).single('attachment');
 

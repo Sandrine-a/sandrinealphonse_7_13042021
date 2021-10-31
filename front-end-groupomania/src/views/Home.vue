@@ -24,13 +24,13 @@
       </div>
 
       <div class="login__form-input" v-if=" mode == 'signup'">
-        <label for="lastname" class="color_blue"> Nom </label>
-        <input v-model="lastname" class="input_field" type="text" id="lastname" placeholder="Entrez votre nom" required>
+        <label for="lastName" class="color_blue"> Nom </label>
+        <input v-model="lastName" class="input_field" type="text" id="lastName" placeholder="Entrez votre nom" required>
       </div>
 
       <div class="login__form-input" v-if=" mode == 'signup'">
-        <label for="firstname" class="color_blue">Prénom </label>
-        <input v-model="firstname" class="input_field" type="text" id="firstname" placeholder="Entrez votre prénom" required>
+        <label for="firstName" class="color_blue">Prénom </label>
+        <input v-model="firstName" class="input_field" type="text" id="firstName" placeholder="Entrez votre prénom" required>
       </div>
           
       <section id="section__btn">
@@ -78,8 +78,8 @@ export default {
       mode: 'login',
       email: '',
       password: '',
-      lastname: '',
-      firstname: '' 
+      lastName: '',
+      firstName: '' 
     }
   },
   computed: {
@@ -96,8 +96,8 @@ export default {
       this.$store.dispatch('signup', {
         email: this.email,
         password: this.password,
-        firstname: this.firstname,
-        lastname: this.lastname
+        firstName: this.firstName,
+        lastName: this.lastName
       })
       .then(() => this.login())
       .catch(error => console.log(error));

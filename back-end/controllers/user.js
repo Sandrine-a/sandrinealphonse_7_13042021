@@ -15,7 +15,7 @@ exports.signup = async (req,res,next) => {
   console.log("controleur SIGNUP");
 
   //Recuperation des param
-  const { firstname, lastname, email, password } = req.body;
+  const { firstName, lastName, email, password } = req.body;
 
   //Verification de l'utilisateur déja en BDD
   const userExist = await models.User.findOne({
@@ -27,10 +27,11 @@ exports.signup = async (req,res,next) => {
     return res.status(400).json({error: 'Utisateur deja enregistré !'});
   } else {
     try { 
+      console.log('SIGNUP');
       const hash = await bcrypt.hash(password, 12);
       const user = await models.User.create({
-        firstName: firstname,
-        lastName: lastname,
+        firstName: firstName,
+        lastName: lastName,
         email: email,
         password: hash
       });
@@ -79,7 +80,7 @@ exports.getUserProfile = async (req,res,next) => {
   const userId = req.params.id; 
 
   const user = await models.User.findOne({
-    attributes: ['id', 'firstName', 'lastName', 'email'],
+    attributes: ['id', 'firstName', 'lastName', 'email', 'pPicture'],
     where: { id: userId}
   })
   .then(user => {
@@ -93,6 +94,7 @@ exports.getUserProfile = async (req,res,next) => {
 };
 
 exports.updateUserProfile = async (req,res,next) => {
+  console.log(req.body);
 
   //PARAMS
   const userId = req.params.id; 
@@ -100,7 +102,7 @@ exports.updateUserProfile = async (req,res,next) => {
   //Recherche d'un fichier dans la req puis isoler l'User
   const updatedUser = req.file ? {
     ...req.body,
-    photo: `${req.protocol}://${req.get('host')}/images/users/${req.file.filename}`
+    pPicture: `${req.protocol}://${req.get('host')}/images/users/${req.file.filename}`
   } : {
     ...req.body
   }
@@ -108,11 +110,11 @@ exports.updateUserProfile = async (req,res,next) => {
 
   try {
     const user = await models.User.findOne({
-      attributes: ['id', 'firstName', 'lastName', 'pPicture' ],
+      attributes: ['id', 'firstName', 'lastName', 'email', 'pPicture' ],
       where: { id: userId}
     })
     if(user) {
-      if(!updatedUser.photo) {
+      if(!updatedUser.pPicture) {
         if(user.pPicture) {
           //Suppression de l'ancienne image de la BDD
           const oldFilename = user.pPicture.split('/images/users/')[1];
@@ -123,8 +125,8 @@ exports.updateUserProfile = async (req,res,next) => {
           }
         }
         user.update({
-          firstName: updatedUser.firstname, 
-          lastName: updatedUser.lastname,
+          firstName: updatedUser.firstName, 
+          lastName: updatedUser.lastName,
           pPicture: null
         }, {
           where: {
@@ -135,9 +137,9 @@ exports.updateUserProfile = async (req,res,next) => {
       } else {
         console.log('user rajoute pPicture');
         user.update({
-          firstName: updatedUser.firstname, 
-          lastName: updatedUser.lastname,
-          pPicture: updatedUser.photo
+          firstName: updatedUser.firstName, 
+          lastName: updatedUser.lastName,
+          pPicture: updatedUser.pPicture
         }, {
           where: {
             id: userId
@@ -190,10 +192,4 @@ exports.deleteProfile = async (req,res,next) => {
   }
 };
 
-
-//MIDDLEWARE TO DO
-/* 
-
-
-; */
 

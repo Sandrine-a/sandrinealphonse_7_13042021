@@ -83,7 +83,6 @@
           .catch(error => console.log(error));
         }
       },
-
       sortPostsById() {
         this.allPosts.sort((a,b)=> {
           b.id - a.id
