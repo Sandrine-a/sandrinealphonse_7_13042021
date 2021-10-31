@@ -8,6 +8,7 @@
         <ul class="header__nav--list">
           <li class="nav__list"><router-link to="/posts" class="nav__link"><fa icon="home" class="nav__icon"/></router-link></li>
           <li class="nav__list"><router-link :to="`/users/${this.userAccess.userId}`" class="nav__link"><fa icon="user" class="nav__icon"/></router-link></li>
+          <li class="nav__list exit" @click="exitApp"><fa icon="times" class="nav__icon"/></li>
         </ul>
       </nav>
       <router-view />
@@ -31,6 +32,10 @@ export default {
     ...mapState(['userInfos','userAccess'])
   },
   methods: {
+    exitApp() {
+      this.$store.dispatch('exitApp')
+      this.$router.push('/');
+    }
   }
 }
 
@@ -42,8 +47,8 @@ export default {
 
    .header {
    background-color: $tertiary-color;
-   border-bottom-left-radius: 20px;
-   border-bottom-right-radius: 2px;
+   border-bottom-left-radius: 25px;
+   border-bottom-right-radius: 25px;
    padding: 0 25px;
    &__container {
     height: 150px;
@@ -79,5 +84,8 @@ export default {
     height: 100%;
     width: 80%;
   }
+ }
+ .exit {
+   cursor: pointer;
  }
 </style>

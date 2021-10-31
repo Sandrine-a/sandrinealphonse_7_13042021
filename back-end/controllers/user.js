@@ -15,7 +15,7 @@ exports.signup = async (req,res,next) => {
   console.log("controleur SIGNUP");
 
   //Recuperation des param
-  const { lastname, firstname, email, password } = req.body;
+  const { firstname, lastname, email, password } = req.body;
 
   //Verification de l'utilisateur déja en BDD
   const userExist = await models.User.findOne({
@@ -106,60 +106,60 @@ exports.updateUserProfile = async (req,res,next) => {
   }
   console.log(updatedUser);
 
-  models.User.findOne({
-    attributes: ['id', 'firstName', 'lastName', 'pPicture' ],
-    where: { id: userId}
-  })
-  .then(user => {
-    if( updatedUser.photo && user.pPicture == null) {
-      user.update({
-        firstName: updatedUser.firstname, 
-        lastName: updatedUser.lastname,
-        pPicture: updatedUser.photo 
-      }, {
-        where: {
-          id: req.body.userId
+  try {
+    const user = await models.User.findOne({
+      attributes: ['id', 'firstName', 'lastName', 'pPicture' ],
+      where: { id: userId}
+    })
+    if(user) {
+      if(!updatedUser.photo) {
+        if(user.pPicture) {
+          //Suppression de l'ancienne image de la BDD
+          const oldFilename = user.pPicture.split('/images/users/')[1];
+          try {
+            fs.unlinkSync(`images/users/${oldFilename}`)
+          } catch(error) {
+            throw new Error("Erreur avec l'image envoyée")
+          }
         }
-      })
-      .then(res.status(201).json({ message: ' Profile modifié !'}))
-    } else if ( !updatedUser.photo && user.pPicture ) {
-      user.update({
-        firstName: updatedUser.firstname, 
-        lastName: updatedUser.lastname
-      }, {
-        where: {
-          id: req.body.userId
-        }
-      })
-      .then(res.status(201).json({ message: ' Profile modifié sans photo!'}))
-    } else {
-        //Suppression de l'ancienne image de la BDD
-        const oldFilename = user.pPicture.split('/images/users/')[1];
-        try {
-          fs.unlinkSync(`images/users/${oldFilename}`)
-        } catch(error) {
-          throw new Error("Erreur avec l'image envoyée")
-        }
+        user.update({
+          firstName: updatedUser.firstname, 
+          lastName: updatedUser.lastname,
+          pPicture: null
+        }, {
+          where: {
+            id: userId
+          }
+        })
+        .then(res.status(201).json({ message: ' Profile modifié sans photo!'}))
+      } else {
+        console.log('user rajoute pPicture');
         user.update({
           firstName: updatedUser.firstname, 
           lastName: updatedUser.lastname,
           pPicture: updatedUser.photo
         }, {
           where: {
-            id: req.body.userId
+            id: userId
           }
         })
         .then(res.status(201).json({ message: ' Profile modifié avec photo!'}))
+
+      }
+    } else {
+      res.status(404).json({ message: 'Unable to verify User'})
     }
-  })
-  .catch((error) => res.status(500).json({ error: error }));
+  }catch(error) { res.status(500).json({ error: error })}
 };
 
 exports.getAllUsers = async (req,res,next) => {
   const allPosts = await models.User.findAll({
     attributes: ['id', 'firstName', 'lastName', 'email', 'isAdmin', 'pPicture'],
 /*     include: [{
-      model:models.User,  //////RAJouter table de liaison des commentaires
+      model:models.Post,  //////RAJouter table de liaison des posts
+      attributes: ['id']
+    },{
+      model:models.Comment,  //////RAJouter table de liaison des commentaires
       attributes: ['id']
     }] */
   })
@@ -174,11 +174,26 @@ exports.getAllUsers = async (req,res,next) => {
   .catch((error) => res.status(500).json({ error: error }));
 };
 
+exports.deleteProfile = async (req,res,next) => {
+  //PARAMS
+  const userId = req.body.userId;
+
+  const user = await models.User.findOne({
+    where: { id: userId}
+  })
+  if(user) {
+    user.destroy()
+    .then(() => res.status(200).json({ message: ' Utilisateur supprimé '}))
+    .catch(error => res.status(500).json({ error: error }))
+  } else {
+    res.status(404).json({ message: 'Unable to verify User'})
+  }
+};
+
 
 //MIDDLEWARE TO DO
 /* 
 
 
-exports.deleteProfile = async (req,res,next) => {
-}; */
+; */
 

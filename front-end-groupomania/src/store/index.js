@@ -7,7 +7,7 @@ export default createStore({
   state: {
     status: '',
     userAccess: {
-      userId: -1,
+      userId: '',
       token: ''
     },
     userInfos: {
@@ -132,11 +132,15 @@ export default createStore({
     },
     getUserProfile({ commit }) {
       let id = this.state.userAccess.userId;
-      axiosInstance.get(`/users/${id}`)
-      .then((response) => {
-        commit('USER_PROFILE', response.data);
-      })
-      .catch(() => {
+      return new Promise((resolve,reject) => {
+        axiosInstance.get(`/users/${id}`)
+        .then((response) => {
+          commit('USER_PROFILE', response.data);
+          resolve(response);
+        })
+        .catch((error) => {
+          reject(error);
+        })
       })
     },
     getOnePost({ commit}, post) {
@@ -171,8 +175,6 @@ export default createStore({
       })
     },
     sendComment({ commit }, comment) {
-      console.log(comment);
-      console.log(comment.userId);
       return new Promise((resolve,reject) => {
         commit('GET_COMMENT', comment );
         console.log('Send comment a partir dici');
@@ -180,7 +182,6 @@ export default createStore({
         
         axiosInstance.post(`/posts/${comment.postId}/comments`, commentDatas)
         .then((response) => {
-          console.log(response);
           commit('GET_COMMENT', response);
           commit('SET_STATUS', 'sent')
           resolve(response);
@@ -287,6 +288,30 @@ export default createStore({
         })
         .catch((error) => {reject(error)})
       })
+    },
+    updateIdentity({ commit }, userInfos) {
+      console.log(userInfos);
+      return new Promise((resolve,reject) => {
+        axiosInstance.put(`/users/${this.state.userAccess.userId}`,userInfos )
+        .then((response) => {
+          console.log(response.data);
+          commit('USER_PROFILE', response.data );
+          resolve(response);
+        })
+        .catch((error) => {
+          commit('SET_STATUS', 'error_updateprofile');
+          reject(error);
+        })
+      }) 
+    },
+    exitApp({ commit }, userAccess) {
+      localStorage.clear()
+      userAccess = {
+        userId: -1,
+        token: ''
+      }
+      console.log(userAccess);
+      commit('LOG_USER', userAccess)     
     }
   },
   modules: {

@@ -14,6 +14,7 @@ module.exports = (sequelize, DataTypes) => {
       //Liaison de posts
       models.User.hasMany(models.Post);
       models.User.hasMany(models.Comment);
+
     }
   };
   User.init({

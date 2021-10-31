@@ -19,10 +19,6 @@ router.put('/:id', auth, multer.usersStorage, userCtrl.updateUserProfile);
 
 router.get('/', auth, userCtrl.getAllUsers);
 
-//Routing TODO
-/* 
+router.delete('/:id', auth, userCtrl.deleteProfile); 
 
-router.post('/:id', userCtrl.deletProfile); */
-
-//Export des routes users:
 module.exports = router;

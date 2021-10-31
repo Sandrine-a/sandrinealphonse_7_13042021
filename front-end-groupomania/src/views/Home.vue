@@ -78,8 +78,8 @@ export default {
       mode: 'login',
       email: '',
       password: '',
-      firstname: '',
-      lastname: ''
+      lastname: '',
+      firstname: '' 
     }
   },
   computed: {

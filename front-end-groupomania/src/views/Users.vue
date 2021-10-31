@@ -6,7 +6,7 @@
     <div>
       <h1 lass="profil__title">Profil</h1>
       <section class="profil__card">
-        <UsersIdentity /> 
+        <UsersIdentity @get-profile="getUserProfile" /> 
       </section> 
         
     </div>
@@ -24,6 +24,10 @@
 
   export default {
     name: 'Users',
+    data() {
+      return {
+      }
+    },
     components: {
       Header,
       UsersIdentity
@@ -31,17 +35,20 @@
     computed: {
       ...mapState(['userInfos','userAccess'])
     },
+    created() {
+      this.$store.dispatch('getUserParams');
+      this.$store.dispatch('getUserProfile')  
+    },
     mounted() {
-      console.log(this.userAccess);
-      if (this.userAccess.userId == -1 ) {
+      if (!this.userAccess) {
         this.$router.push('/');
         return;
       }
-      this.$store.dispatch('getUserParams');
-      this.$store.dispatch('getUserProfile');
     },
     methods: {
-
+      getUserProfile() {
+        this.$store.dispatch('getUserProfile')       
+      }
     }
   }
 

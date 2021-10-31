@@ -57,8 +57,6 @@
       this.$store.dispatch('getUserParams');
 
       this.$store.dispatch('getAllPosts');
-
-/*       this.posts = this.allPosts */
         
       this.$store.dispatch('getAllUsers');
 

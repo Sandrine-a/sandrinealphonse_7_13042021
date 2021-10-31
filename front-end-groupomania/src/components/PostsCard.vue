@@ -36,7 +36,7 @@
           <section class="posts__comments-total">
             <a @click.stop.prevent="isHidden = !isHidden"> 
               <p >
-                {{commentsLength}} commentaire<span v-if="commentsLength > 0" >s</span>
+                {{commentsLength}} commentaire<span v-if="commentsLength > 1" >s</span>
               </p>
             </a>
           </section>

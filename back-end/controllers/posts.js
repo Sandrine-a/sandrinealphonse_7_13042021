@@ -65,10 +65,10 @@ exports.getAllPosts = async (req,res,next) => {
        model:models.User,
        attributes: ['id']
      }, 
-/*      {
+     {
       model:models.Comment,
       attributes: ['id']
-     } */
+     }
     ]
    })
   .then((posts) => {

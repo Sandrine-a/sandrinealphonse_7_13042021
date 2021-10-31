@@ -7,7 +7,7 @@
       </div>
       <div class="post__form-input">
         <label for="content" class="input__label"></label>
-          <textarea v-model="content" class="input__field" type="mail" id="content" placeholder="Taper votre texte ici"></textarea>     
+          <textarea v-model="content" class="input__field" id="content" placeholder="Taper votre texte ici"></textarea>     
       </div>
       
       <UpdateAttachmentInput v-model="attachment" :mode="mode" :infos="infos" :default-src="infos.attachment" class="post__form-render" />
@@ -50,9 +50,6 @@
     }, 
     computed: {
         ...mapState(['userAccess','status', 'post']),
-    },/*  */
-    mounted(){
-      console.log(this.infos);
     },
     methods: {
       async sendUpdatedPost(post) {
@@ -89,7 +86,6 @@
             .then(() => this.cancelWrite())   
             .catch(error => console.log(error)); 
           }
-
         } catch(error) {
           console.log(error);
         }
