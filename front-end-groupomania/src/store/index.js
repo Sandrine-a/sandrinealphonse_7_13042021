@@ -229,6 +229,7 @@ export default createStore({
       return new Promise((resolve,reject) => {
         commit('CREATE_POST', post );
         console.log('sendPost a partir dici');
+        console.log(post);
         let formData = new FormData();
         formData.append('title', post.title)
         formData.append('content', post.content)
@@ -249,7 +250,7 @@ export default createStore({
       })   
     },
     sendUpdatedPost({ commit }, post) {
-      console.log('sendUpdate');
+
       return new Promise((resolve,reject) => {
         commit('CREATE_POST', post );
         console.log('sendPost a partir dici');
@@ -260,7 +261,8 @@ export default createStore({
         formData.append('title', post.title)
         formData.append('content', post.content)
         formData.append('attachment', post.attachment)
-        formData.append('userId', post.userId)
+        formData.append('userId', post.userId);
+        
         axiosInstance.put(`/posts/${id}`, formData )
         .then((response) => {
           console.log(response.data);
@@ -291,7 +293,7 @@ export default createStore({
       })
     },
     updateIdentity({ commit }, userInfos) {
-      console.log(userInfos);
+
       return new Promise((resolve,reject) => {
                
         let formData = new FormData();

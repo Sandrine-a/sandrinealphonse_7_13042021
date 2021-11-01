@@ -18,7 +18,7 @@
 
     <div class="card__column">
       <section class="posts__column" >
-        <PostsCard v-for="(item, index) in allPosts.slice().reverse()" :datas="item" :key="index" @delete-post="deletePost" />
+        <PostsCard v-for="(item, index) in allPosts.slice().reverse()" :datas="item" :key="index" @delete-post="deletePost"  />
       </section>
     </div>
   </div>
@@ -60,12 +60,14 @@
         
       this.$store.dispatch('getAllUsers');
 
-    },
+    },  
     mounted() {
       if (!this.userAccess) {
         this.$router.push('/');
         return;
       }
+      console.log(this.allUsers);
+      console.log(this.allPosts);
     },
     methods: {
       switchToWrite() {
@@ -89,7 +91,7 @@
         })
         console.log('toto');
         console.log(this.allPosts);
-        }
+      }
 
     }
   }

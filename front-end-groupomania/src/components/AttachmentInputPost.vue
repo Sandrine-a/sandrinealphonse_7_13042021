@@ -95,7 +95,7 @@
     }
     &__text {
       font-weight: bold;
-      font-size: 3vh;
+      font-size: 1.1rem;
       margin: 2px 0 2px 20px;
       color: $text-color-secondary;
     }

@@ -144,43 +144,31 @@ exports.modifyPost = async (req,res,next) => {
         where: { id: postId, userId: userId }
       })
       if(post) {
-        if(post.attachment && updatedPost.attachment) {
-          //Modification de l'ancienne image de la BDD
-          const oldFilename = post.attachment.split('/images/posts/')[1];
-          try {
-            fs.unlinkSync(`images/posts/${oldFilename}`)
-          } catch(error) {
-            throw new Error("Erreur avec l'image envoyée")
+        if(!updatedPost.attachment) {
+          console.log('******* POST UPDATED SANS PHOTO');
+          if(post.attachment) {
+            console.log('Si initialement il y a photo');
+            //Modification de l'ancienne image de la BDD
+            const oldFilename = post.attachment.split('/images/posts/')[1];
+            try {
+              fs.unlinkSync(`images/posts/${oldFilename}`)
+            } catch(error) {
+              throw new Error("Erreur avec l'image envoyée")
+            }
           } 
+          console.log('*********** Suprression de la photo');
           post.update({
             title: updatedPost.title,
             content: updatedPost.content,
-            attachment: updatedPost.attachment
+            attachment: null
           }, {
             where: {
               id: postId
             }
           })
           .then(res.status(201).json({ post }))    
-        } else if (post.attachment && !updatedPost.attachment) {
-            //Suppression de l'ancienne image de la BDD
-            const oldFilename = post.attachment.split('/images/posts/')[1];
-            try {
-              fs.unlinkSync(`images/posts/${oldFilename}`)
-            } catch(error) {
-              throw new Error("Erreur avec l'image envoyée")
-            } 
-            post.update({
-              title: updatedPost.title,
-              content: updatedPost.content,
-              attachment: null
-            }, {
-              where: {
-                id: postId
-              }
-            })
-            .then(res.status(201).json({ post }))  
-        }else {
+        } else {
+          console.log('*******ELSE');
           post.update({
             title: updatedPost.title,
             content: updatedPost.content,

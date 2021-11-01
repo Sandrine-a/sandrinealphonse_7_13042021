@@ -14,7 +14,7 @@
 
       <div class="post__form-buttons">
         <div class="btn__post">
-          <button @click.stop.prevent="sendUpdatedPost" class="btn__post-send" type="button"> Envoyer </button>
+          <button @click.stop.prevent="sendUpdatedPost" class="btn__post-send"> Envoyer </button>
         </div>
         <div class="btn__post">
           <button class="btn__post-cancel" type="button" @click.stop.prevent="cancelWrite"  > Annuler </button>
@@ -73,7 +73,7 @@
           .catch(error => console.log(error)); 
           } else {
             console.log('PAS ATTACH');
-            console.log(this.id);
+            console.log(this.attachment);
             post = {
               title:  this.title,
               content: this.content,

@@ -14,7 +14,7 @@
 
       <div class="post__form-buttons">
         <div class="btn__post">
-          <button @click.stop.prevent="sendPost" class="btn__post-send"> Envoyer </button>
+          <button @click.stop="sendPost" class="btn__post-send"> Envoyer </button>
         </div>
         <div class="btn__post">
           <button class="btn__post-cancel" type="button" @click.stop.prevent="cancelWrite" > Annuler </button>
@@ -135,7 +135,7 @@
  }
  #text {
    font-weight: bold;
-   font-size: 3vh;
+   font-size: 1.2rem;
    &::placeholder{
      color: $text-color-secondary;
    }
@@ -171,7 +171,7 @@
     border: none;
     cursor: pointer;
     font-weight: bold;
-    font-size: 4vh;
+    font-size: 1.2rem;
    }
  }
 

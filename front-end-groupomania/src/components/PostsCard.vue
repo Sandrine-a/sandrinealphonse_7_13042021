@@ -5,7 +5,7 @@
     <div class="posts__container" v-if=" mode == 'read'">
       <article class="posts__content">
         <h3 class="posts__content-title"> {{ datas.title }} </h3>
-        <div class="posts__attachment" v-if=" datas.attachment " >
+        <div class="posts__attachment" v-if=" datas.attachment" >
           <img :src="datas.attachment" class="posts__attachment-img" >
         </div>
         <div class="posts__content-article">
@@ -15,6 +15,9 @@
         </div>
 
         <div class="posts__author">
+          <div class="posts__author-avatar" v-if="author.pPicture != null ">
+            <img :src="author.pPicture" class="posts__author-pPicture" alt="Avatar de l'auteur du post"/>
+          </div>
           <p class="posts__author-name" >  {{ this.author.firstName }} {{this.author.lastName }} </p>
         </div>
 
@@ -57,11 +60,13 @@
           <section class="posts__comments-render" v-if="!isHidden">
             <div class="comments__content" v-for="item in allComments" :key="item">
               <div class="comments__content-items">
-                <p v-for="user in this.allUsers" :key="user" class="comments__content-author">
-                  <span v-if="user.id == item.UserId">
-                  {{ user.firstName }} {{ user.lastName }}
-                  </span>
-                </p>
+                <div v-for="user in this.allUsers" :key="user" class="comments__content-author">
+                  <img v-if="user.id == item.UserId && user.pPicture != null" :src="user.pPicture" class="comments__content-pPicture" alt="Avatar de l'auteur du commentaire" />
+                  <fa icon="user-alt-slash" v-if="user.id == item.UserId && user.pPicture == null"  class="comments__content-icon" />
+                  <p v-if="user.id == item.UserId">
+                    {{ user.firstName }} {{ user.lastName }}
+                  </p>
+                </div>
                 <p class="comments__content-text">
                   {{ item.content}}
                 </p>
@@ -201,6 +206,20 @@ export default {
       text-align: start;
       font-weight: bold;
       font-style: italic;
+      height: 50px;
+      display: flex;
+      &-avatar {
+        height: 100%;
+        width: 50px;
+        margin-right: 10px;
+        border-radius: 50px;
+        overflow: hidden;
+      }
+      &-pPicture {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
     }
     &__container {
       display: flex;
@@ -282,28 +301,37 @@ export default {
       }
     }
     &__content {
-    background-color: $primary-color;
-    color:$text-color-secondary;
-    padding-left: 20px;
-    border-radius:15px;
-    margin-top: 15px;
-    display: flex;
-    justify-content: space-between;
-    &-items {
-      text-align: start;
+      background-color: $primary-color;
+      color:$text-color-secondary;
+      padding-left: 20px;
+      border-radius:15px;
+      margin-top: 15px;
+      display: flex;
+      justify-content: space-between;
+      &-items {
+        text-align: start;
+      }
+      &-delete {
+        cursor: pointer;
+        padding-right: 10px;
+      }
+      &-pPicture, &-icon {
+        width: 40px;
+        height: 40px;
+        margin-top: 6px;
+        margin-right: 6px;
+        object-fit: contain;
+        color: $secondary-color;
+      }
+      &-author {
+        font-weight: bold;
+        margin-bottom: 0;
+        display: flex;
+      }
+      &-text {
+        margin-top: 0;
+      }
     }
-    &-delete {
-      cursor: pointer;
-      padding-right: 10px;
-    }
-    &-author {
-      font-weight: bold;
-      margin-bottom: 0;
-    }
-    &-text {
-      margin-top: 0;
-    }
-  }
   }
   .icon{
     &__validateCom, &__cancelCom{

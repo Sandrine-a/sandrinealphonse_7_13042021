@@ -32,7 +32,7 @@
 /*         src: '', */
         src: this.defaultSrc,
         status:'',
-        attachment: this.modelValue
+        attachment: this.src
       }
     },
     methods: {
@@ -49,10 +49,12 @@
         this.src = e.target.result;
         }
         this.status = 'imgUploaded';
+        console.log(this.src);
+        console.log(this.attachment);
       },
       remove() {
-        this.src = '';
-        this.$emit('update:modelValue', null);
+        this.src = null;
+        this.$emit('update:modelValue', this.src);
         this.status = ''
       }
     }
@@ -97,7 +99,7 @@
     }
     &__text {
       font-weight: bold;
-      font-size: 3vh;
+      font-size: 1.1rem;
       margin: 2px 0 2px 20px;
       color: $text-color-secondary;
     }

@@ -5,7 +5,7 @@
       <div class="card__photo" v-if="mode == 'read'">
         <div class="card__photo-item">
           <fa icon="user-alt-slash" class="card__photo-icon" v-if="src == null "/>
-          <img :src="src" alt="avatar profile" class="card__photo-pPicture" v-else/>
+          <img :src="src" class="card__photo-pPicture" v-else/>
         </div>
         <p class="label">Ma photo</p>
       </div>
@@ -21,13 +21,18 @@
         <form class="identity__form"> 
 
           <div class="card__photo" >   
-            <div class="card__photo-item" >
-              <fa icon="user-alt-slash" class="card__photo-icon" v-if="src == null "/>
-              <img :src="src" alt="Image du post à modifier" class="card__photo-pPicture" v-if=" status = 'uploading' && src != null" >
+            <div class="card__photo-form" >
+              <fa icon="user-alt-slash" class="card__photo-icon" v-if="src == null || !src"/>
+              <img :src="src" class="card__photo-pPicture" v-if="isntHidden && src != null " >
+              <button id="remove__btn" @click.stop.prevent="removePhoto" type="button" v-if="isntHidden && src != null ">X</button>
             </div>
-            <div class="identity__form-upload" >  
+            <div class="card__photo-control" >    
               <label for="pPicture" class="identity__form-label">Ma Photo </label>
-              <input class="input__field" id="pPicture" type="file" ref="pPicture" accept="image/*" @change="uploadPpicture" placeholder="Télécharger">    
+              <div class="identity__form-upload">
+                <input class="input__field" id="pPicture" type="file" ref="pPicture" accept="image/*" @change="uploadPpicture">  
+                <button class="upload__btn" type="button" @click.stop.prevent="initUpload" >Télécharger</button>
+                <p class="upload__text">Ajouter une photo</p>  
+              </div>
             </div>
           </div>
           <div class="identity__form-input">
@@ -70,11 +75,20 @@
         pPicture:this.$store.state.userInfos.pPicture,
         email: this.$store.state.userInfos.email,
         mode:'read',
-        status:''
+        status:'',
+        isntHidden: true,
       }
     },
     computed: {
       ...mapState(['userInfos','userAccess'])
+    },
+    watch: {
+      pPicture(val) {
+        console.log(val)
+        if(!val) {
+          this.isntHidden = false;
+        }
+      }
     },
     mounted() {
       console.log(this.userInfos);
@@ -97,16 +111,20 @@
         .then(()=> {
           this.$emit('get-profile')
           this.mode = 'read'
-          console.log('end of updateIdentity');
           console.log(this.userInfos);
         })
       },
       cancelUpdate() {
-        this.mode = 'read'
+        this.pPicture = this.$store.state.userInfos.pPicture;
+        this.src = this.$store.state.userInfos.pPicture
+        this.$emit('get-profile');
+        this.mode = 'read';
+      },
+      initUpload() {
+       this.$refs.pPicture.click()
       },
       uploadPpicture(e) {
         this.pPicture = e.target.files[0];
-        console.log(this.pPicture);
   
         //Rendu dans la div image 
         let reader = new FileReader()
@@ -115,8 +133,14 @@
         this.src = e.target.result;
         }
 
-        this.status = 'uploading';
+        this.isntHidden = true
+
       },
+      removePhoto() {
+        this.src = '';
+        this.pPicture= '';
+        console.log(this.pPicture);
+      }
     }
   }
 </script>
@@ -145,7 +169,14 @@
         width: 160px;
         height: 160px;
         background-color: $bg-color;
-        margin-right: 20px;
+        margin-right: 25px;
+      }
+      &-form {
+        width: 160px;
+        height: 160px;
+        background-color: $bg-color;
+        margin-right: 25px;
+        display: flex;
       }
       &-icon {
         color: $primary-color;
@@ -157,6 +188,11 @@
         height: 100%;
         object-fit: cover;
       }
+      &-control {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+      }
     }
     &__datas {
       text-align: start;
@@ -165,36 +201,81 @@
       align-self: flex-end;
     }
   }
-    .label {
+  .label {
+  color: $text-color-secondary;
+  text-decoration: underline;
+  margin-bottom: 0;
+  }
+  .upload {
+    &__btn {
+      border-radius: 15px;
+      background-color: $secondary-color;
+      color: white;
+      font-weight: bold;
+      margin-left: 7px;
+      cursor: pointer;
+      margin: 2px;
+    }
+    &__text {
+      font-weight: bold;
+      font-size: 0.9rem;
+      margin: 2px 2px 2px 5px;
+      color: $text-color-secondary;
+    }
+    &__img {
+      height: 250px;
+      margin-top:10px;
+    }
+  }
+  .input{
+    &__field{
+    background-color: white;
+    border: 2px black solid;
+    border-radius: 10px;
+    max-height: 40px;
+    font-weight: bold;
+    display: none;
+    }
+  }
+
+  #remove__btn {
+    background-color: white;
     color: $text-color-secondary;
-    text-decoration: underline;
-    margin-bottom: 0;
+    border: 2px black solid;
+    border-radius: 10px;
+    font-weight: bold;
+    vertical-align: top;
+    cursor: pointer;
+    height: 20px;
+    margin-left: -5px;
+  }
+  .identity__form {
+    &-label {
+      text-decoration: underline;
+      margin-bottom: 16px;
     }
-    .identity__form {
-      &-label {
-        text-decoration: underline;
-        margin-bottom: 16px;
-      }
-      &-input {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        margin-top:12px;
-      }
-      &-field {
-        background-color: white;
-        border: 1px black dashed;
-        border-radius: 10px;
-        min-height: 25px;
-        margin-bottom: 15px;
-      }
-      &-upload {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-      }
+    &-input {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      margin-top:12px;
     }
-    .btn__identity{
+    &-field {
+      background-color: white;
+      border: 1px black dashed;
+      border-radius: 10px;
+      min-height: 25px;
+      margin-bottom: 15px;
+    }
+    &-upload {
+      display: flex;
+      align-items: flex-start;
+      background-color: white;
+      border: 1px black dashed;
+      border-radius: 10px;
+    }
+  }
+  .btn__identity{
     height: 35px;
     &-modify {
       color: white;
