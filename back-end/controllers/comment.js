@@ -40,8 +40,6 @@ exports.createComment = async (req,res,next) => {
   } else{
     return res.status(500).json({error: ' Unable to verify Post'});
   }
-  
-
 }
 
 exports.deleteComment = async (req,res,next) => {

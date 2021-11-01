@@ -101,7 +101,7 @@ exports.deletePost = async (req,res,next) => {
   const userId = req.body.userId;
 
   const post = await models.Post.findOne({
-    where: { id: postId, userId: userId}
+    where: { id: postId }
   })
   .then( post => {
     if(!post.attachment) {
@@ -141,7 +141,7 @@ exports.modifyPost = async (req,res,next) => {
     try{
       const post = await models.Post.findOne({
         attributes: ['id', 'title','content', 'attachment' ],
-        where: { id: postId, userId: userId }
+        where: { id: postId }
       })
       if(post) {
         if(!updatedPost.attachment) {

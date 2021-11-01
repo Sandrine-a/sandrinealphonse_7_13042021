@@ -52,6 +52,7 @@ exports.login = async (req,res,next) => {
     where: {email: email}
   })
   .then(user => {
+    console.log(user);
     if(!user) {
       return res.status(401).json({ error: 'Utilisateur inconnu !' });
     }
@@ -62,8 +63,9 @@ exports.login = async (req,res,next) => {
       }
       res.status(200).json({
         'userId': user.id,
+        'isAdmin': user.isAdmin,
         'token': jwt.sign(
-          {userId: user.id},
+          {userId: user.id, isAdmin: user.isAdmin},
           process.env.USER_SECRET_TOKEN,
           {expiresIn: '12h'}
         )

@@ -66,6 +66,7 @@
         this.$router.push('/');
         return;
       }
+      console.log(this.userAccess);
     },
     methods: {
       switchToWrite() {

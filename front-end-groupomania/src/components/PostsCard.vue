@@ -22,7 +22,7 @@
         </div>
 
       </article>
-      <div class="posts__buttons" v-if=" this.datas.UserId == this.userAccess.userId " >
+      <div class="posts__buttons" v-if=" this.datas.UserId == this.userAccess.userId || this.userAccess.isAdmin" >
         <div class="btn__card">
           <button class="btn__card-modify" type="button" @click.stop.prevent="updatePost"> Modifier </button>
         </div>
@@ -71,7 +71,7 @@
                   {{ item.content}}
                 </p>
               </div>
-              <div class="comments__content-delete" v-if="item.UserId == this.userAccess.userId" @click.stop.prevent="deleteComment(item)">x</div>
+              <div class="comments__content-delete" v-if="item.UserId == this.userAccess.userId || this.userAccess.isAdmin " @click.stop.prevent="deleteComment(item)">x</div>
             </div>
           </section>
         

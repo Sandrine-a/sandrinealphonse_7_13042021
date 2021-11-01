@@ -8,14 +8,16 @@ export default createStore({
     status: '',
     userAccess: {
       userId: '',
-      token: ''
+      token: '',
+      isAdmin: ''
     },
     userInfos: {
       userId:'',
       firstName: '',
       lastName: '',
       pPicture: '',
-      email: ''
+      email: '',
+      isAdmin: ''
     },
     allPosts: [],
     allUsers: [],
