@@ -54,7 +54,6 @@
     },
     methods: {
       async sendPost(post) {
-        console.log('sending');
         try {
           if(this.attachment) {
             console.log('ATTACHMENT FONCTION');

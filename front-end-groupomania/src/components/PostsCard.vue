@@ -146,7 +146,12 @@ export default {
       this.mode ='read'
     },
     deletePost() {
-      this.$emit('delete-post', this.datas)
+      let result = confirm("Confirmez-vous la suppression du Post?");
+      if(result) {
+        this.$store.dispatch('deletePost', this.datas )
+        .then(() => this.$store.dispatch('getAllPosts'))
+        .catch(error => console.log(error));
+      }
     },
     getAllComments() {
       this.$store.dispatch('getAllComments', {postId: this.datas.id})

@@ -18,7 +18,7 @@
 
     <div class="card__column">
       <section class="posts__column" >
-        <PostsCard v-for="(item, index) in allPosts.slice().reverse()" :datas="item" :key="index" @delete-post="deletePost"  />
+        <PostsCard v-for="(item, index) in allPosts.slice().reverse()" :datas="item" :key="index" />
       </section>
     </div>
   </div>
@@ -66,8 +66,6 @@
         this.$router.push('/');
         return;
       }
-      console.log(this.allUsers);
-      console.log(this.allPosts);
     },
     methods: {
       switchToWrite() {
@@ -76,14 +74,6 @@
       },
       switchToRead() {
         this.mode ='read'
-      },
-      deletePost(post) {
-        let result = confirm("Confirmez-vous la suppression?");
-        if(result) {
-          this.$store.dispatch('deletePost', post )
-          .then(() => this.$store.dispatch('getAllPosts'))
-          .catch(error => console.log(error));
-        }
       },
       sortPostsById() {
         this.allPosts.sort((a,b)=> {

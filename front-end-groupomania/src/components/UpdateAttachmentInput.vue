@@ -53,7 +53,8 @@
         console.log(this.attachment);
       },
       remove() {
-        this.src = null;
+        this.src = '';
+        this.attachment='';
         this.$emit('update:modelValue', this.src);
         this.status = ''
       }

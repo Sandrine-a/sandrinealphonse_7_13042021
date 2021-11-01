@@ -228,7 +228,6 @@ export default createStore({
     sendPost({ commit }, post) {
       return new Promise((resolve,reject) => {
         commit('CREATE_POST', post );
-        console.log('sendPost a partir dici');
         console.log(post);
         let formData = new FormData();
         formData.append('title', post.title)
