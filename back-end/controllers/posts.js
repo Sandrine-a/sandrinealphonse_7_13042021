@@ -105,6 +105,7 @@ exports.deletePost = async (req,res,next) => {
   })
   .then( post => {
     if(!post.attachment) {
+      console.log('*****NO ATTACHMENT here');
       post.destroy()
       .then(() => res.status(200).json({ message: ' Post supprimé '}))
       .catch(error => res.status(500).json({ error: error }));
@@ -168,7 +169,7 @@ exports.modifyPost = async (req,res,next) => {
           })
           .then(res.status(201).json({ post }))    
         } else {
-          console.log('*******ELSE');
+          console.log('*******ELSE WIThout attachment');
           post.update({
             title: updatedPost.title,
             content: updatedPost.content,

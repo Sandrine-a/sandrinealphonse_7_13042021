@@ -222,7 +222,7 @@ export default {
     border: none;
     cursor: pointer;
     font-weight: bold;
-    font-size: 4vh;
+    font-size: 1.2rem;
   }
   &-switch {
     color: white;
@@ -233,7 +233,7 @@ export default {
     border: none;
     cursor: pointer;
     font-weight: bold;
-    font-size: 4vh;
+    font-size: 1.2rem;
   }
 }
 

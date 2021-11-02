@@ -9,8 +9,21 @@
         <label for="content" class="input__label"></label>
           <textarea v-model="content" class="input__field" id="content" placeholder="Taper votre texte ici"></textarea>     
       </div>
-      
-        <attachmentInputPost v-model="attachment" />
+
+      <div class="post__form-input">
+        <div class="attachment__img" v-if=" this.attachment">
+          <img :src="src" alt="Image du post"  class="upload__img" v-if="isntHidden && src != null "> 
+          <button id="cancel__btn-old" type="button"  @click.stop.prevent="remove" v-if="isntHidden && src != null ">X</button>  
+        </div> 
+        <div class="post__form-upload" >    
+          <button class="upload__btn" type="button" @click.stop.prevent="initUpload" >Télécharger</button>
+          <p class="upload__text">Ajouter une image</p>
+
+          <input class="input__field" id="attachment" type="file" ref="attachment" accept="image/*" @change="uploadImage" >    
+            
+        </div>
+
+      </div>
 
       <div class="post__form-buttons">
         <div class="btn__post">
@@ -28,19 +41,18 @@
 <script>
 // @ is an alias to /src
   import {mapState} from 'vuex';
-  import attachmentInputPost from '../components/AttachmentInputPost.vue'
 
   export default {
     name: 'AddPostForm',
-    components: {
-      attachmentInputPost
-    },  
     data() {
       return {
         title: '',
         content:'',
         userId:'',
-        attachment:''
+        attachment:'',
+        src: '',
+        status:'',
+        isntHidden: true,
       }
     },    
     computed: {
@@ -57,6 +69,7 @@
         try {
           if(this.attachment) {
             console.log('ATTACHMENT FONCTION');
+            console.log(this.attachment);
             post = {
               title: this.title,
               content: this.content,
@@ -93,6 +106,26 @@
       },
       cancelWrite () {
         this.$emit('write-cancel', { mode: 'read' })
+      },
+      initUpload() {
+       this.$refs.attachment.click()
+      },
+      uploadImage(e) {
+        this.attachment = e.target.files[0];
+
+        //Rendu dans la div image 
+        let reader = new FileReader()
+        reader.readAsDataURL(this.attachment);
+        reader.onload = (e) => {
+        this.src = e.target.result;
+        }
+        
+        this.isntHidden = true
+        },
+      remove() {
+        this.src = '';
+        this.attachment='';
+        this.status = ''
       }
     }
 
@@ -105,74 +138,135 @@
  @import "@/assets/_variables.scss";
 
  .post__form {
-   display: flex;
-   flex-direction: column;
-   justify-content: space-between; 
-   min-height: 350px;
-    
-   &-input {
-     display: flex;
-     flex-direction: column;
-     width: 80%;
-   }
-   &-buttons {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; 
+    min-height: 350px;
+    &-input {
       display: flex;
-      justify-content: space-between;
-      width: auto;
+      flex-direction: column;
+      width: 80%;
     }
- }
- .input{
-   &__label {
-     color: $text-color-secondary;
-   }
+    &-upload {
+      border: 2px black solid;
+      border-radius: 10px;
+      width: 45%;
+      max-height: 40px;
+      min-height: 1.4rem;
+      display: flex;
+    }
+    &-buttons {
+        display: flex;
+        justify-content: space-between;
+        width: auto;
+      }
+  }
+  .input{
+    &__label {
+      color: $text-color-secondary;
+    }
   &__field{
     background-color: white;
     border: 2px black solid;
     border-radius: 10px;
     min-height: 30px;
   }
- }
- #text {
-   font-weight: bold;
-   font-size: 1.2rem;
-   &::placeholder{
-     color: $text-color-secondary;
-   }
- }
- #content {
-   min-height: 100px;
-   &::placeholder{
-     color: $text-color-secondary;
-   }
- }
- .btn__post{
-  height: 40px;
-  width: auto;
-  min-width: 200px;
-  margin-top: 30px;
-   &-send{
-    color: white;
-    background: $tertiary-color;
-    border-radius: 10px;
-    height: 100%;
-    width: 100%;;
-    border: none;
-    cursor: pointer;
+  }
+  #text {
     font-weight: bold;
     font-size: 1.2rem;
-   }
-   &-cancel{
-    color: white;
-    background: $tertiary-color;
+    &::placeholder{
+      color: $text-color-secondary;
+    }
+  }
+  #content {
+    min-height: 100px;
+    &::placeholder{
+      color: $text-color-secondary;
+    }
+  }
+    .input{
+    &__field{
+    background-color: white;
+    border: 2px black solid;
     border-radius: 10px;
-    height: 100%;
-    width: 100%;;
-    border: none;
-    cursor: pointer;
+    max-height: 40px;
+    }
+  }
+  .upload {
+    &__btn {
+      border-radius: 15px;
+      background-color: $secondary-color;
+      color: white;
+      font-weight: bold;
+      margin-left: 7px;
+      cursor: pointer;
+      margin: 2px;
+    }
+    &__text {
+      font-weight: bold;
+      font-size: 1.1rem;
+      margin: 2px 0 2px 20px;
+      color: $text-color-secondary;
+    }
+    &__img {
+      height: 250px;
+      margin-top:10px;
+    }
+  }
+  #attachment {
+  font-weight: bold;
+  display: none;
+  }
+  .attachment__img {
+    margin:20px 0;
+  }
+  #cancel__btn {
+    background-color: white;
+    color: $text-color-secondary;
+    border: 2px black solid;
+    border-radius: 10px;
     font-weight: bold;
-    font-size: 1.2rem;
-   }
- }
+    vertical-align: top;
+    cursor: pointer;
+    &-old {
+      background-color: white;
+      color: $text-color-secondary;
+      border: 2px black solid;
+      border-radius: 10px;
+      font-weight: bold;
+      vertical-align: top;
+      cursor: pointer;
+    }
+  }
+  .btn__post{
+    height: 40px;
+    width: auto;
+    min-width: 200px;
+    margin-top: 30px;
+    &-send{
+      color: white;
+      background: $tertiary-color;
+      border-radius: 10px;
+      height: 100%;
+      width: 100%;;
+      border: none;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 1.2rem;
+    }
+    &-cancel{
+      color: white;
+      background: $tertiary-color;
+      border-radius: 10px;
+      height: 100%;
+      width: 100%;;
+      border: none;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 1.2rem;
+    }
+  }
 
  
 </style>
