@@ -8,42 +8,52 @@
       <section class="profil__card">
         <UsersIdentity @get-profile="getUserProfile" /> 
       </section> 
-        
+
+      <section v-if="this.userAccess.isAdmin">
+        <h2> Liste des utilisateurs </h2>
+        <div v-for="user in this.allUsers" :key="user">
+          <p> {{ user.firstName }} {{ user.lastName }} </p>
+        </div>
+      </section>
     </div>
-    
+
+
+    <Footer />
   </div>
   
 </template>
 
 <script>
-  //Imports components
-  import Header from '../components/Header.vue';
-  import UsersIdentity from '../components/UsersIdentity.vue'
   // @ is an alias to /src
   import {mapState} from 'vuex';
+  //Imports components
+  import Header from '../components/Header.vue';
+  import UsersIdentity from '../components/UsersIdentity.vue';
+  import Footer from '../components/Footer.vue'
 
   export default {
     name: 'Users',
-    data() {
-      return {
-      }
-    },
     components: {
       Header,
-      UsersIdentity
-    },  
+      UsersIdentity,
+      Footer
+    }, 
+    data() {
+    }, 
     computed: {
-      ...mapState(['userInfos','userAccess'])
+      ...mapState(['userInfos','userAccess', 'allUsers'])
     },
     created() {
       this.$store.dispatch('getUserParams');
-      this.$store.dispatch('getUserProfile')  
+      
+      this.$store.dispatch('getUserProfile'); 
     },
     mounted() {
       if (!this.userAccess) {
         this.$router.push('/');
         return;
       }
+      console.log(this.allUsers);
     },
     methods: {
       getUserProfile() {

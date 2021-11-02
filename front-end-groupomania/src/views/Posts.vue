@@ -21,6 +21,8 @@
         <PostsCard v-for="(item, index) in allPosts.slice().reverse()" :datas="item" :key="index" />
       </section>
     </div>
+
+    <Footer/>
   </div>
   
 </template>
@@ -33,7 +35,7 @@
   import AddPostSelect from '../components/AddPostSelect.vue';
   import AddPostForm from '../components/AddPostForm.vue';
   import PostsCard from '../components/PostsCard.vue';
-  
+  import Footer from '../components/Footer.vue'
 
   export default {
     name: 'Posts',
@@ -42,6 +44,7 @@
       PostsCard,
       AddPostSelect,
       AddPostForm,
+      Footer
     },
     data() {
       return {

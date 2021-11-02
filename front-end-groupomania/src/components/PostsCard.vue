@@ -31,9 +31,9 @@
         </div>
       </div>
       <section class="posts__reactions">
-       <div class="posts__reactions-likes">
+<!--        <div class="posts__reactions-likes">
           <fa icon="heart" class="posts__reactions-icon"/>
-        </div>
+        </div> -->
 
         <div class="posts__comments">
           <section class="posts__comments-total">
@@ -208,11 +208,11 @@ export default {
         height: 100%;     }
     }
     &__author {
-      text-align: start;
       font-weight: bold;
       font-style: italic;
       height: 50px;
       display: flex;
+      justify-content: flex-end;
       &-avatar {
         height: 100%;
         width: 50px;
