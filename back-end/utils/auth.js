@@ -6,8 +6,8 @@ module.exports = (req, res, next) => {
     const decodedToken = jwt.verify(token, process.env.USER_SECRET_TOKEN); 
     const userId = decodedToken.userId; 
     const isAdmin = decodedToken.isAdmin;
-    if (req.body.userId && req.body.userId !== userId || req.body.userId && !isAdmin) {
-      throw new Error(' unauthorized User!');;
+    if ( req.body.userId && req.body.userId !== userId && !isAdmin ){
+      throw new Error(' unauthorized User!');
     } else {
       next();
     }

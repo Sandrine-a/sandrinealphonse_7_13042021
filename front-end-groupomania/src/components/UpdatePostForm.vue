@@ -106,7 +106,6 @@
         this.status = '';
       }
     }
-
   }
 
 </script>

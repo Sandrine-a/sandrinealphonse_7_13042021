@@ -67,35 +67,18 @@
     methods: {
       async sendPost(post) {
         try {
-          if(this.attachment) {
-            console.log('ATTACHMENT FONCTION');
-            console.log(this.attachment);
-            post = {
-              title: this.title,
-              content: this.content,
-              attachment: this.attachment,
-              userId: this.userAccess.userId
-            }
+          console.log(this.attachment);
+          post = {
+            title: this.title,
+            content: this.content,
+            attachment: this.attachment,
+            userId: this.userAccess.userId
+          }
           await this.$store.dispatch('sendPost', post)
           .then(() => this.$store.dispatch('getAllPosts'))
           .then(() => this.cancelWrite())
           .then(() => this.succesAlert())
           .catch(error => console.log(error)); 
-
-          } else {
-            console.log('PAS ATTACH');
-            post = {
-              title:  this.title,
-              content: this.content,
-              attachment: null,
-              userId: this.userAccess.userId
-            }
-            await this.$store.dispatch('sendPost', post)
-            .then(() => this.$store.dispatch('getAllPosts'))
-            .then(() => this.cancelWrite())
-            .then(() => this.succesAlert())    
-            .catch(error => console.log(error)); 
-          }
 
         } catch(error) {
           console.log(error);
