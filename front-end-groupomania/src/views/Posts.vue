@@ -12,9 +12,13 @@
       </section>
 
         <AddPostSelect @click.stop.prevent="switchToWrite" @keyup.enter="switchToWrite" v-if=" mode == 'read'" />
-        <AddPostForm @write-cancel="switchToRead" v-else/>
+        <AddPostForm @write-cancel="switchToRead" @succes-status='displaySuccesMessage' @hide-sucess='hideSuccessMessage' v-else/>
 
     </div> 
+
+    <div class="success" v-if="alert == 'successSent'">
+     <p class="success__message">Votre post a été envoyé avec succès! </p>
+    </div>
 
     <div class="card__column" v-if="status = 'datasOk'">
       <section class="posts__column" >
@@ -50,7 +54,8 @@
       return {
         posts: [],
         profilesFromPosts: [],
-        mode: 'read'
+        mode: 'read',
+        alert: ''
       }
     }, 
     computed: {
@@ -69,7 +74,6 @@
         this.$router.push('/');
         return;
       }
-      console.log(this.userAccess);
     },
     methods: {
       switchToWrite() {
@@ -83,8 +87,12 @@
         this.allPosts.sort((a,b)=> {
           b.id - a.id
         })
-        console.log('toto');
-        console.log(this.allPosts);
+      },
+      displaySuccesMessage() {
+        this.alert = 'successSent';
+      },
+      hideSuccessMessage() {
+        this.alert = '';
       }
 
     }
@@ -120,7 +128,22 @@
   &__logo {
     width: 50px;
   }
-}
+  }
+  .success {
+    margin-left: 40px;
+    margin-bottom: 30px;
+    width: 60%;
+    border-radius: 25px;
+    &__message {
+     color: $text-color-secondary;
+     font-weight: bold;
+     text-decoration: underline $tertiary-color 3px;
+     font-style: italic;
+     font-size: 1.2rem;
+     margin-bottom: 5px;
+
+    }
+  }
   .card__column {
     margin-left: 40px;
     width: 70%;

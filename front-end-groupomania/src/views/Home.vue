@@ -16,33 +16,33 @@
      <h1 class="login__title color_blue " v-if=" mode == 'login'" > Connexion </h1>
      <h1 class="login__title color_blue " v-else> Créez votre compte </h1>
 
-     <form class="login__form">
+     <form class="login__form" @submit="checkForm">
 
       <div class="login__form-input">
         <label for="email" class="color_blue">E-mail </label>
-        <input v-model="email" class="input_field" type="mail" id="email" placeholder="Entrez votre mail pro" required>
+        <input v-model="email" class="input_field" id="email" placeholder="Entrez votre mail pro" pattern="[a-zA-Z0-9._%+-]+@(?:[a-zA-Z0-9-]+\.)+[a-zA-Z]{2,8}" maxlength="100" title="(ex:mail@mail.fr)" required>
       </div>
       <div class="login__form-input">
         <label for="password" class="color_blue">Mot-de-Passe </label>
-        <input v-model="password" class="input_field" type="password" id="password" placeholder="Entrez votre mot-de-passe" required>
+        <input v-model="password" class="input_field" type="password" id="password" placeholder="Entrez votre mot-de-passe" required pattern="(?=^.{6,}$)(?=.*[!@#$%^&*])((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$" title="Doit contenir 6 caractères minimum avec au moins,1 majuscule, 1 minuscule, 1 caractère spécial">
       </div>
 
       <div class="login__form-input" v-if=" mode == 'signup'">
         <label for="lastName" class="color_blue"> Nom </label>
-        <input v-model="lastName" class="input_field" type="text" id="lastName" placeholder="Entrez votre nom" required>
+        <input v-model="lastName" class="input_field" type="text" id="lastName" placeholder="Entrez votre nom" pattern="[a-zA-ZÀ-ÿ-'\s\b]{1,50}" title="Merci d'indiquer un format valide, max. 50 caractères" required>
       </div>
 
       <div class="login__form-input" v-if=" mode == 'signup'">
         <label for="firstName" class="color_blue">Prénom </label>
-        <input v-model="firstName" class="input_field" type="text" id="firstName" placeholder="Entrez votre prénom" required>
+        <input v-model="firstName" class="input_field" type="text" id="firstName" placeholder="Entrez votre prénom" pattern="[a-zA-ZÀ-ÿ-'\s\b]{1,50}" title="Merci d'indiquer un format valide, max. 50 caractères" required>
       </div>
           
       <section id="section__btn">
 
         <div class="btn__main">
           <div v-if=" mode == 'login' && status == 'error_login' "> Mot-de-passe/adresse mail invalide </div>
-          <button @click="login()" class="btn__main-confirm" type="button" v-if=" mode == 'login' "><span v-if=" status == 'loading' ">Connexion en cours...</span><span v-else>Connexion</span></button>
-          <button @click="signup()" class="btn__main-confirm" type="button" v-else><span v-if=" status == 'loading' ">Création en cours...</span>
+          <button class="btn__main-confirm" type="submit" v-if=" mode == 'login' "><span v-if=" status == 'loading' ">Connexion en cours...</span><span v-else>Connexion</span></button>
+          <button class="btn__main-confirm" type="submit" v-else><span v-if=" status == 'loading' ">Création en cours...</span>
           <span v-else>Créer un compte</span></button>
         </div>
 
@@ -83,12 +83,25 @@ export default {
       email: '',
       password: '',
       lastName: '',
-      firstName: '' 
+      firstName: ''
     }
   },
   computed: {
-    ...mapState(['status'])
+    ...mapState(['status']),
   },
+/*   watch: {
+    password(value) {
+      console.log(value);
+      this.value = value;
+    },
+    email(value) {
+      console.log(value);
+      if(!/[a-zA-Z0-9._%+-]+@(?:[a-zA-Z0-9-]+\.)+[a-zA-Z]{2,8}/.test(value) ) {
+        
+        console.log('wrong');
+      }
+    }
+  }, */
   methods : {
     switchToSignup() {
       this.mode = 'signup';
@@ -116,6 +129,14 @@ export default {
         this.$router.push('Posts')
       })
       .catch(error => console.log(error));
+    },
+    checkForm(e) {
+      if(this.mode == 'login') {
+        this.login()
+      } else if (this.mode =='signup') {
+        this.signup()
+      }
+      e.preventDefault();
     }
   }
 }
@@ -204,7 +225,6 @@ export default {
     color: white;
     border: none;
   }
-
   #section__btn {
     margin-top: 50px;
     display: flex;
@@ -212,7 +232,6 @@ export default {
     justify-content: center;
     align-items: center;
   }
-
   .btn__main{
     height: 50px;
     &-confirm {

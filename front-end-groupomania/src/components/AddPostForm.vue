@@ -1,5 +1,5 @@
 <template>
-  <form class="post__form"> 
+  <form class="post__form" @submit="sendPost"> 
 
       <div class="post__form-input">
         <label for="title" class="input__label"> </label>
@@ -27,7 +27,7 @@
 
       <div class="post__form-buttons">
         <div class="btn__post">
-          <button @click.stop="sendPost" class="btn__post-send"> Envoyer </button>
+          <button type="submit" class="btn__post-send"> Envoyer </button>
         </div>
         <div class="btn__post">
           <button class="btn__post-cancel" type="button" @click.stop.prevent="cancelWrite" > Annuler </button>
@@ -59,16 +59,15 @@
     },
     watch: {
       attachment(val) {
-        console.log(val)
         if(!val) {
           this.isntHidden = false;
         }
       }
     },
     methods: {
-      async sendPost(post) {
+      async sendPost(e,post) {
+        e.preventDefault()
         try {
-          console.log(this.attachment);
           post = {
             title: this.title,
             content: this.content,
@@ -76,17 +75,16 @@
             userId: this.userAccess.userId
           }
           await this.$store.dispatch('sendPost', post)
-          .then(() => this.$store.dispatch('getAllPosts'))
+          .then(() => setTimeout(() => this.$emit('hide-sucess'), 5000)) 
+          .then(()=> {
+            this.$emit('succes-status')
+            this.$store.dispatch('getAllPosts')
+            })
           .then(() => this.cancelWrite())
-          .then(() => this.succesAlert())
           .catch(error => console.log(error)); 
-
         } catch(error) {
           console.log(error);
         }
-      },
-      succesAlert() {
-        this.$emit('succes-status')
       },
       cancelWrite () {
         this.$emit('write-cancel', { mode: 'read' })

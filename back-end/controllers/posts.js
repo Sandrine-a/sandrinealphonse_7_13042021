@@ -7,54 +7,48 @@ const fs = require('fs');
 
 exports.createPost = async (req,res,next) => { 
   //Params
+  console.log(req.body);
+  console.log(req.file);
   const { title, content, userId } = req.body;
 
   //Vérification de la complétion des inputs
-  if(!title && !content && !userId || !title && !req.file.filename && !userId) {
-  return res.status(400).json({error: ' Tous les champs sont oblogatoires !'});
+  if(!title && !userId) {
+  return res.status(400).json({error: ' User id and title are mandatory!'});
    }; 
    
-  const userExist = await models.User.findOne({
-    where: { id: userId}
-  })
-  if(userExist) {
-    try {
-      //Recherche d'un fichier dans la req pour l'isoler du post
-      const newPost = req.file ? {
-        ...req.body,
-        attachment: `${req.protocol}://${req.get('host')}/images/posts/${req.file.filename}`
-      } : {
-        ...req.body
-      }
-      
+   try {
+    //Recherche d'un fichier dans la req pour l'isoler du post
+    const newPost = req.file ? {
+      ...req.body,
+      attachment: `${req.protocol}://${req.get('host')}/images/posts/${req.file.filename}`
+    } : {
+      ...req.body
+    }   
 
-      if(req.file) {
-        //Creéation du post si file
-        await models.Post.create({
-          title: title,
-          content: content,
-          attachment: newPost.attachment,
-          likes: 0,
-          comments: 0,
-          UserId: userId
-          })
-          .then((post) => res.status(201).json({ post }))  
-      } else {
-        //Si post text 
-        await models.Post.create({
-          title: title,
-          content: content,
-          likes: 0,
-          comments: 0,
-          UserId: userId
-          })
-          .then((post) => res.status(201).json({ post }))     
-        }
-    } catch (error) {
-      res.status(400).json({ error })
-    }
-  } else {
-    return res.status(404).json({error: 'Utisateur inconnu !'});
+    if(req.file) {
+      //Creéation du post si file
+      await models.Post.create({
+        title: title,
+        content: content,
+        attachment: newPost.attachment,
+        likes: 0,
+        comments: 0,
+        UserId: userId
+        })
+        .then((post) => res.status(201).json({ post }))  
+    } else {
+      //Si post text 
+      await models.Post.create({
+        title: title,
+        content: content,
+        likes: 0,
+        comments: 0,
+        UserId: userId
+        })
+        .then((post) => res.status(201).json({ post }))     
+      }
+  } catch (error) {
+    res.status(400).json({ error })
   }
 };
 

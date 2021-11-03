@@ -12,9 +12,6 @@
       <section v-if="userAccess.isAdmin" class="management__section">
         <h2 class="management__title"> Gestion des utilisateurs </h2>
         <UsersManagement v-for="user in allUsers" :key="user" :user="user" @delete-user="deleteUser"/>
-<!--         <div v-for="user in allUsers" :key="user">
-          <p> {{ user.firstName }} {{ user.lastName }} </p>
-        </div> -->
       </section>
     </div>
 

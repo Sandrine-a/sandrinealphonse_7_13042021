@@ -193,7 +193,7 @@ export default createStore({
           resolve(response);
         })
         .catch((error) => {
-          commit('SET_STATUS', 'error_sendpost');
+          commit('SET_STATUS', 'error_sendComment');
           reject(error);
         })
       })  
@@ -237,6 +237,7 @@ export default createStore({
         formData.append('content', post.content)
         formData.append('attachment', post.attachment)
         formData.append('userId', post.userId)
+        
         axiosInstance.post('/posts', formData )
         .then((response) => {
           commit('CREATE_POST', response.data );
