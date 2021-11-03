@@ -68,6 +68,12 @@ Ctrl+C
 
 ### Usage ###
 
+* DATABASE :
+`
+npx sequelize-cli db:create
+npx sequelize-cli db:migrate
+`
+
 * Pour créer un utilisateur admin:
 
 Créez votre utilisateur en utilsant la fonction "signup", puis via mySql:
