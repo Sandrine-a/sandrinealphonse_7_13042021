@@ -62,7 +62,6 @@
     },
      watch: {
       attachment(val) {
-        console.log(val)
         if(!val) {
           this.isntHidden = false;
         }
@@ -191,7 +190,7 @@
     border: none;
     cursor: pointer;
     font-weight: bold;
-    font-size: 4vh;
+    font-size: 1.2rem;
   }
   }
   .upload {
@@ -220,9 +219,10 @@
     display: none;
   }
   .attachment__img {
-    margin:20px 0;
+    display: flex;
+    margin: 20px 0;
   }
-  #cancel__btn {
+    #cancel__btn {
     background-color: white;
     color: $text-color-secondary;
     border: 2px black solid;
@@ -230,14 +230,62 @@
     font-weight: bold;
     vertical-align: top;
     cursor: pointer;
-    &-old {
-      background-color: white;
-      color: $text-color-secondary;
-      border: 2px black solid;
-      border-radius: 10px;
-      font-weight: bold;
-      vertical-align: top;
-      cursor: pointer;
+    height: 30px;
+  }
+  @media all and (max-width: 576px) {
+    .post{
+      &__form{
+        &-upload {
+          flex-direction: column;
+          max-height: 50px;
+        }
+        &-input {
+          width: 100%;
+        }
+      }
+    }
+    .upload {
+      &__text {
+        margin:auto;
+      }
+    }
+    #text {
+    font-weight: bold;
+    font-size: 0.9rem;
+    }
+  }
+  @media all and (max-width: 768px) {
+    .post{
+      &__form{
+        &-buttons {
+          flex-direction: column;
+          height: 100px;
+        }
+      }
+
+    }
+    .upload {
+      &__img {
+        width: 100%;
+        margin-top:0;
+      }
+    }
+    .attachment__img {
+      flex-direction: column-reverse;
+    }
+    #cancel__btn {
+      align-self: flex-end;
+      width: 30px;
+    
+    }
+  }
+  @media all and (max-width: 991px) {
+    .post{
+      &__form{
+        &-upload {
+          width: 100%;
+        }
+      }
     }
   }
 

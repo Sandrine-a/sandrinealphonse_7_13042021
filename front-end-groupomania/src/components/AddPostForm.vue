@@ -13,7 +13,7 @@
       <div class="post__form-input">
         <div class="attachment__img" v-if=" this.attachment">
           <img :src="src" alt="Image du post"  class="upload__img" v-if="isntHidden && src != null "> 
-          <button id="cancel__btn-old" type="button"  @click.stop.prevent="remove" v-if="isntHidden && src != null ">X</button>  
+          <button id="cancel__btn" type="button"  @click.stop.prevent="remove" v-if="isntHidden && src != null ">X</button>  
         </div> 
         <div class="post__form-upload" >    
           <button class="upload__btn" type="button" @click.stop.prevent="initUpload" >Télécharger</button>
@@ -84,6 +84,7 @@
           .catch(error => console.log(error)); 
         } catch(error) {
           console.log(error);
+          alert('Error has occurred! Please try again');          
         }
       },
       cancelWrite () {
@@ -167,7 +168,7 @@
       color: $text-color-secondary;
     }
   }
-    .input{
+  .input{
     &__field{
     background-color: white;
     border: 2px black solid;
@@ -193,7 +194,7 @@
     }
     &__img {
       height: 250px;
-      margin-top:10px;
+      margin-top:5px;
     }
   }
   #attachment {
@@ -201,7 +202,8 @@
   display: none;
   }
   .attachment__img {
-    margin:20px 0;
+   display: flex;
+   margin: 20px 0;
   }
   #cancel__btn {
     background-color: white;
@@ -211,15 +213,7 @@
     font-weight: bold;
     vertical-align: top;
     cursor: pointer;
-    &-old {
-      background-color: white;
-      color: $text-color-secondary;
-      border: 2px black solid;
-      border-radius: 10px;
-      font-weight: bold;
-      vertical-align: top;
-      cursor: pointer;
-    }
+    height: 30px;
   }
   .btn__post{
     height: 40px;
@@ -247,6 +241,62 @@
       cursor: pointer;
       font-weight: bold;
       font-size: 1.2rem;
+    }
+  }
+  @media all and (max-width: 576px) {
+    .post{
+      &__form{
+        &-upload {
+          flex-direction: column;
+          max-height: 50px;
+        }
+        &-input {
+          width: 100%;
+        }
+      }
+    }
+    .upload {
+      &__text {
+        margin:auto;
+      }
+    }
+    #text {
+    font-weight: bold;
+    font-size: 0.9rem;
+    }
+  }
+  @media all and (max-width: 768px) {
+    .post{
+      &__form{
+        &-buttons {
+          flex-direction: column;
+          height: 100px;
+        }
+      }
+
+    }
+    .upload {
+      &__img {
+        width: 100%;
+        margin-top:0;
+      }
+    }
+    .attachment__img {
+      flex-direction: column-reverse;
+    }
+    #cancel__btn {
+      align-self: flex-end;
+      width: 30px;
+    
+    }
+  }
+  @media all and (max-width: 991px) {
+    .post{
+      &__form{
+        &-upload {
+          width: 100%;
+        }
+      }
     }
   }
 

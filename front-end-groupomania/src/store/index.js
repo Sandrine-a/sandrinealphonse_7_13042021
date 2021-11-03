@@ -66,10 +66,8 @@ export default createStore({
     },
     GET_ALL_POSTS(state, allPosts) {
       state.allPosts = allPosts;
-      console.log(allPosts);
     },
     GET_ALL_USERS(state, allUsers) {
-      console.log(allUsers);
       state.allUsers = allUsers;
     },
     GET_ATTACHMENT(state, attachment) {
@@ -80,11 +78,9 @@ export default createStore({
     },
     CREATE_POST(state, post) {
       state.post = post;
-      console.log(post);
     },
     GET_POST(state, oldPost) {
       state.oldPost = oldPost;
-      console.log(oldPost);
     },
     POST_TO_DELETE(state, post) {
       state.post = post;
@@ -94,7 +90,6 @@ export default createStore({
     },
     GET_COMMENT(state, comment) {
       state.comment = comment;
-      console.log(comment);
     }
   },
   actions: {

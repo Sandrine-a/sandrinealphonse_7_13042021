@@ -45,7 +45,7 @@ export default {
 
  @import "@/assets/_variables.scss";
 
-   .header {
+  .header {
    background-color: $tertiary-color;
    border-bottom-left-radius: 25px;
    border-bottom-right-radius: 25px;
@@ -71,21 +71,38 @@ export default {
       list-style-type: none;
      }
    }
- }
- a {
-   color: black;
- }
- .nav {
-  &__list {
-  width: 100px;
-  height: 50px;
   }
-  &__icon {
-    height: 100%;
-    width: 80%;
+  a {
+    color: black;
   }
- }
- .exit {
-   cursor: pointer;
- }
+  .nav {
+    &__list {
+    width: 100px;
+    height: 50px;
+    }
+    &__icon {
+      height: 100%;
+      width: 80%;
+    }
+  }
+  .exit {
+    cursor: pointer;
+  }
+  
+  @media all and (max-width: 768px) {
+    .header {
+      &__container {
+        flex-direction: column;
+      }
+/*       &__logo {
+        align-self: flex-start;
+      } */
+      &__nav {
+        align-self: flex-end;
+        width: 40%;
+      }
+    }
+    
+  }
+
 </style>

@@ -84,22 +84,16 @@
     },
     watch: {
       pPicture(val) {
-        console.log(val)
         if(!val) {
           this.isntHidden = false;
         }
       }
     },
-    mounted() {
-      console.log(this.userInfos);
-    },
     methods: {
       switchToUpdate() {
-        console.log("User Form");
         this.mode = 'updating'
       },
       updateIdentity(userInfos) {
-        console.log(this.pPicture);
         userInfos = {
           lastName: this.lastName,
           firstName: this.firstName,
@@ -237,7 +231,6 @@
     display: none;
     }
   }
-
   #remove__btn {
     background-color: white;
     color: $text-color-secondary;
@@ -303,6 +296,55 @@
       font-size: 1.2rem;
       margin-left: 10px;
 
+    }
+  }
+  @media all and (max-width: 576px) {
+    .card  {
+      &__button {
+        width: 100%
+      }
+      &__photo {
+        flex-direction: column;
+      }
+      .btn__identity {
+        &-send, &-cancel {
+          width: auto;
+        }
+      }
+    }
+    .btn{
+      &__identity {
+        &-modify {
+          width: 100%;
+        }
+      }
+    }
+    .identity {
+      &__form {
+        &-label {
+          margin-bottom: 0;;
+        }
+        &-upload {
+          flex-direction: column;
+        }
+      }
+    }
+    .upload {
+      &__btn {
+        width: 100%;
+      }
+    }
+  }
+  @media all and (max-width: 768px) {
+    .card {
+      flex-direction: column;
+      padding: 30px;
+      margin:10px;
+      &__photo {
+        &-control {
+          width: auto;
+        }
+      }
     }
   }
 </style>

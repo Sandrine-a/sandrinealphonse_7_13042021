@@ -89,19 +89,6 @@ export default {
   computed: {
     ...mapState(['status']),
   },
-/*   watch: {
-    password(value) {
-      console.log(value);
-      this.value = value;
-    },
-    email(value) {
-      console.log(value);
-      if(!/[a-zA-Z0-9._%+-]+@(?:[a-zA-Z0-9-]+\.)+[a-zA-Z]{2,8}/.test(value) ) {
-        
-        console.log('wrong');
-      }
-    }
-  }, */
   methods : {
     switchToSignup() {
       this.mode = 'signup';
@@ -120,7 +107,6 @@ export default {
       .catch(error => console.log(error));
     },
     login() {
-      console.log(this.email,this.password);
       this.$store.dispatch('login', {
         email: this.email,
         password: this.password

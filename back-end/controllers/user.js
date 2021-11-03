@@ -12,9 +12,7 @@ const fs = require('fs');
 
 //Middlewares
 exports.signup = async (req,res,next) => {
-  console.log("controleur SIGNUP");
-
-  //Recuperation des param
+  //Recuperation du Body
   const { firstName, lastName, email, password } = req.body;
 
   //Verification de l'utilisateur déja en BDD
@@ -27,7 +25,6 @@ exports.signup = async (req,res,next) => {
     return res.status(400).json({error: 'Utisateur deja enregistré !'});
   } else {
     try { 
-      console.log('SIGNUP');
       const hash = await bcrypt.hash(password, 12);
       const user = await models.User.create({
         firstName: firstName,
@@ -43,7 +40,6 @@ exports.signup = async (req,res,next) => {
 };
 
 exports.login = async (req,res,next) => { 
-  console.log("controleur LOGIN");
   //Recuperation des param
   const email = req.body.email;
   const password = req.body.password;
@@ -52,7 +48,6 @@ exports.login = async (req,res,next) => {
     where: {email: email}
   })
   .then(user => {
-    console.log(user);
     if(!user) {
       return res.status(401).json({ error: 'Utilisateur inconnu !' });
     }
@@ -96,8 +91,6 @@ exports.getUserProfile = async (req,res,next) => {
 };
 
 exports.updateUserProfile = async (req,res,next) => {
-  console.log(req.body);
-
   //PARAMS
   const userId = req.params.id; 
 
@@ -108,7 +101,6 @@ exports.updateUserProfile = async (req,res,next) => {
   } : {
     ...req.body
   }
-  console.log(updatedUser);
 
   try {
     const user = await models.User.findOne({
@@ -137,7 +129,6 @@ exports.updateUserProfile = async (req,res,next) => {
         })
         .then(res.status(201).json({ message: ' Profile modifié sans photo!'}))
       } else {
-        console.log('user rajoute pPicture');
         user.update({
           firstName: updatedUser.firstName, 
           lastName: updatedUser.lastName,
@@ -169,7 +160,6 @@ exports.getAllUsers = async (req,res,next) => {
   })
   .then(users => {
     if(users) {
-      console.log(users);
       res.status(200).json(users);
     } else {
       return res.status(404).json({ error: 'No users found' })
@@ -179,7 +169,6 @@ exports.getAllUsers = async (req,res,next) => {
 };
 
 exports.deleteProfile = async (req,res,next) => {
-  console.log(req.body);
   //PARAMS
   const userId = req.body.userId;
 

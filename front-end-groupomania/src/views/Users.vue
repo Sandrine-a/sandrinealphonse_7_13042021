@@ -4,8 +4,8 @@
     <Header/>
 
     <div v-if="status == 'gotProfile'">
-      <h1 lass="profil__title">Profil</h1>
-      <section class="profil__card">
+      <h1 lass="profile__title">Profil</h1>
+      <section class="profile__card">
         <UsersIdentity @get-profile="getUserProfile" /> 
       </section> 
 
@@ -50,7 +50,6 @@
         this.$router.push('/');
         return;
       }
-      console.log(this.allUsers);
       this.$store.dispatch('getAllUsers');
     },
     methods: {
@@ -77,7 +76,7 @@
   .main {
     background-color: $bg-color;
   }
-  .profil{
+  .profile{
     &__card{
       padding-bottom: 60px;
     }
@@ -85,10 +84,13 @@
   .management {
     &__section {
       margin: 30px;
-      border: 1px $primary-color solid;
+      border: 2px $primary-color solid;
       border-bottom: none;
       border-top-left-radius: 25px;
       border-top-right-radius: 25px;
+    }
+    &__title {
+      font-size: 1.3rem;
     }
   }
 

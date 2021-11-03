@@ -10,6 +10,7 @@
 
 
   body {
+    max-width: 1920px;
     margin: 0;
     font-family: 'Poppins', sans-serif;
     -webkit-font-smoothing: antialiased;

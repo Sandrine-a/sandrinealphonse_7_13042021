@@ -154,7 +154,17 @@
     justify-content: space-between;
     align-items: flex-start;
    }
-
+  @media all and (max-width: 576px) {
+    .addPost {
+      &__title {
+        font-size:1.1rem;
+      }
+    }
+    .card__column  {
+      width: 90%;
+      margin: auto;
+    }
+  }
   
 
 

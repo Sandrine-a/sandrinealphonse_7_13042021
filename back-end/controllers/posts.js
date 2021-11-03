@@ -7,8 +7,6 @@ const fs = require('fs');
 
 exports.createPost = async (req,res,next) => { 
   //Params
-  console.log(req.body);
-  console.log(req.file);
   const { title, content, userId } = req.body;
 
   //Vérification de la complétion des inputs
@@ -99,7 +97,6 @@ exports.deletePost = async (req,res,next) => {
   })
   .then( post => {
     if(!post.attachment) {
-      console.log('*****NO ATTACHMENT here');
       post.destroy()
       .then(() => res.status(200).json({ message: ' Post supprimé '}))
       .catch(error => res.status(500).json({ error: error }));
@@ -140,9 +137,7 @@ exports.modifyPost = async (req,res,next) => {
       })
       if(post) {
         if(!updatedPost.attachment) {
-          console.log('******* POST UPDATED SANS PHOTO');
           if(post.attachment) {
-            console.log('Si initialement il y a photo');
             //Modification de l'ancienne image de la BDD
             const oldFilename = post.attachment.split('/images/posts/')[1];
             try {
@@ -151,7 +146,6 @@ exports.modifyPost = async (req,res,next) => {
               throw new Error("Erreur avec l'image envoyée")
             }
           } 
-          console.log('*********** Suprression de la photo');
           post.update({
             title: updatedPost.title,
             content: updatedPost.content,
@@ -163,7 +157,6 @@ exports.modifyPost = async (req,res,next) => {
           })
           .then(res.status(201).json({ post }))    
         } else {
-          console.log('*******ELSE WIThout attachment');
           post.update({
             title: updatedPost.title,
             content: updatedPost.content,

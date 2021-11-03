@@ -9,7 +9,7 @@
       </ul>
     </nav>
     <div class="footer__corporate">
-      <img src="../assets/icon-groupomania-white.svg" alt="logo footer Groupomania" class="header__logo--img">
+      <img src="../assets/icon-groupomania-white.svg" alt="logo footer Groupomania" class="footer_logo-img">
     </div>
   </footer>
   
@@ -51,9 +51,16 @@ export default {
      cursor: pointer;
      &-list {
        list-style-type: none;
+       padding: 0;
      }
    }
- }
+  }
+  .exit {
+    font-weight: bold;
+  }
+  .footer_logo-img {
+    width: 200px
+  }
 
 
 </style>

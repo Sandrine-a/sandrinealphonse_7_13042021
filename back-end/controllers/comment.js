@@ -6,7 +6,6 @@ const models = require('../models');
 
 exports.createComment = async (req,res,next) => {
   //PARAMS
-  console.log(req.params.postId);
   const postId = req.params.postId;
   const userId = req.body.userId;
 
@@ -15,15 +14,12 @@ exports.createComment = async (req,res,next) => {
     where: { id: postId }
   })
   if(postExist) {
-    console.log("CONROLEUR COMMENT");
     //Recherche de l'user qui commente 
     try{
       const userExist = await models.User.findOne({
         where: { id: userId}
       })
       if(userExist) {
-        console.log('EXIST');
-        console.log(req.body.content);
           await models.Comment.create({
             content: req.body.content,
             UserId: userId,
@@ -46,7 +42,6 @@ exports.deleteComment = async (req,res,next) => {
   //PARAMS
   const postId = req.params.postId;
   const commentId = req.params.commentId;
-  console.log('DELETE COMM');
 
   const comment = await models.Comment.findOne({
     where: { id: commentId, postId: postId }

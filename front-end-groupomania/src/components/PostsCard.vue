@@ -45,7 +45,7 @@
               <label for="reaction" class="comments__label"></label>
                 <input type="text" v-model="reaction" class="comments__textarea" id="reaction"  placeholder="Commenter">   
             </p>
-            <div class="comments__controls" v-if=" status == 'commenting'">
+            <div class="comments__controls" v-if=" action == 'commenting'">
               <button class="comments__controls-validate" @click.stop.prevent="sendComment" >
                 <fa icon="check-square" class="icon__validateCom"/>
               </button>
@@ -60,7 +60,7 @@
                 <div v-for="user in this.allUsers" :key="user" class="comments__content-author">
                   <img v-if="user.id == item.UserId && user.pPicture != null" :src="user.pPicture" class="comments__content-pPicture" alt="Avatar de l'auteur du commentaire" />
                   <fa icon="user-alt-slash" v-if="user.id == item.UserId && user.pPicture == null"  class="comments__content-icon" />
-                  <p v-if="user.id == item.UserId">
+                  <p class="comments__content-identity" v-if="user.id == item.UserId">
                     {{ user.firstName }} {{ user.lastName }}
                   </p>
                 </div>
@@ -103,7 +103,8 @@ export default {
       reaction:'',
       allComments: [],
       isHidden: true,
-      status: ''
+      status: '',
+      action:''
     }
   },
   props: {
@@ -117,7 +118,7 @@ export default {
   },
   watch: {
     reaction() {
-      return this.status = 'commenting'
+      return this.action = 'commenting'
     }
   },
   created() {
@@ -361,5 +362,27 @@ export default {
     font-size: 1.2rem;
     }
   }
+  @media all and (max-width: 768px) {
+    .posts {
+      &__buttons {
+        flex-direction: column;
+        height: 100px;
+      }
+      &__attachment {
+        height: auto;
+        &-img {
+          object-fit: contain;
+        }
+      }
+    }
+    .comments {
+      &__content {
+        &-identity {
+          font-size: 0.8rem;
+        }
+      }
+    }
+  }
+
 
 </style>
