@@ -30,7 +30,7 @@ npm run serve
 * Cela devrait lancer l'interface sur:
 
 `
-Local:   http://localhost:8080/ 
+Local:   http://localhost:8080/ <br/>
 Network: http://192.168.1.112:8080/
 `
 
@@ -58,7 +58,7 @@ Si nodemon n'est pas installé, taper:
 node server
 ```
 
-* Cela devrait lancer le serveur sur:
+* Cela devrait lancer le serveur sur:<br/>
 `http://localhost:3000/`
 
 * Pour arrêter le seveur tapez dans le terminal:
@@ -68,7 +68,7 @@ Ctrl+C
 
 ### Usage ###
 
-* DATABASE :
+* DATABASE :<br/>
 `
 npx sequelize-cli db:create
 npx sequelize-cli db:migrate
@@ -76,6 +76,6 @@ npx sequelize-cli db:migrate
 
 * Pour créer un utilisateur admin:
 
-Créez votre utilisateur en utilsant la fonction "signup", puis via mySql:
+Créez votre utilisateur en utilsant la fonction "signup", puis via mySql:<br/>
 `UPDATE users SET isAdmin=1 WHERE id=X;`
 => X étant le numéro d'utilateur ciblé.
