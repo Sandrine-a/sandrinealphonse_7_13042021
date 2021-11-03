@@ -14,7 +14,7 @@
           </p>
         </div>
 
-        <div class="posts__author">
+        <div class="posts__author" v-if="status = 'authorOk'">
           <div class="posts__author-avatar" v-if="author.pPicture != null ">
             <img :src="author.pPicture" class="posts__author-pPicture" alt="Avatar de l'auteur du post"/>
           </div>
@@ -31,9 +31,6 @@
         </div>
       </div>
       <section class="posts__reactions">
-<!--        <div class="posts__reactions-likes">
-          <fa icon="heart" class="posts__reactions-icon"/>
-        </div> -->
 
         <div class="posts__comments">
           <section class="posts__comments-total">
@@ -125,6 +122,7 @@ export default {
   },
   created() {
     this.getProfileFromPost();
+    this.status = 'authorOk'
     this.getAllComments();
   },
   methods: {

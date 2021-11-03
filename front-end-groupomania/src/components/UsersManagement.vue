@@ -5,7 +5,7 @@
     <p class="management__user-identity">
      {{ user.firstName }} {{ user.lastName }} 
     </p>
-    <div class="management__user-delete" @click.stop.prevent="deleteUser">
+    <div class="management__user-delete"  v-if="!user.isAdmin">
      <button @click.stop.prevent="deleteUser" class="btn__management-delete" type="button"> Supprimer </button>
     </div>
   </div>
@@ -24,17 +24,12 @@
     computed: {
       ...mapState(['userInfos','userAccess'])
     },
-    mounted() {
-/*       console.log(this.user); */
-    },
     methods: {
       deleteUser() {
-
-        console.log(this.user);
         let result = confirm(`Confirmez-vous la suppression définitive de l'utilsateur ${this.user.lastName} ${this.user.firstName}?`);
-          if(result) {
-            this.$emit('delete-user', this.user)
-          }     
+        if(result) {
+          this.$emit('delete-user', this.user)
+        }     
       }
     }
   }

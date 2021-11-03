@@ -1,7 +1,11 @@
 
 <template>
   <div class="home">
-
+    <!--     Only max-width 991px -->
+    <div class="mobile__logo">
+      <img alt="Groupomania logo" src="../assets/icon-groupmania.png" class="mobile__logo-icon" >
+    </div>
+    <!-- On min-width 992px -->
     <div class="frame">
        <img alt="Groupomania logo" src="../assets/icon-groupomania-white.svg" class="frame__icon">
        <img alt="vector frame" src="../assets/vector-frame.svg" class="frame__vector" >
@@ -122,119 +126,144 @@ export default {
 
  @import "@/assets/_variables.scss";
 
- .home{
-   display: flex;
- } 
-
- .frame {
-  width: 40%;
-  background-image: url("../assets/groupomania_couverture_paris.jpg");
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center top;
-  position: relative;
-  overflow: hidden;
-    &__icon {
-      width: 55%;
-      position: absolute;
-      bottom: 90px;
-      left: 120px;
-      z-index: 2;
+  .home{
+    display: flex;
+    min-height: 680px;
+  } 
+  .frame {
+    width: 40%;
+    background-image: url("../assets/groupomania_couverture_paris.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center top;
+    position: relative;
+    overflow: hidden;
+      &__icon {
+        width: 55%;
+        position: absolute;
+        bottom: 90px;
+        left: 120px;
+        z-index: 2;
+      }
+      &__vector {
+        width: 77%;
+        height: 160px;
+        position: absolute;
+        bottom: 30px;
+        left: 75px;
+        z-index: 1;
+      }
+  }
+  .form {
+    width:70%;
+    border-top-left-radius: 25px;
+    border-bottom-left-radius: 25px;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 80px;
+  }
+  .color_blue {
+    color: $text-color-secondary;
+    font-weight: bold;
+  }
+  .login {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    &__form {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      &-input {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: flex-start;
+      }
+      &-legend {
+      text-align: center;
+      padding: 10px 0;
     }
-    &__vector {
-      width: 77%;
-      height: 160px;
-      position: absolute;
-      bottom: 30px;
-      left: 75px;
-      z-index: 1;
+      &-legendBold {
+      font-weight: bold;
+      color: $tertiary-color;
+      cursor: pointer;
+      text-decoration: underline;
+      }
     }
- }
+  }
+  .input_field {
+    width: 300px;
+    height: 50px;
+    border-radius: 20px;
+    background-color: $primary-color;
+    color: white;
+    border: none;
+  }
 
- .form {
-   width:70%;
-   border-top-left-radius: 25px;
-   border-bottom-left-radius: 25px;
-   background-color: white;
-   display: flex;
-   flex-direction: column;
-   justify-content: center;
-   align-items: center;
- }
-
-.color_blue {
-  color: $text-color-secondary;
-  font-weight: bold;
-}
-.login {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  &__form {
+  #section__btn {
+    margin-top: 50px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    &-input {
-      display: flex;
+  }
+
+  .btn__main{
+    height: 50px;
+    &-confirm {
+      color: white;
+      background: $tertiary-color;
+      border-radius: 10px;
+      height: 100%;
+      width: 300px;
+      border: none;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 1.2rem;
+    }
+    &-switch {
+      color: white;
+      background: $tertiary-color;
+      border-radius: 10px;
+      height: 100%;
+      width: 300px;
+      border: none;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 1.2rem;
+    }
+  }
+  @media all and (min-width: 992px) {
+    .mobile__logo {
+      display: none;
+    }
+  }
+  @media all and (max-width: 991px) {
+    .home {
       flex-direction: column;
-      justify-content: center;
-      align-items: flex-start;
     }
-    &-legend {
-    text-align: center;
-    padding: 10px 0;
-   }
-    &-legendBold {
-    font-weight: bold;
-    color: $tertiary-color;
-    cursor: pointer;
-    text-decoration: underline;
+    .mobile__logo {
+      height: 100px;
+      &-icon {
+        height: 100%;
+      }
+    }
+    .form {
+      width: 100%;
+    }
+    .frame {
+      display: none;
+    }
+    .login {
+      &__title {
+        margin: 10px 0;
+      }
     }
   }
-}
-
-.input_field {
-  width: 300px;
-  height: 50px;
-  border-radius: 20px;
-  background-color: $primary-color;
-  color: white;
-  border: none;
-}
-
-#section__btn {
-  margin-top: 50px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-
-.btn__main{
-  height: 50px;
-  &-confirm {
-    color: white;
-    background: $tertiary-color;
-    border-radius: 10px;
-    height: 100%;
-    width: 300px;
-    border: none;
-    cursor: pointer;
-    font-weight: bold;
-    font-size: 1.2rem;
-  }
-  &-switch {
-    color: white;
-    background: $tertiary-color;
-    border-radius: 10px;
-    height: 100%;
-    width: 300px;
-    border: none;
-    cursor: pointer;
-    font-weight: bold;
-    font-size: 1.2rem;
-  }
-}
 
 </style>

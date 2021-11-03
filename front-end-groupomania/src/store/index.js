@@ -184,7 +184,6 @@ export default createStore({
     sendComment({ commit }, comment) {
       return new Promise((resolve,reject) => {
         commit('GET_COMMENT', comment );
-        console.log('Send comment a partir dici');
         let commentDatas = {userId: comment.userId, content: comment.content}
         
         axiosInstance.post(`/posts/${comment.postId}/comments`, commentDatas)
@@ -203,7 +202,6 @@ export default createStore({
       return new Promise((resolve,reject) => {
         axiosInstance.delete(`/posts/${comment.PostId}/comments/${comment.id}`, {comment: {postId: comment.PostId}, commentId: comment.id })
         .then((response) => {
-          console.log(response.data);
           commit('GET_COMMENT', response);
           resolve(response);
         })
@@ -234,7 +232,6 @@ export default createStore({
     sendPost({ commit }, post) {
       return new Promise((resolve,reject) => {
         commit('CREATE_POST', post );
-        console.log(post);
         let formData = new FormData();
         formData.append('title', post.title)
         formData.append('content', post.content)
@@ -242,7 +239,6 @@ export default createStore({
         formData.append('userId', post.userId)
         axiosInstance.post('/posts', formData )
         .then((response) => {
-          console.log(response);
           commit('CREATE_POST', response.data );
           commit('REMOVE_ATTACHEMENT', null)
           commit('SET_STATUS', 'sent')
@@ -258,8 +254,6 @@ export default createStore({
 
       return new Promise((resolve,reject) => {
         commit('CREATE_POST', post );
-        console.log('sendPost a partir dici');
-        console.log(post.attachment);
         const id = post.id;
 
         let formData = new FormData();
@@ -270,7 +264,6 @@ export default createStore({
         
         axiosInstance.put(`/posts/${id}`, formData )
         .then((response) => {
-          console.log(response.data);
           commit('CREATE_POST', response.data );
           commit('REMOVE_ATTACHEMENT', null)
           commit('SET_STATUS', 'updateSent')
@@ -290,7 +283,6 @@ export default createStore({
       return new Promise((resolve,reject) => {
         axiosInstance.delete(`/posts/${id}`, {data: {userId: this.state.userAccess.userId} })
         .then((response) => {
-          console.log(response.data);
           resolve(response);
         })
         .catch((error) => {reject(error)})
@@ -308,7 +300,6 @@ export default createStore({
 
         axiosInstance.put(`/users/${this.state.userAccess.userId}`, formData )
         .then((response) => {
-          console.log(response.data);
           commit('USER_PROFILE', response.data );
           resolve(response);
         })
@@ -334,7 +325,6 @@ export default createStore({
         userId: -1,
         token: ''
       }
-      console.log(userAccess);
       commit('LOG_USER', userAccess)     
     }
   },
