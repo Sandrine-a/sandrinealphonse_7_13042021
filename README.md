@@ -29,10 +29,8 @@ npm run serve
 ```
 * Cela devrait lancer l'interface sur:
 
-`
--Local:   http://localhost:8080/ 
--Network: http://192.168.1.112:8080/
-`
+`-Local:   http://localhost:8080/` <br/>
+`-Network: http://192.168.1.112:8080/`
 
 * Pour arrêter le front tapez dans le terminal:
 ```bash
