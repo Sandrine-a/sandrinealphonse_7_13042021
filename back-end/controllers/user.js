@@ -179,6 +179,7 @@ exports.getAllUsers = async (req,res,next) => {
 };
 
 exports.deleteProfile = async (req,res,next) => {
+  console.log(req.body);
   //PARAMS
   const userId = req.body.userId;
 

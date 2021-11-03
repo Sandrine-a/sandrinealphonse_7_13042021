@@ -2,6 +2,7 @@
 const {
   Model
 } = require('sequelize');
+
 module.exports = (sequelize, DataTypes) => {
   class Comment extends Model {
     /**
@@ -29,7 +30,26 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   Comment.init({
+    id: { type: DataTypes.INTEGER, primaryKey: true },
     content: DataTypes.TEXT,
+    postId: {
+      type: DataTypes.INTEGER,
+      references: {
+        // This is a reference to another model
+        model: 'Posts',
+        // This is the column name of the referenced model
+        key: 'id',
+      }
+    },
+    userId:  {
+      type: DataTypes.INTEGER,
+      references: {
+        // This is a reference to another model
+        model: 'Users',
+        // This is the column name of the referenced model
+        key: 'id',
+      }
+    }
   }, {
     sequelize,
     modelName: 'Comment',

@@ -51,17 +51,18 @@
         userId:'',
         attachment:'',
         src: '',
-        status:'',
         isntHidden: true,
       }
     },    
     computed: {
-        ...mapState(['userAccess','status']),
+        ...mapState(['userAccess']),
     },
     watch: {
-      attachment(oldValue, newValue) {
-        console.log(oldValue)
-        console.log(newValue)
+      attachment(val) {
+        console.log(val)
+        if(!val) {
+          this.isntHidden = false;
+        }
       }
     },
     methods: {
@@ -133,7 +134,7 @@
     &-upload {
       border: 2px black solid;
       border-radius: 10px;
-      width: 45%;
+      width: 50%;
       max-height: 40px;
       min-height: 1.4rem;
       display: flex;
@@ -188,8 +189,8 @@
     }
     &__text {
       font-weight: bold;
-      font-size: 1.1rem;
-      margin: 2px 0 2px 20px;
+      font-size: 0.9rem;
+      margin: 2px 0 2px 10px;
       color: $text-color-secondary;
     }
     &__img {

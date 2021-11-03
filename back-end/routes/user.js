@@ -9,16 +9,17 @@ const auth = require('../utils/auth');
 const multer = require('../utils/multer-config');
 
 //Routing
+
 router.post('/signup', validator.signupValidator(), validator.validateResult, userCtrl.signup);
 
 router.post('/login', validator.loginValidator(), validator.validateResult, userCtrl.login);
+
+router.get('/', auth, userCtrl.getAllUsers);
 
 router.get('/:id', auth, userCtrl.getUserProfile);
 
 router.put('/:id', auth, multer.usersStorage, userCtrl.updateUserProfile);
 
-router.get('/', auth, userCtrl.getAllUsers);
-
-router.delete('/:id', auth, userCtrl.deleteProfile); 
+router.delete('/:id', auth, multer.usersStorage, userCtrl.deleteProfile); 
 
 module.exports = router;

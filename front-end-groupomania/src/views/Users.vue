@@ -3,17 +3,18 @@
   <div class="main">
     <Header/>
 
-    <div>
+    <div v-if="status == 'gotProfile'">
       <h1 lass="profil__title">Profil</h1>
       <section class="profil__card">
         <UsersIdentity @get-profile="getUserProfile" /> 
       </section> 
 
-      <section v-if="this.userAccess.isAdmin">
-        <h2> Liste des utilisateurs </h2>
-        <div v-for="user in this.allUsers" :key="user">
+      <section v-if="userAccess.isAdmin" class="management__section">
+        <h2 class="management__title"> Gestion des utilisateurs </h2>
+        <UsersManagement v-for="user in allUsers" :key="user" :user="user" @delete-user="deleteUser"/>
+<!--         <div v-for="user in allUsers" :key="user">
           <p> {{ user.firstName }} {{ user.lastName }} </p>
-        </div>
+        </div> -->
       </section>
     </div>
 
@@ -29,24 +30,23 @@
   //Imports components
   import Header from '../components/Header.vue';
   import UsersIdentity from '../components/UsersIdentity.vue';
-  import Footer from '../components/Footer.vue'
+  import UsersManagement from '../components/UsersManagement.vue';
+  import Footer from '../components/Footer.vue';
 
   export default {
     name: 'Users',
     components: {
       Header,
       UsersIdentity,
+      UsersManagement,
       Footer
     }, 
-    data() {
-    }, 
     computed: {
-      ...mapState(['userInfos','userAccess', 'allUsers'])
+      ...mapState(['userInfos','userAccess', 'allUsers', 'status'])
     },
     created() {
       this.$store.dispatch('getUserParams');
-      
-      this.$store.dispatch('getUserProfile'); 
+      this.$store.dispatch('getUserProfile');     
     },
     mounted() {
       if (!this.userAccess) {
@@ -54,10 +54,19 @@
         return;
       }
       console.log(this.allUsers);
+      this.$store.dispatch('getAllUsers');
     },
     methods: {
       getUserProfile() {
         this.$store.dispatch('getUserProfile')       
+      },
+      deleteUser(user) {
+        this.$store.dispatch('deleteUser', user)
+        .then(() => {
+          this.$store.dispatch('getUserProfile')
+          this.$store.dispatch('getAllUsers')
+        })
+        .catch(error => console.log(error));
       }
     }
   }
@@ -73,7 +82,16 @@
   }
   .profil{
     &__card{
-      padding-bottom: 100px;
+      padding-bottom: 60px;
+    }
+  }
+  .management {
+    &__section {
+      margin: 30px;
+      border: 1px $primary-color solid;
+      border-bottom: none;
+      border-top-left-radius: 25px;
+      border-top-right-radius: 25px;
     }
   }
 

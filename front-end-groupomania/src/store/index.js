@@ -134,14 +134,17 @@ export default createStore({
       commit('CHECK_USER', userAccess)
     },
     getUserProfile({ commit }) {
+      commit('SET_STATUS', 'loading');
       let id = this.state.userAccess.userId;
       return new Promise((resolve,reject) => {
         axiosInstance.get(`/users/${id}`)
         .then((response) => {
+          commit('SET_STATUS', 'gotProfile');
           commit('USER_PROFILE', response.data);
           resolve(response);
         })
         .catch((error) => {
+          commit('SET_STATUS', 'error_profile');
           reject(error);
         })
       })
@@ -171,6 +174,7 @@ export default createStore({
       return new Promise((resolve,reject) => {
         axiosInstance.get(`/posts/${posts.postId}/comments`)
         .then((response) => {
+          commit('SET_STATUS', 'datasOk');
           commit('GET_ALL_COMMENTS', response.data)
           resolve(response);
         })
@@ -186,7 +190,7 @@ export default createStore({
         axiosInstance.post(`/posts/${comment.postId}/comments`, commentDatas)
         .then((response) => {
           commit('GET_COMMENT', response);
-          commit('SET_STATUS', 'sent')
+          commit('SET_STATUS', 'commentSent')
           resolve(response);
         })
         .catch((error) => {
@@ -269,7 +273,7 @@ export default createStore({
           console.log(response.data);
           commit('CREATE_POST', response.data );
           commit('REMOVE_ATTACHEMENT', null)
-          commit('SET_STATUS', 'sent')
+          commit('SET_STATUS', 'updateSent')
           resolve(response);
         })
         .catch((error) => {
@@ -283,7 +287,6 @@ export default createStore({
       commit('POST_TO_DELETE', post)
       //Puis, récupération de l'id du post dans le state
       const id = this.state.post.id;
-
       return new Promise((resolve,reject) => {
         axiosInstance.delete(`/posts/${id}`, {data: {userId: this.state.userAccess.userId} })
         .then((response) => {
@@ -314,6 +317,16 @@ export default createStore({
           reject(error);
         })
       }) 
+    },
+    deleteUser({ commit }, userInfos) {
+      return new Promise((resolve,reject) => {
+        axiosInstance.delete(`/users/${userInfos.id}`, {data: {userId: userInfos.id} })
+        .then((response) => {
+          commit('SET_STATUS', 'deleted');
+          resolve(response);
+        })
+        .catch((error) => {reject(error)})
+      })
     },
     exitApp({ commit }, userAccess) {
       localStorage.clear()

@@ -11,12 +11,12 @@
         <img src="../assets/groupomania-icon.svg" alt="Logo miniature" class="addPost__logo"/>
       </section>
 
-        <AddPostSelect @click.stop.prevent="switchToWrite" @keyup.enter="switchToWrite"  v-if=" mode == 'read'" />
+        <AddPostSelect @click.stop.prevent="switchToWrite" @keyup.enter="switchToWrite" v-if=" mode == 'read'" />
         <AddPostForm @write-cancel="switchToRead" v-else/>
 
     </div> 
 
-    <div class="card__column">
+    <div class="card__column" v-if="status = 'datasOk'">
       <section class="posts__column" >
         <PostsCard v-for="(item, index) in allPosts.slice().reverse()" :datas="item" :key="index" />
       </section>
