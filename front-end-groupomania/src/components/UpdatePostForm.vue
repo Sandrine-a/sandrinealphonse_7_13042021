@@ -1,5 +1,5 @@
 <template>
-  <form class="post__form"> 
+  <form class="post__form" @submit="sendUpdatedPost"> 
 
       <div class="post__form-input">
         <label for="title" class="input__label"> </label>
@@ -25,7 +25,7 @@
 
       <div class="post__form-buttons">
         <div class="btn__post">
-          <button @click.stop.prevent="sendUpdatedPost" class="btn__post-send"> Envoyer </button>
+          <button type="submit" class="btn__post-send"> Envoyer </button>
         </div>
         <div class="btn__post">
           <button class="btn__post-cancel" type="button" @click.stop.prevent="cancelWrite"  > Annuler </button>
@@ -68,7 +68,8 @@
       }
     },
     methods: {
-      async sendUpdatedPost(post) {
+      async sendUpdatedPost(e, post) {
+        e.preventDefault()
         post = {
           title: this.title,
           content: this.content,

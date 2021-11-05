@@ -32,6 +32,7 @@ exports.signup = async (req,res,next) => {
         email: email,
         password: hash
       });
+      console.log(user);
       return res.status(201).json({ 'userId': user.id});
     }  catch (error) {
       res.status(500).json({ error});
@@ -95,7 +96,7 @@ exports.updateUserProfile = async (req,res,next) => {
   const userId = req.params.id; 
 
   //Recherche d'un fichier dans la req puis isoler l'User
-  const updatedUser = req.file ? {
+  const updatedUser = await req.file ? {
     ...req.body,
     pPicture: `${req.protocol}://${req.get('host')}/images/users/${req.file.filename}`
   } : {
@@ -127,8 +128,17 @@ exports.updateUserProfile = async (req,res,next) => {
             id: userId
           }
         })
-        .then(res.status(201).json({ message: ' Profile modifié sans photo!'}))
+        .then(res.status(201).json({ user}))
       } else {
+        if(user.pPicture) {
+          //Suppression de l'ancienne image de la BDD
+          const oldFilename = user.pPicture.split('/images/users/')[1];
+          try {
+            fs.unlinkSync(`images/users/${oldFilename}`)
+          } catch(error) {
+            throw new Error("Erreur avec l'image envoyée")
+          }
+        }
         user.update({
           firstName: updatedUser.firstName, 
           lastName: updatedUser.lastName,
@@ -138,7 +148,7 @@ exports.updateUserProfile = async (req,res,next) => {
             id: userId
           }
         })
-        .then(res.status(201).json({ message: ' Profile modifié avec photo!'}))
+        .then(res.status(201).json({ user }))
 
       }
     } else {

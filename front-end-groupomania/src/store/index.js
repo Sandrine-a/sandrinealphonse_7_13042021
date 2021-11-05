@@ -255,8 +255,10 @@ export default createStore({
         let formData = new FormData();
         formData.append('title', post.title)
         formData.append('content', post.content)
-        formData.append('attachment', post.attachment)
         formData.append('userId', post.userId);
+        if(post.attachment) {
+          formData.append('attachment', post.attachment)
+        }
         
         axiosInstance.put(`/posts/${id}`, formData )
         .then((response) => {
@@ -292,11 +294,14 @@ export default createStore({
         formData.append('userId', userInfos.userId)
         formData.append('lastName', userInfos.lastName)
         formData.append('firstName', userInfos.firstName)
-        formData.append('pPicture', userInfos.pPicture)
+        if(userInfos.pPicture) {
+          formData.append('pPicture', userInfos.pPicture)
+        }
 
         axiosInstance.put(`/users/${this.state.userAccess.userId}`, formData )
         .then((response) => {
           commit('USER_PROFILE', response.data );
+          commit('SET_STATUS', 'updateProfileSent')
           resolve(response);
         })
         .catch((error) => {

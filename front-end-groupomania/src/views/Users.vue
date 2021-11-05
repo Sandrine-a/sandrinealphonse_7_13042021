@@ -51,6 +51,7 @@
         return;
       }
       this.$store.dispatch('getAllUsers');
+      console.log(this.status);
     },
     methods: {
       getUserProfile() {

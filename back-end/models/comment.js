@@ -30,7 +30,6 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   Comment.init({
-    id: { type: DataTypes.INTEGER, primaryKey: true },
     content: DataTypes.TEXT,
     postId: {
       type: DataTypes.INTEGER,

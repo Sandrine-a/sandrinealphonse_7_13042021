@@ -20,7 +20,7 @@
      <p class="success__message">Votre post a été envoyé avec succès! </p>
     </div>
 
-    <div class="card__column" v-if="status = 'datasOk'">
+    <div class="card__column">
       <section class="posts__column" >
         <PostsCard v-for="(item, index) in allPosts.slice().reverse()" :datas="item" :key="index" />
       </section>

@@ -4,7 +4,7 @@
     <div class="card__informations">   
       <div class="card__photo" v-if="mode == 'read'">
         <div class="card__photo-item">
-          <fa icon="user-alt-slash" class="card__photo-icon" v-if="src == null "/>
+          <fa icon="user-alt-slash" class="card__photo-icon" v-if="src == null || src == '' "/>
           <img :src="src" class="card__photo-pPicture" v-else/>
         </div>
         <p class="label">Ma photo</p>
@@ -19,7 +19,6 @@
       <div div class="card__form" v-if=" mode == 'updating' ">
         
         <form class="identity__form"> 
-
           <div class="card__photo" >   
             <div class="card__photo-form" >
               <fa icon="user-alt-slash" class="card__photo-icon" v-if="src == null || !src"/>
@@ -104,8 +103,7 @@
         this.$store.dispatch('updateIdentity', userInfos)
         .then(()=> {
           this.$emit('get-profile')
-          this.mode = 'read'
-          console.log(this.userInfos);
+/*           this.mode = 'read' */
         })
       },
       cancelUpdate() {
@@ -133,7 +131,6 @@
       removePhoto() {
         this.src = '';
         this.pPicture= '';
-        console.log(this.pPicture);
       }
     }
   }

@@ -13,14 +13,12 @@
             {{ datas.content }}
           </p>
         </div>
-
-        <div class="posts__author" v-if="status = 'authorOk'">
+        <div class="posts__author" v-if="getAuthor == 'authorOk'">
           <div class="posts__author-avatar" v-if="author.pPicture != null ">
             <img :src="author.pPicture" class="posts__author-pPicture" alt="Avatar de l'auteur du post"/>
           </div>
           <p class="posts__author-name" >  {{ this.author.firstName }} {{this.author.lastName }} </p>
         </div>
-
       </article>
       <div class="posts__buttons" v-if=" this.datas.UserId == this.userAccess.userId || this.userAccess.isAdmin" >
         <div class="btn__card">
@@ -31,7 +29,6 @@
         </div>
       </div>
       <section class="posts__reactions">
-
         <div class="posts__comments">
           <section class="posts__comments-total">
             <a @click.stop.prevent="isHidden = !isHidden"> 
@@ -49,7 +46,7 @@
               <button class="comments__controls-validate" @click.stop.prevent="sendComment" >
                 <fa icon="check-square" class="icon__validateCom"/>
               </button>
-               <button type="reset" class="comments__controls-cancel" >
+                <button type="reset" class="comments__controls-cancel" >
                 <fa icon="window-close" class="icon__cancelCom"/>
               </button>
             </div>
@@ -73,14 +70,11 @@
           </section>
         
         </div>
-
       </section>
     </div>
-
     <div class="posts__form" v-else >
       <UpdatePostForm  @write-cancel="switchToRead" v-for="infos in post" :key="infos" :infos="infos"/> 
     </div>
-
   </div>
   
 </template>
@@ -103,7 +97,7 @@ export default {
       reaction:'',
       allComments: [],
       isHidden: true,
-      status: '',
+      getAuthor: '',
       action:''
     }
   },
@@ -123,7 +117,6 @@ export default {
   },
   created() {
     this.getProfileFromPost();
-    this.status = 'authorOk'
     this.getAllComments();
   },
   methods: {
@@ -131,6 +124,7 @@ export default {
       for(let user of this.allUsers){
        if(user.id == this.datas.UserId) {
           this.author = user
+          this.getAuthor = 'authorOk';
        }
       }
     },

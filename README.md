@@ -66,10 +66,12 @@ Ctrl+C
 
 ### Usage ###
 
+* DOCUMENTATION DE L'API:<br/>
+`https://documenter.getpostman.com/view/17239528/UVC2H8wF`
+
 * DATABASE :<br/>
 `npx sequelize-cli db:create`<br/>
 `npx sequelize-cli db:migrate`
-
 
 * Pour créer un utilisateur admin:
 
