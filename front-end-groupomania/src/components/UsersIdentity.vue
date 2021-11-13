@@ -148,6 +148,8 @@
     border-radius: 25px;
     display: flex;
     justify-content: space-around;
+    border: 2px solid $secondary-color;
+    box-shadow: 5px 4px 7px $secondary-color ;
     &__informations {
       display: flex;
       flex-direction: column;

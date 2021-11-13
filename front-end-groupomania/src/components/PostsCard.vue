@@ -183,6 +183,7 @@ export default {
       border-radius: 25px;
       border: 2px solid $secondary-color;
       width: 100%;
+      box-shadow: 5px 4px 7px $secondary-color ;
     }
     &__content {
       &-title{
